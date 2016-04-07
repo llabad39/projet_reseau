@@ -1,7 +1,3 @@
-
-
-
-
 /**
  * A structure to represent an entity
  */
