@@ -20,9 +20,10 @@ public class ServeurTcp{
 		pw.flush();
 		text=br.readLine();
 		String[] token =text.split(" ");
-		if(token[0].equals("WELC")){
+		if(token[0].equals("NEWC")){
 		    ent.ip_next = token[1];
 		    ent.port_udp_next = token[2];
+		    pw.print("ACKC\n");
 		}
 	    }
 	}
