@@ -1,43 +1,23 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
+#include "utils.h"
+#include "protocolTCP.h"
 
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-
-int connectTCP(char *ip, int port, char *ip_dest, int port_dest){
-  
-  struct sockaddr_in adress_sock;
-  adress_sock.sin_family = AF_INET;
-  adress_sock.sin_port = htons(port_dest);
-  if(inet_aton(ip_dest,&adress_sock.sin_addr) == 0){
-    printf("Veillez entrer une adresse correcte\n");
-    return -1;
+int main(int argc, char* argv[]){
+  if(argc > 1 && !strcmp(argv[1],"--help")){
+    printf("Permet de se connecter a une machine en TCP\n");
+    printf("Utilisation : clientTCP addresse port\n");
+    return 0;
   }
-  int sock = socket(PF_INET,SOCK_STREAM,0);
-  if(connect(sock,(struct sockaddr *)&adress_sock,
-	     sizeof(struct sockaddr_in)) != -1){
-    /*char buff [100];
-    int size_rec = recv(sock,buff,99*sizeof(char),0);
-    if(size_rec < 1){
-      printf("Probleme lors du recv\n");
+  if(argc > 2){
+    char * ip = argv[1];
+    int port = atoi(argv[2]);
+    if(connectTCP(ip,port,ip,port) == -1){
+      fprintf(stderr,"Erreur lors de la connection TCP\n");
       return -1;
     }
-    buff[size_rec] = '\0';
-    printf("Message : %s\n",buff);*/
-    char mess[100] = "NEWC ";
-    char port_s[4];
-    sprintf(port_s,"%d",port);
-    strcat(mess,ip);
-    strcat(mess," ");
-    strcat(mess,port_s);
-    strcat(mess,"\n");
-    int w = write(sock,mess,strlen(mess));
-    printf("envoi : %d\n",w);
   }else{
-    printf("Probleme lors du connect\n");
+    fprintf(stderr,"Veillez rentrez une adresse et un numéro de port\n");
+    fprintf(stderr,"Utilisation : clientTCP addresse port\n");
+    return -1;
   }
   return 0;
 }

@@ -1,0 +1,17 @@
+#define M_SIZE_MAX 512        /***< maximum size for a message (octets) */
+
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+
+#include "entity.h"
+
+int serverTCP(int port, entity ent);
+
+int connectTCP(char *ip, int port, char *ip_dest, int port_dest);
