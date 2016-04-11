@@ -9,7 +9,7 @@ int main(int argc, char* argv[]){
       return 0;
     }
     //int port = atoi(argv[1]);
-    entity *ent = (entity*)(malloc(sizeof(entity)));
+    entity *ent = (entity*)(malloc(sizeof(entity*)));
     //    ent->port_tcp = *argv[1];
     strcpy(ent->port_tcp,argv[1]);
     if(serverTCP(atoi(ent->port_tcp),*ent) != 0){
