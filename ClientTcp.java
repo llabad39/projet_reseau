@@ -7,7 +7,7 @@ public class ClientTcp{
     public String port;
     public String ip;
 
-    public ClientTcp(Entity _ent,String _port,String _ip){
+    public ClientTcp(Entity _ent,String _ip,String _port){
 	this.ent = _ent;
 	this.port = _port;
 	this.ip = _ip;
@@ -23,9 +23,7 @@ public class ClientTcp{
 	    case "connect" : 
 		String mess = br.readLine();
 		String[] welc = mess.split(" "); 
-		
-		InetAddress ia = InetAddress.getLocalHost();
-		pw.print("NEWC "+ia.getHostAddress()+" "+this.ent.port_udp+" \n");
+		pw.print("NEWC "+this.ent.ip+" "+this.ent.port_udp+" \n");
 		pw.flush();
 		String ackc = br.readLine();
 		pw.close();
