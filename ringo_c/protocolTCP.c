@@ -13,6 +13,7 @@ int serverTCP(int port, entity ent){
     close(sock);
     return -1;
   }
+      printf("rzere");
   if(listen(sock,0) != 0){
     fprintf(stderr,"Probleme lors du listen\n");
     close(sock);
@@ -77,7 +78,7 @@ int connectTCP(char *ip, int port, char *ip_dest, int port_dest){
     printf("Message : %s\n",buff);
     char mess[M_SIZE_MAX] = "NEWC ";
     char port_s[4];
-    sprintf(port_s,"%d",port);
+      snprintf(port_s,4,"%d",port);
     strcat(mess,ip);
     strcat(mess," ");
     strcat(mess,itos(port));
