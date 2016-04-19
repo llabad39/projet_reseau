@@ -26,7 +26,7 @@ public class ServeurTcp{
 		    if(token[0].equals("NEWC")){
 			ent.ip_next = token[1];
 			ent.port_udp_next = token[2];
-			pw.print("ACKC\n");
+			pw.print("ACKD\n");
 			pw.flush();
 		    }
 		    else if(token[0].equals("DUPL")){
