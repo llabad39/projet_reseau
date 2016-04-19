@@ -9,13 +9,15 @@ int main(int argc, char* argv[]){
       return 0;
     }
     //int port = atoi(argv[1]);
-    entity *ent = (entity*)(malloc(sizeof(entity*)));
-    //    ent->port_tcp = *argv[1];
-    strcpy(ent->port_tcp,argv[1]);
+    entity *ent;
+    ent = malloc(sizeof(entity));
+    strncpy(ent->port_tcp,argv[1],4);
     if(serverTCP(atoi(ent->port_tcp),*ent) != 0){
       fprintf(stderr,"Erreur dans l'execution du serveur TCP\n");
+      free(ent);
       return -1;
     }
+    free(ent);
   }else{
     fprintf(stderr,"Veillez rentrez un numéro de port valable\n");
     fprintf(stderr,"Utilisation : serverTCP port\n");
