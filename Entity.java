@@ -12,11 +12,15 @@ public class Entity{
 
     String ip_next2;
     String port_udp_next2;
+    String port_diff2;
+    String ip_diff2;
     //String ip; l'addresse de la machine locale
     
     public Entity(String _ip,String _id,String _port_udp,String _port_tcp){
 	this.ip=_ip;
 	this.id = _id;
+	this.ip_next = ip;
+	this.port_udp_next = _port_udp;
 	this.port_udp = _port_udp;
 	this.port_tcp = _port_tcp;
 	this.ip_next2 = null;
