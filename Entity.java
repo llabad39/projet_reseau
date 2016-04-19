@@ -12,6 +12,8 @@ public class Entity{
 
     String ip_next2;
     String port_udp_next2;
+    String port_diff2;
+    String ip_diff2;
     //String ip; l'addresse de la machine locale
     
     public Entity(String _ip,String _id,String _port_udp,String _port_tcp){
