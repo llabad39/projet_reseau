@@ -1,6 +1,7 @@
 import java.util.*;
     
 public class Entity{
+    String ip;
     String id;
     String port_udp;
     String port_tcp;
@@ -13,7 +14,8 @@ public class Entity{
     String port_udp_next2;
     //String ip; l'addresse de la machine locale
     
-    public Entity(String _id,String _port_udp,String _port_tcp){
+    public Entity(String _ip,String _id,String _port_udp,String _port_tcp){
+	this.ip=_ip;
 	this.id = _id;
 	this.port_udp = _port_udp;
 	this.port_tcp = _port_tcp;
@@ -21,7 +23,8 @@ public class Entity{
 	this.port_udp_next2 = null;
     }
     
-    public Entity(String _id,String _port_udp,String _port_tcp,String _ip_diff,String _port_diff){
+    public Entity(String _ip,String _id,String _port_udp,String _port_tcp,String _ip_diff,String _port_diff){
+	this.ip=_ip;
 	this.id = _id;
 	this.port_udp = _port_udp;
 	this.port_tcp = _port_tcp;

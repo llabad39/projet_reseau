@@ -1,6 +1,7 @@
 import java.util.*;
 import java.net.InetAddress; 
 import java.net.UnknownHostException;
+import java.lang.Object;
 
 
 public class Main{
@@ -15,10 +16,9 @@ public class Main{
 	    String port_tcp = scanner.nextLine();
 	    System.out.println("port UDP ?");
 	    String port_udp = scanner.nextLine();
-	    String ip;
 	    try{
 		InetAddress IA = InetAddress.getLocalHost(); 
-		ip = IA.getHostAddress();
+		String ip = IA.getHostAddress();
 		Entity me;
 		ClientTcp cl;
 		int a;
@@ -29,17 +29,21 @@ public class Main{
 		    String[] arr = cmd.split(" ");
 		    switch (arr[0]){
 		    case "connect":
-			me = new Entity(id, port_udp, port_tcp);
-			cl=new ClientTcp(me, port_udp, ip);
-			a=cl.clientTCP("connect");
-			if(a==0){
-			    //serveur tcp
-			    //serveur udp
-			    is_connected=true;
+			if(arr.length==3){
+			    me = new Entity(ip, id, port_udp, port_tcp);
+			    cl=new ClientTcp(me, arr[1], arr[2]);
+			    a=cl.clientTCP("connect");
+			    if(a==0){
+				//serveur tcp
+				//serveur udp
+				is_connected=true;
+			    }else{
+				System.out.println("wrong arguments");
+				System.out.println();
+				b=false;
+			    }
 			}else{
 			    System.out.println("wrong arguments");
-			    System.out.println();
-			    b=false;
 			}
 			break;
 		    case "create":
@@ -47,27 +51,35 @@ public class Main{
 			String multi_diff = scanner.nextLine();
 			System.out.println("multi diff port ?");
 			String port_diff = scanner.nextLine();
-			me = new Entity(id, port_udp, port_tcp, multi_diff, port_diff);
+			me = new Entity(ip, id, port_udp, port_tcp, multi_diff, port_diff);
 			//serveur udp
 			//serveur tcp
 			//tests : wrong args b=false
 			is_connected=true;
 			break;
 		    case "dupl":
-			me = new Entity(id, port_udp, port_tcp);
-			cl=new ClientTcp(me, port_udp, ip);
-			a=cl.clientTCP("dupl");
-			if(a==0){
-			    //serveur tcp
-			    //serveur udp
-			    is_connected=true;
+			if(arr.length==3){
+			    System.out.println("multi diff adress ?");
+			    String multi_diff2 = scanner.nextLine();
+			    System.out.println("multi diff port ?");
+			    String port_diff2 = scanner.nextLine();
+			    me = new Entity(ip, id, port_udp, port_tcp, multi_diff2, port_diff2);
+			    cl=new ClientTcp(me, arr[1], arr[2]);
+			    a=cl.clientTCP("dupl");
+			    if(a==0){
+				//serveur tcp
+				//serveur udp
+				is_connected=true;
+			    }else{
+				System.out.println("wrong arguments");
+				System.out.println();
+				b=false;
+			    }
 			}else{
 			    System.out.println("wrong arguments");
-			    System.out.println();
-			    b=false;
-			}
+			}	
 			break;
-		    case "who's" :
+		    case "whos" :
 			if(is_connected=true){
 			    //blabla
 			}else{
