@@ -19,6 +19,8 @@ public class Entity{
     public Entity(String _ip,String _id,String _port_udp,String _port_tcp){
 	this.ip=_ip;
 	this.id = _id;
+	this.ip_next = ip;
+	this.port_udp_next = _port_udp;
 	this.port_udp = _port_udp;
 	this.port_tcp = _port_tcp;
 	this.ip_next2 = null;
