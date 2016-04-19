@@ -1,6 +1,7 @@
 import java.util.*;
 import java.net.InetAddress; 
 import java.net.UnknownHostException;
+import java.lang.Object;
 
 
 public class Main{
@@ -28,7 +29,7 @@ public class Main{
 		    String[] arr = cmd.split(" ");
 		    switch (arr[0]){
 		    case "connect":
-			if(arr.size()==3){
+			if(arr.length==3){
 			    me = new Entity(ip, id, port_udp, port_tcp);
 			    cl=new ClientTcp(me, arr[1], arr[2]);
 			    a=cl.clientTCP("connect");
@@ -57,8 +58,12 @@ public class Main{
 			is_connected=true;
 			break;
 		    case "dupl":
-			if(arr.size()==3){
-			    me = new Entity(ip, id, port_udp, port_tcp);
+			if(arr.length==3){
+			    System.out.println("multi diff adress ?");
+			    String multi_diff2 = scanner.nextLine();
+			    System.out.println("multi diff port ?");
+			    String port_diff2 = scanner.nextLine();
+			    me = new Entity(ip, id, port_udp, port_tcp, multi_diff2, port_diff2);
 			    cl=new ClientTcp(me, arr[1], arr[2]);
 			    a=cl.clientTCP("dupl");
 			    if(a==0){
@@ -72,9 +77,9 @@ public class Main{
 			    }
 			}else{
 			    System.out.println("wrong arguments");
-			}
+			}	
 			break;
-		    case "who's" :
+		    case "whos" :
 			if(is_connected=true){
 			    //blabla
 			}else{
