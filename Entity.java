@@ -16,6 +16,9 @@ public class Entity{
     String ip_diff2;
     //String ip; l'addresse de la machine locale
     
+    public Entity(){
+    }
+    
     public Entity(String _ip,String _id,String _port_udp,String _port_tcp){
 	this.ip=_ip;
 	this.id = _id;
@@ -90,5 +93,24 @@ public class Entity{
 	this.port_udp_next2 = _port_udp_next2;
     }
 
-
+    public String fill_ip(String ip) throws IpException{
+	String[] arr = ip.split("\\.");
+	String ip2="";
+	if(arr.length==4){
+	    int i;
+	    for(i=0; i<4; i++){
+		switch (arr[i].length()){
+		case 0 : ip2+="000"+arr[i]; break;
+		case 1 : ip2+="00"+arr[i]; break;
+		case 2 : ip2+="0"+arr[i]; break;
+		case 3 : ip2+=arr[i]; break;
+		default : throw new IpException();
+		}
+		if(i!=3){ ip2 += ".";}
+	    }
+	}else{
+	    throw new IpException();
+	}
+	return ip2;
+    }    
 }

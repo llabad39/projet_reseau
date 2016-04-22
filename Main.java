@@ -19,31 +19,53 @@ public class Main{
 	    id = scanner.nextLine();
 	    if(id.length()>8){
 		System.out.println("id too long, 8 char max");
+	    }else{
 		break;
 	    }
-	    try{
-		InetAddress IA = InetAddress.getLocalHost(); 
-		ip = IA.getHostAddress();
-	    }
-	    catch(UnknownHostException e){
-		System.out.println(e);
-		e.printStackTrace();
-	    }
-	    System.out.println("port TCP ?");
-	    port_tcp = scanner.nextLine();
-	   
+	}
+
+	while(arg){
 	    System.out.println("port UDP ?");
 	    port_udp = scanner.nextLine();
 	    try{
-		ServerSocket server=new ServerSocket(Integer.parseInt(port_tcp));
-	    }
-	    catch(Exception e){
-		System.out.println("Mauvais port tcp");
+		DatagramSocket dso=new DatagramSocket(Integer.parseInt(port_udp));
 		break;
+	    }	
+	    catch(Exception e){
+		System.out.println("Mauvais port udp");
 	    }
-	    arg=false;
 	}
-	Entity me;
+
+	while(arg){
+	    System.out.println("port TCP ?");
+	    port_tcp = scanner.nextLine();
+	    if(!port_tcp.equals(port_udp)){
+		try{
+		    ServerSocket server=new ServerSocket(Integer.parseInt(port_tcp));
+		    break;
+		}
+		catch(Exception e){
+		    System.out.println("Mauvais port tcp");
+		}
+	    }else{
+		System.out.println("Mauvais port tcp");
+	    }
+	}
+ 
+	Entity me=new Entity();
+	try{
+	    InetAddress IA = InetAddress.getLocalHost(); 
+	    ip =me.fill_ip(IA.getHostAddress());
+	    System.out.println(ip);
+	}
+	catch(UnknownHostException e){
+	    System.out.println(e);
+	    e.printStackTrace();
+	}
+	catch(IpException e){
+	    System.out.println(e);
+	    e.printStackTrace();
+	}
 	ClientTcp cl;
 	int a;
 	boolean is_connected=false;
@@ -53,18 +75,24 @@ public class Main{
 	    String[] arr = cmd.split(" ");
 	    switch (arr[0]){
 	    case "connect":
-		if(is_connected=false){
+		if(is_connected==false){
 		    if(arr.length==3){
-			me = new Entity(ip, id, port_udp, port_tcp);
-			cl=new ClientTcp(me, arr[1], arr[2]);
-			a=cl.clientTCP("connect");
-			if(a==0){
-			    ServeurTcp s = new ServeurTcp(me);
-			    Mythread mt = new Mythread(s);
-			    mt.run();
-			    is_connected=true;
-			}else{
-			    System.out.println("wrong arguments");
+			try{
+			    String ipf=me.fill_ip(arr[1]);
+			    me = new Entity(ip, id, port_udp, port_tcp);
+			    cl=new ClientTcp(me,ipf, arr[2]);
+			    a=cl.clientTCP("connect");
+			    if(a==0){
+				ServeurTcp s = new ServeurTcp(me);
+				Mythread mt = new Mythread(s);
+				mt.run();
+				is_connected=true;
+			    }else{
+				System.out.println("wrong arguments");
+			    }
+			}catch(IpException e){
+			    System.out.println(e);
+			    e.printStackTrace();  
 			}
 		    }else{
 			System.out.println("wrong arguments");
@@ -95,17 +123,23 @@ public class Main{
 			String multi_diff2 = scanner.nextLine();
 			System.out.println("multi diff port ?");
 			String port_diff2 = scanner.nextLine();
-			me = new Entity(ip, id, port_udp, port_tcp, multi_diff2, port_diff2);
-			cl=new ClientTcp(me, arr[1], arr[2]);
-			a=cl.clientTCP("dupl");
-			if(a==0){
-			    //serveur tcp
-			    //serveur udp
-			    is_connected=true;
-			}else{
-			    System.out.println("wrong arguments");
-			    System.out.println();
-			    b=false;
+			try{
+			    String ipf=me.fill_ip(arr[1]);
+			    me = new Entity(ip, id, port_udp, port_tcp, multi_diff2, port_diff2);
+			    cl=new ClientTcp(me,ipf, arr[2]);
+			    a=cl.clientTCP("dupl");
+			    if(a==0){
+				//serveur tcp
+				//serveur udp
+				is_connected=true;
+			    }else{
+				System.out.println("wrong arguments");
+				System.out.println();
+				b=false;
+			    }
+			}catch(IpException e){
+			    System.out.println(e);
+			    e.printStackTrace();  
 			}
 		    }else{
 			System.out.println("wrong arguments");
