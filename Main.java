@@ -59,13 +59,12 @@ public class Main{
 			cl=new ClientTcp(me, arr[1], arr[2]);
 			a=cl.clientTCP("connect");
 			if(a==0){
-			    //serveur tcp
-			    //serveur udp
+			    ServeurTcp s = new ServeurTcp(me);
+			    Mythread mt = new Mythread(s);
+			    mt.run();
 			    is_connected=true;
 			}else{
 			    System.out.println("wrong arguments");
-			    System.out.println();
-			    b=false;
 			}
 		    }else{
 			System.out.println("wrong arguments");

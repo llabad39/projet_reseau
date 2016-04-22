@@ -11,7 +11,7 @@ public class ServeurTcp{
 	try{
 	    int port_tcp = Integer.parseInt(ent.port_tcp);
 	    ServerSocket server = new ServerSocket(port_tcp);
-	    //while(true){
+	    while(true){
 		if(this.ent.ip_next2==null){
 
 		    Socket socket=server.accept();
@@ -40,7 +40,7 @@ public class ServeurTcp{
 		    socket.close();
 		}
 		   
-		//}
+		}
 	}
 	
 	catch(Exception e){
