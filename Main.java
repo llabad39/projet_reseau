@@ -53,56 +53,68 @@ public class Main{
 	    String[] arr = cmd.split(" ");
 	    switch (arr[0]){
 	    case "connect":
-		if(arr.length==3){
-		    me = new Entity(ip, id, port_udp, port_tcp);
-		    cl=new ClientTcp(me, arr[1], arr[2]);
-		    a=cl.clientTCP("connect");
-		    if(a==0){
-			//serveur tcp
-			//serveur udp
-			is_connected=true;
+		if(is_connected=false){
+		    if(arr.length==3){
+			me = new Entity(ip, id, port_udp, port_tcp);
+			cl=new ClientTcp(me, arr[1], arr[2]);
+			a=cl.clientTCP("connect");
+			if(a==0){
+			    //serveur tcp
+			    //serveur udp
+			    is_connected=true;
+			}else{
+			    System.out.println("wrong arguments");
+			    System.out.println();
+			    b=false;
+			}
 		    }else{
 			System.out.println("wrong arguments");
-			System.out.println();
-			b=false;
 		    }
+		    break;
 		}else{
-		    System.out.println("wrong arguments");
+		    System.out.println("You are already login");
 		}
-		break;
 	    case "create":
-		System.out.println("multi diff adress ?");
-		String multi_diff = scanner.nextLine();
-		System.out.println("multi diff port ?");
-		String port_diff = scanner.nextLine();
-		me = new Entity(ip, id, port_udp, port_tcp, multi_diff, port_diff);
-		//serveur udp
-		//serveur tcp
-		//tests : wrong b=false
-		is_connected=true;
-		break;
-	    case "dupl":
-		if(arr.length==3){
+		if(is_connected=false){
 		    System.out.println("multi diff adress ?");
-		    String multi_diff2 = scanner.nextLine();
+		    String multi_diff = scanner.nextLine();
 		    System.out.println("multi diff port ?");
-		    String port_diff2 = scanner.nextLine();
-		    me = new Entity(ip, id, port_udp, port_tcp, multi_diff2, port_diff2);
-		    cl=new ClientTcp(me, arr[1], arr[2]);
-		    a=cl.clientTCP("dupl");
-		    if(a==0){
-			//serveur tcp
-			//serveur udp
-			is_connected=true;
+		    String port_diff = scanner.nextLine();
+		    me = new Entity(ip, id, port_udp, port_tcp, multi_diff, port_diff);
+		    //serveur udp
+		    //serveur tcp
+		    //tests : wrong b=false
+		    is_connected=true;
+		    break;
+		}else{
+		    System.out.println("You are already login");
+		}
+	    case "dupl":
+		if(is_connected=false){
+		    if(arr.length==3){
+			System.out.println("multi diff adress ?");
+			String multi_diff2 = scanner.nextLine();
+			System.out.println("multi diff port ?");
+			String port_diff2 = scanner.nextLine();
+			me = new Entity(ip, id, port_udp, port_tcp, multi_diff2, port_diff2);
+			cl=new ClientTcp(me, arr[1], arr[2]);
+			a=cl.clientTCP("dupl");
+			if(a==0){
+			    //serveur tcp
+			    //serveur udp
+			    is_connected=true;
+			}else{
+			    System.out.println("wrong arguments");
+			    System.out.println();
+			    b=false;
+			}
 		    }else{
 			System.out.println("wrong arguments");
-			System.out.println();
-			b=false;
-		    }
+		    }	
+		    break;
 		}else{
-		    System.out.println("wrong arguments");
-		}	
-		break;
+		    System.out.println("You are already login");
+		}
 	    case "whos" :
 		if(is_connected=true){
 		    //blabla

@@ -59,6 +59,7 @@ int connectTCP(char *ip, int port, char *ip_dest, int port_dest){
   struct sockaddr_in adress_sock;
   adress_sock.sin_family = AF_INET;
   adress_sock.sin_port = htons(port_dest);
+  printf("t: %d\n",adress_sock.sin_port);
   if(inet_aton(ip_dest,&adress_sock.sin_addr) == 0){
     fprintf(stderr,"Veillez entrer une adresse correcte\n");
     return -1;
