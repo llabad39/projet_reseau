@@ -62,7 +62,8 @@ public class ClientTcp{
 		    System.err.println("Erreur d'acceptation, message repondu: "+ackd);
 		    return -1;
 		}	
-	    }	   
+	    }
+	    ServeurTcp  st = new ServeurTcp(
 	}catch(Exception e){
 	    System.out.println(e);
 	    e.printStackTrace();
