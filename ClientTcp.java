@@ -62,7 +62,10 @@ public class ClientTcp{
 		    System.err.println("Erreur d'acceptation, message repondu: "+ackd);
 		    return -1;
 		}	
-	    }	   
+	    }
+	    ServeurTcp  st = new ServeurTcp(ent);
+	    Mythread mt = new Mythread(st);
+	    mt.run();
 	}catch(Exception e){
 	    System.out.println(e);
 	    e.printStackTrace();
