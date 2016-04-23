@@ -57,6 +57,8 @@ public class Main{
 	    InetAddress IA = InetAddress.getLocalHost(); 
 	    ip =me.fill_ip(IA.getHostAddress());
 	    System.out.println(ip);
+	    //System.out.println(ip.hashCode());
+
 	}
 	catch(UnknownHostException e){
 	    System.out.println(e);
@@ -77,22 +79,16 @@ public class Main{
 	    case "connect":
 		if(is_connected==false){
 		    if(arr.length==3){
-			try{
-			    String ipf=me.fill_ip(arr[1]);
-			    me = new Entity(ip, id, port_udp, port_tcp);
-			    cl=new ClientTcp(me,ipf, arr[2]);
-			    a=cl.clientTCP("connect");
-			    if(a==0){
-				ServeurTcp s = new ServeurTcp(me);
-				Mythread mt = new Mythread(s);
-				mt.run();
-				is_connected=true;
-			    }else{
-				System.out.println("wrong arguments");
-			    }
-			}catch(IpException e){
-			    System.out.println(e);
-			    e.printStackTrace();  
+			me = new Entity(ip, id, port_udp, port_tcp);
+			cl=new ClientTcp(me,arr[1], arr[2]);
+			a=cl.clientTCP("connect");
+			if(a==0){
+			    ServeurTcp s = new ServeurTcp(me);
+			    Mythread mt = new Mythread(s);
+			    mt.run();
+			    is_connected=true;
+			}else{
+			    System.out.println("wrong arguments");
 			}
 		    }else{
 			System.out.println("wrong arguments");
