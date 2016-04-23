@@ -7,11 +7,11 @@ public class ServeurTcp{
     public ServeurTcp(Entity e){
 	this.ent = e;
     } 
-    public void runServ(){
+    public void runServ(boolean run){
 	try{
 	    int port_tcp = Integer.parseInt(ent.port_tcp);
 	    ServerSocket server = new ServerSocket(port_tcp);
-	    while(true){
+	    while(run){
 		if(this.ent.ip_next2==null){
 
 		    Socket socket=server.accept();
@@ -52,6 +52,6 @@ public class ServeurTcp{
 	Entity e = new Entity("127.0.0.1","lucas92","4242","4243");
 	
 	ServeurTcp s = new ServeurTcp(e);
-	s.runServ();
+	s.runServ(true);
     }
 }
