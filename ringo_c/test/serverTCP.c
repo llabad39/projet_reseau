@@ -9,6 +9,7 @@ int main(int argc, char* argv[]){
       return 0;
     }
     entity ent = createEntity("3333","4444",argv[1],"3434");
+    getInfo(ent);
     if(serverTCP(atoi(ent.port_tcp),ent) != 0){
       fprintf(stderr,"Erreur dans l'execution du serveur TCP\n");
       return -1;

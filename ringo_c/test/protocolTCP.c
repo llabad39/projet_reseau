@@ -1,4 +1,5 @@
 #include "protocolTCP.h"
+//#include "utils.h"
 
 int serverTCP(int port, entity ent){
   int sock = socket(PF_INET,SOCK_STREAM,0);
@@ -42,7 +43,7 @@ int serverTCP(int port, entity ent){
 	return -1;
       }
       buff[recv]='\0';
-      printf("SERVEUR TCP - Message recu : %s\n",buff);
+      printf("Message recu : %s\n",buff);
       
       strtok(buff," ");
       strncpy(ent.ip_next,strtok(NULL," "),15);
@@ -61,7 +62,7 @@ int serverTCP(int port, entity ent){
 
 //Attention : a modifier pour envoyer le port udp et non pas le port tcp
 //peut etre prendre en argument une entity ?
-int connectTCP(char *ip, int port, char *ip_dest, int port_dest, entity * ent){
+int connectTCP(char *ip, int port, char *ip_dest, int port_dest){
   struct sockaddr_in adress_sock;
   adress_sock.sin_family = AF_INET;
   adress_sock.sin_port = htons(port_dest);
@@ -80,7 +81,7 @@ int connectTCP(char *ip, int port, char *ip_dest, int port_dest, entity * ent){
       return -1;
     }
     buff[size_rec] = '\0';
-    printf("CLIENT TCP - Message recu : %s\n",buff);
+    printf("Message : %s\n",buff);
     char mess[M_SIZE_MAX] = "NEWC ";
     char port_s[4];
     snprintf(port_s,4,"%d",port);
@@ -98,26 +99,37 @@ int connectTCP(char *ip, int port, char *ip_dest, int port_dest, entity * ent){
       return -1;
     }
     buff2[size_rec] = '\0';
-    printf("CLIENT TCP - Message recu : %s\n",buff2);
+    printf("Message : %s\n",buff2);
     if(strcmp(buff2,"ACKC\n") < 0){
       fprintf(stderr,"Probleme d'acceptation dans l'anneau\n");
       close(sock);
       return -1;      
     }
        
-    strtok(buff," "); 
-    strncpy(ent->ip_next,strtok(NULL," "),15);
-    strncpy(ent->port_udp_next,strtok(NULL," "),4);
-    strncpy(ent->ip_diff,strtok(NULL," "),15);
-    strncpy(ent->port_diff,strtok(NULL," "),4);
-    
+    strtok(buff," ");
+
+    //CREATE ENTITY -> return ent ??
+    /*
+      char * _ip_next = strtok(NULL," ");
+      char * _port_udp_next = strtok(NULL," ");
+      char * _ip_diff = strtok(NULL," ");
+      char * _port_diff = strtok(NULL," ");
+      entity ent = createEntity(_ip_diff,_port_diff,port,_port_udp);
+
+    strncpy(ent.ip_next,strtok(NULL," "),15);
+    strncpy(ent.port_udp_next,strtok(NULL," "),4);
+    strncpy(ent.ip_diff,strtok(NULL," "),15);
+    strncpy(ent.port_diff,strtok(NULL," "),4);
+
+    getInfo(ent);
+    */
   }else{
     fprintf(stderr,"Probleme lors du connect\nVerifier le port tcp indiqué\n");
     close(sock);
-    return -1;
+    return NULL;
   }
   close(sock);
-  return 0;
+  return ent;
 }
 
 

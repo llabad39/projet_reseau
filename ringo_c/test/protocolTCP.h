@@ -9,10 +9,9 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <sys/types.h>
 
 #include "utils.h"
 
 int serverTCP(int port, entity ent);
 
-int connectTCP(char *ip, int port, char *ip_dest, int port_dest,entity * ent);
+int connectTCP(char *ip, int port, char *ip_dest, int port_dest);
