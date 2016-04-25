@@ -20,6 +20,25 @@ public class Mess{
 	return Long.parseLong(dat+ent.ip.hashCode());
     }
 
+    public void send_mess(){
+	String[] arr = cmd.split(" ");
+	switch (arr[0]){
+	case "whos" : 
+	    if(arr.length==1){
+		//envoyer "WHOS "+idm
+		// Mess m=new Mess("memb", ent);
+		//  m.send_mess();
+	    }else{
+		System.out.println("commande mal formée : whos ne prend pas d'argument");
+	    }
+	    break;
+	case "memb" : 
+	    //envoyer "MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp;
+	    break;
+	case "gbye" : 
+	    
+	}
+    }
 
 }
 

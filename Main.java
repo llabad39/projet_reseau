@@ -93,10 +93,10 @@ public class Main{
 		    }else{
 			System.out.println("wrong arguments");
 		    }
-		    break;
 		}else{
 		    System.out.println("You are already login");
 		}
+		break;
 	    case "create":
 		if(is_connected=false){
 		    System.out.println("multi diff adress ?");
@@ -108,10 +108,10 @@ public class Main{
 		    //serveur tcp
 		    //tests : wrong b=false
 		    is_connected=true;
-		    break;
 		}else{
 		    System.out.println("You are already login");
 		}
+		break;
 	    case "dupl":
 		if(is_connected=false){
 		    if(arr.length==3){
@@ -139,25 +139,24 @@ public class Main{
 			}
 		    }else{
 			System.out.println("wrong arguments");
-		    }	
-		    break;
+		    }
 		}else{
 		    System.out.println("You are already login");
-		}
-	    case "whos" :
-		if(is_connected=true){
-		    //blabla
-		}else{
-		    System.out.println("use connect, create or dupl");
-		}
+		}	
 		break;
 	    case "quit ring" :
 		is_connected=false;
 		me=null;
 		//serveurs=null
 		break;
-	    default : 
-		System.out.println("incompatible command");
+	    default :
+		if(is_connected=true){
+		    Mess m=new Mess(cmd, me);
+		    m.send_mess();
+		}else{
+		    System.out.println("use connect, create or dupl");
+		}
+		break;
 	    }
 	}
     }
