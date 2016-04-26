@@ -54,8 +54,7 @@ public class Main{
  
 	Entity me=new Entity();
 	try{
-	    InetAddress IA = InetAddress.getLocalHost(); 
-	    System.out.println(IA.getHostAddress());
+	    InetAddress IA = InetAddress.getLocalHost();
 	    ip =me.fill_ip(IA.getHostAddress());
 	    System.out.println(ip);
 	    //System.out.println(ip.hashCode());
