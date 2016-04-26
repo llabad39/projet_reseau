@@ -2,10 +2,9 @@ import java.net.*;
 import java.io.*;
 
 
-public class ServeurTcp{
-    Entity ent;
+public class ServeurTcp extends Serveur{
     public ServeurTcp(Entity e){
-	this.ent = e;
+	super(e);
     } 
     public void runServ(boolean run){
 	try{
@@ -26,7 +25,7 @@ public class ServeurTcp{
 		    if(token[0].equals("NEWC")){
 			ent.ip_next = token[1];
 			ent.port_udp_next = token[2];
-			pw.print("ACKD\n");
+			pw.print("ACKC\n");
 			pw.flush();
 		    }
 		    else if(token[0].equals("DUPL")){
@@ -40,7 +39,7 @@ public class ServeurTcp{
 		    socket.close();
 		}
 		   
-		}
+	    }
 	}
 	
 	catch(Exception e){
