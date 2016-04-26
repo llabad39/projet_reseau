@@ -6,6 +6,7 @@ public class Mythread implements Runnable{
     boolean r;
     public Mythread(ServeurTcp s){
 	this.serv = s;
+	r=true;
     }
     public void run(){
 	try{

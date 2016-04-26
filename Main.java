@@ -57,6 +57,8 @@ public class Main{
 	    InetAddress IA = InetAddress.getLocalHost(); 
 	    ip =me.fill_ip(IA.getHostAddress());
 	    System.out.println(ip);
+	    //System.out.println(ip.hashCode());
+
 	}
 	catch(UnknownHostException e){
 	    System.out.println(e);
@@ -77,31 +79,25 @@ public class Main{
 	    case "connect":
 		if(is_connected==false){
 		    if(arr.length==3){
-			try{
-			    String ipf=me.fill_ip(arr[1]);
-			    me = new Entity(ip, id, port_udp, port_tcp);
-			    cl=new ClientTcp(me,ipf, arr[2]);
-			    a=cl.clientTCP("connect");
-			    if(a==0){
-				ServeurTcp s = new ServeurTcp(me);
-				//	Mythread mt = new Mythread(s);
-				s.runServ(true);
-				//mt.run();
-				is_connected=true;
-			    }else{
-				System.out.println("wrong arguments");
-			    }
-			}catch(IpException e){
-			    System.out.println(e);
-			    e.printStackTrace();  
+
+			me = new Entity(ip, id, port_udp, port_tcp);
+			cl=new ClientTcp(me,arr[1], arr[2]);
+			a=cl.clientTCP("connect");
+			if(a==0){
+			    ServeurTcp s = new ServeurTcp(me);
+			    Mythread mt = new Mythread(s);
+			    mt.run();
+			    is_connected=true;
+			}else{
+			    System.out.println("wrong arguments");
 			}
 		    }else{
 			System.out.println("wrong arguments");
 		    }
-		    break;
 		}else{
 		    System.out.println("You are already login");
 		}
+		break;
 	    case "create":
 		if(is_connected=false){
 		    System.out.println("multi diff adress ?");
@@ -113,10 +109,10 @@ public class Main{
 		    //serveur tcp
 		    //tests : wrong b=false
 		    is_connected=true;
-		    break;
 		}else{
 		    System.out.println("You are already login");
 		}
+		break;
 	    case "dupl":
 		if(is_connected=false){
 		    if(arr.length==3){
@@ -144,25 +140,24 @@ public class Main{
 			}
 		    }else{
 			System.out.println("wrong arguments");
-		    }	
-		    break;
+		    }
 		}else{
 		    System.out.println("You are already login");
-		}
-	    case "whos" :
-		if(is_connected=true){
-		    //blabla
-		}else{
-		    System.out.println("use connect, create or dupl");
-		}
+		}	
 		break;
 	    case "quit ring" :
 		is_connected=false;
 		me=null;
 		//serveurs=null
 		break;
-	    default : 
-		System.out.println("incompatible command");
+	    default :
+		if(is_connected=true){
+		    Mess m=new Mess(cmd, me);
+		    m.send_mess();
+		}else{
+		    System.out.println("use connect, create or dupl");
+		}
+		break;
 	    }
 	}
     }
