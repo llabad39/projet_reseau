@@ -16,8 +16,7 @@ public class Mess{
 	String[] arr=maDate.toString().split(" ");
 	String[] arr2=arr[3].split("\\:");
 	String dat=""+arr2[0]+arr2[1]+arr2[2];
-	System.out.println( Long.parseLong(dat+ent.ip.hashCode()));
-	return Long.parseLong(dat+ent.ip.hashCode());
+	return Long.parseLong(ent.ip.hashCode()+dat);
     }
 
     public void send_mess(){
