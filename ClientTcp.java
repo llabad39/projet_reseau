@@ -29,7 +29,7 @@ public class ClientTcp{
 		pw.close();
 		br.close();
 		socket.close();
-		if(!ackc.equals("ACKD\n")){
+		if(!ackc.equals("ACKD")){
 		    System.err.println("Erreur d'acceptation, message repondu: "+ackc);
 		    return -1;
 		}
@@ -50,19 +50,22 @@ public class ClientTcp{
 		br.close();
 		socket.close();
 		switch (ackd){
-		case "ACKD\n" : 
+		case "ACKD" : 
 		    this.ent.setIpNext(welc2[1]);
 		    this.ent.setPortUdpNext(welc2[2]);
 		    System.out.println("connection réussie");	
 		    break;
-		case "NOTC\n" :
+		case "NOTC" :
 		    System.out.println("L'entitée est déjà doubleur");	
 		    return -1;
 		default : 
 		    System.err.println("Erreur d'acceptation, message repondu: "+ackd);
 		    return -1;
 		}	
-	    }	   
+	    }
+	    ServeurTcp  st = new ServeurTcp(ent);
+	    Mythread mt = new Mythread(st);
+	    mt.run();
 	}catch(Exception e){
 	    System.out.println(e);
 	    e.printStackTrace();
