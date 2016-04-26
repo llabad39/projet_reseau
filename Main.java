@@ -88,7 +88,7 @@ public class Main{
 			if(a==0){
 			    ServeurTcp s = new ServeurTcp(me);
 			    Mythread mt = new Mythread(s);
-			    mt.run();
+			    mt.start();
 			    is_connected=true;
 			}else{
 			    System.out.println("wrong arguments");
