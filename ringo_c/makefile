@@ -1,18 +1,25 @@
 CFLAGS = -Wall
 CC = gcc
-EXEC = serverTCP clientTCP
-
+EXEC = serverTCP clientTCP envoiUDP serverUDP
+OBJECTS = protocolTCP.o utils.o entity.o
+HEADERS = $(wildcard *.h)
 
 all: $(EXEC)
 
-serverTCP: 
-	$(CC) $(CFLAGS) serverTCP.c protocolTCP.c utils.c 
+serverTCP: serverTCP.o $(OBJECTS)
 
-clientTCP: 
-	$(CC) $(CFLAGS) clientTCP.c protocolTCP.c utils.c
+clientTCP: clientTCP.o $(OBJECTS)
+
+envoiUDP: envoiUDP.o $(OBJECTS)
+
+serverUDP: serverUDP.o $(OBJECTS)
+
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -rf *.o
+	rm -f *.o
+	rm -f *~
 
-mrproper: clean
-	rm -rf $(EXEC)
+proper: 
+	rm -f $(EXEC)
