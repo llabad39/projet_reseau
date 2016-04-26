@@ -36,7 +36,7 @@ public class Mess{
 	    //envoyer "MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp;
 	    break;
 	case "gbye" : 
-	    
+	    // envoyer "GBYE "+idm+" "+ent.ip+" "+ent.port_udp+" "+ent.ip_next+" "+ent.port_udp_next;
 	}
     }
 
