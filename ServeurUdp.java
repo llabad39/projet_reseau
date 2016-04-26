@@ -2,15 +2,13 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class ServeurUdp {
-    Entity ent;
+public class ServeurUdp extends Serveur{
     ArrayList<Long> idmess;
-    boolean quit = false;
     public ServeurUdp(Entity e){
-	this.ent = e;
+	super(e);
 	this.idmess=new ArrayList<Long>();
     }
-    public void runServ(){
+    public void runServ(boolean run){
 	try{
 	    int port_udp=Integer.parseInt(ent.port_udp);
 	    DatagramSocket dso=new DatagramSocket(port_udp);
@@ -23,7 +21,7 @@ public class ServeurUdp {
 		String[] arr = st.split(" ");
 		switch (arr[0]){
 		case "EYBG" : 
-		    if(quit){
+		    if(!run){
 			b=false;
 		    }else{
 			//transférer
@@ -38,7 +36,10 @@ public class ServeurUdp {
     public void add_list(Long l){
 	idmess.add(l);
     }
-    public void quit(){
-	quit=true;
+    
+    public static void main(String[]args){
+	Entity e = new Entity("127.000.000.001","lucas92","4242","4243");
+	ServeurUdp serv  = new ServeurUdp(e);
+	serv.runServ(true);
     }
 }

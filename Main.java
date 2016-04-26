@@ -152,7 +152,7 @@ public class Main{
 		is_connected=false;
 		me=null;
 		m=new Mess("gbye", me);
-		su.quit();
+		//su.quit();
 		m.send_mess();
 		//serveurs=null
 		break;
