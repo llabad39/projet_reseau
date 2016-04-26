@@ -82,6 +82,7 @@ public class Main{
 	    case "connect":
 		if(is_connected==false){
 		    if(arr.length==3){
+
 			me = new Entity(ip, id, port_udp, port_tcp);
 			cl=new ClientTcp(me,arr[1], arr[2]);
 			a=cl.clientTCP("connect");
