@@ -4,7 +4,7 @@ import java.io.*;
 public class Mythread implements Runnable{
     Serveur serv;
     boolean r;
-    public Mythread(ServeurTcp s){
+    public Mythread(Serveur s){
 	this.serv = s;
 	r=true;
     }

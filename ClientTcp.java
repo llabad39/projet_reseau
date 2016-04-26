@@ -29,11 +29,10 @@ public class ClientTcp{
 		pw.close();
 		br.close();
 		socket.close();
-		if(!ackc.equals("ACKD")){
+		if(!ackc.equals("ACKC")){
 		    System.err.println("Erreur d'acceptation, message repondu: "+ackc);
 		    return -1;
 		}
-		// welc[0]="WELC " / welc[1]=ip / welc[2]=port / welc[3]=ip-diff / welc[4]=port-diff
 		this.ent.setIpNext(welc[1]);
 		this.ent.setPortUdpNext(welc[2]);
 		this.ent.setIpDiff(welc[3]);
@@ -63,9 +62,6 @@ public class ClientTcp{
 		    return -1;
 		}	
 	    }
-	    ServeurTcp  st = new ServeurTcp(ent);
-	    Mythread mt = new Mythread(st);
-	    mt.run();
 	}catch(Exception e){
 	    System.out.println(e);
 	    e.printStackTrace();

@@ -48,7 +48,7 @@ public class ServeurTcp extends Serveur{
 	}
     }
     public static void main(String[]args){
-	Entity e = new Entity("127.000.000.001","lucas92","4242","4243");
+	Entity e = new Entity("127.000.000.001","lucas92","4242","4146");
 	ServeurTcp s = new ServeurTcp(e);
 	s.runServ(true);
     }
