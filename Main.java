@@ -69,12 +69,14 @@ public class Main{
 	    e.printStackTrace();
 	}
 	ClientTcp cl;
+	ServeurUdp su=new ServeurUdp(me);
 	int a;
 	boolean is_connected=false;
 	boolean b=true;
 	while(b){
 	    String cmd = scanner.nextLine();
 	    String[] arr = cmd.split(" ");
+	    Mess m;
 	    switch (arr[0]){
 	    case "connect":
 		if(is_connected==false){
@@ -147,11 +149,14 @@ public class Main{
 	    case "quit ring" :
 		is_connected=false;
 		me=null;
+		m=new Mess("gbye", me);
+		su.quit();
+		m.send_mess();
 		//serveurs=null
 		break;
 	    default :
 		if(is_connected=true){
-		    Mess m=new Mess(cmd, me);
+		    m=new Mess(cmd, me);
 		    m.send_mess();
 		}else{
 		    System.out.println("use connect, create or dupl");
