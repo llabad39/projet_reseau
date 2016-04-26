@@ -1,3 +1,0 @@
-
-gcc -Wall clientTCP.c protocolTCP.c utils.c -o clientTCP
-gcc -Wall serverTCP.c protocolTCP.c utils.c -o serverTCP
