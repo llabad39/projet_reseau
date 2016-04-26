@@ -28,12 +28,12 @@ public class Main{
 	    System.out.println("port UDP ?");
 	    port_udp = scanner.nextLine();
 	    try{
-		DatagramSocket dso=new DatagramSocket(Integer.parseInt(port_udp));
+	    DatagramSocket dso=new DatagramSocket(Integer.parseInt(port_udp));
 		break;
-	    }	
-	    catch(Exception e){
+		}	
+		catch(Exception e){
 		System.out.println("Mauvais port udp");
-	    }
+		}
 	}
 
 	while(arg){
@@ -42,6 +42,7 @@ public class Main{
 	    if(!port_tcp.equals(port_udp)){
 		try{
 		    ServerSocket server=new ServerSocket(Integer.parseInt(port_tcp));
+		    server.close();
 		    break;
 		}
 		catch(Exception e){
@@ -53,21 +54,21 @@ public class Main{
 	}
  
 	Entity me=new Entity();
-	try{
-	    InetAddress IA = InetAddress.getLocalHost();
-	    ip =me.fill_ip(IA.getHostAddress());
-	    System.out.println(ip);
-	    //System.out.println(ip.hashCode());
 
-	}
-	catch(UnknownHostException e){
-	    System.out.println(e);
+
+	try{
+	    Enumeration<NetworkInterface> listNi=NetworkInterface.getNetworkInterfaces();
+	    NetworkInterface nic=listNi.nextElement();
+	    Enumeration<InetAddress> listIa=nic.getInetAddresses();
+	    InetAddress iac=listIa.nextElement();
+	    iac=listIa.nextElement();
+	    String[] arr = iac.toString().split("/");
+	    ip=me.fill_ip(arr[1]);
+	    System.out.println(ip);
+	} catch(Exception e){
 	    e.printStackTrace();
 	}
-	catch(IpException e){
-	    System.out.println(e);
-	    e.printStackTrace();
-	}
+
 	ClientTcp cl;
 	ServeurUdp su=new ServeurUdp(me);
 	int a;
