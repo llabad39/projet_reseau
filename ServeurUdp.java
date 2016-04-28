@@ -33,13 +33,9 @@ public class ServeurUdp extends Serveur{
 	    e.printStackTrace();
 	}
     }
+
+
     public void add_list(Long l){
 	idmess.add(l);
-    }
-    
-    public static void main(String[]args){
-	Entity e = new Entity("127.000.000.001","lucas92","4242","4243");
-	ServeurUdp serv  = new ServeurUdp(e);
-	serv.runServ(true);
     }
 }
