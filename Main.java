@@ -80,6 +80,7 @@ public class Main{
 	    String cmd = scanner.nextLine();
 	    String[] arr = cmd.split(" ");
 	    Mess m;
+
 	    while(!is_connected){
 		switch (arr[0]){
 		case "connect":
