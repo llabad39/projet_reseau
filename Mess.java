@@ -16,8 +16,6 @@ public class Mess{
 	String[] arr=maDate.toString().split(" ");
 	String[] arr2=arr[3].split("\\:");
 	String dat=""+arr2[0]+arr2[1]+arr2[2];
-	System.out.println(ent.ip.hashCode());
-	System.out.println(Long.parseLong(ent.ip.hashCode()+dat));
 
 	return Long.parseLong(ent.ip.hashCode()+dat);
     }
@@ -39,7 +37,7 @@ public class Mess{
 	    //envoyer "MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp;
 	    break;
 	case "eybg" : 
-	    cl=new ClientUdp( "GBYE "+idm );
+	    cl=new ClientUdp( "EYBG "+idm );
 	    cl.send(ent.ip_next, ent.port_udp_next);
 	    break;
 	case "gbye" :

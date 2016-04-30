@@ -3,16 +3,14 @@ import java.net.*;
 import java.util.*;
 
 public class ServeurUdp extends Serveur{
-    Entity e;
+    //Entity e;
     ArrayList<Long> idmess;
     public ServeurUdp(Entity e){
 	super(e);
 	this.idmess=new ArrayList<Long>();
-	System.out.println((e.id));
 
     }
     public void runServ(boolean run){
-	//System.out.println((e.id));
 	try{
 	    int port_udp=Integer.parseInt(ent.port_udp);
 	    DatagramSocket dso=new DatagramSocket(port_udp);
@@ -27,17 +25,21 @@ public class ServeurUdp extends Serveur{
 		switch (arr[0]){
 		case "GBYE" : 
 		    System.out.println("GBYE");
-		    System.out.println((e.id));
-		    if(arr[1].equals(e.ip_next)){
-			m=new Mess("eybg", e);
+			System.out.println(arr[2]+" "+ent.ip_next);
+
+		    if(arr[2].equals(ent.ip_next)){
+			System.out.println(arr[2]+" "+ent.ip_next);
+			m=new Mess("eybg", ent);
 			m.send_mess();
 		    }
 		    break;
 		case "EYBG" : 
-		    if(!run){
+		    //if(!run){
 			b=false;
-			//	e=null;
-		    }
+			ent=null;
+			dso.close();
+			System.out.println("vous etes déconnectés");
+			//}
 		    break;
 		}
 	    }

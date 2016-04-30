@@ -37,7 +37,6 @@ public class ClientTcp{
 		this.ent.setPortUdpNext(welc[2]);
 		this.ent.setIpDiff(welc[3]);
 		this.ent.setPortDiff(welc[4]);	
-		System.out.println("connection réussie");	
 		break;
 	    case "dupl" : 
 		String mess2 = br.readLine();
@@ -52,7 +51,6 @@ public class ClientTcp{
 		case "ACKD" : 
 		    this.ent.setIpNext(welc2[1]);
 		    this.ent.setPortUdpNext(welc2[2]);
-		    System.out.println("connection réussie");	
 		    break;
 		case "NOTC" :
 		    System.out.println("L'entitée est déjà doubleur");	

@@ -65,7 +65,6 @@ public class Main{
 	    iac=listIa.nextElement();
 	    String[] arr = iac.toString().split("/");
 	    ip=me.fill_ip(arr[1]);
-	    System.out.println(ip);
 	} catch(Exception e){
 	    e.printStackTrace();
 	}
@@ -135,26 +134,21 @@ public class Main{
 		    break;
 		}
 	    }
-	    System.out.println("avant");
+	    System.out.println("vous etes connectés");
 	    ServeurTcp s = new ServeurTcp(me);
 	    ServeurUdp u =  new ServeurUdp(me);
 	    Mythread mt1 = new Mythread(s);
 	    Mythread mt2 = new Mythread(u);
-	    Thread t1=new Thread(mt1,"Bob");
-	    System.out.println("avant");
-	    Thread t2=new Thread(mt2,"Bob");
+	    Thread t1=new Thread(mt1);
+	    Thread t2=new Thread(mt2);
 	    t1.start();
-	    System.out.println("milieu");
 	    t2.start();
-		  System.out.println("fin");
-	  System.out.println("ok1");	
+
 	    while (is_connected){
-  System.out.println("ok2");
 		cmd = scanner.nextLine();
 		arr = cmd.split(" ");
 		switch (arr[0]){
 		case "quit_ring" :
-		    System.out.println("ok");
 		    is_connected=false;
 		    m=new Mess("gbye", me);
 		    mt2.arret();
