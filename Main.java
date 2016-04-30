@@ -71,7 +71,6 @@ public class Main{
 	}
 
 	ClientTcp cl;
-	ServeurUdp su=new ServeurUdp(me);
 	int a;
 	boolean is_connected=false;
 	boolean b=true;
@@ -136,6 +135,7 @@ public class Main{
 		    break;
 		}
 	    }
+	    System.out.println("avant");
 	    ServeurTcp s = new ServeurTcp(me);
 	    ServeurUdp u =  new ServeurUdp(me);
 	    Mythread mt1 = new Mythread(s);
@@ -153,14 +153,14 @@ public class Main{
 		cmd = scanner.nextLine();
 		arr = cmd.split(" ");
 		switch (arr[0]){
-		case "quit ring" :
+		case "quit_ring" :
 		    System.out.println("ok");
 		    is_connected=false;
-		    me=null;
 		    m=new Mess("gbye", me);
 		    mt2.arret();
 		    mt1.arret();
 		    m.send_mess();
+		   
 		    //serveurs=null
 		    break;
 		default :
