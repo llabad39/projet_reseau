@@ -75,11 +75,11 @@ public class Main{
 	boolean b=true;
 	
 	while(b){
-	    String cmd = scanner.nextLine();
-	    String[] arr = cmd.split(" ");
 	    Mess m;
 
 	    while(!is_connected){
+		String cmd = scanner.nextLine();
+		String[] arr = cmd.split(" ");
 		switch (arr[0]){
 		case "connect":
 			if(arr.length==3){			    
@@ -145,20 +145,21 @@ public class Main{
 	    t2.start();
 
 	    while (is_connected){
-		cmd = scanner.nextLine();
-		arr = cmd.split(" ");
+		String cmd = scanner.nextLine();
+		String[] arr = cmd.split(" ");
 		switch (arr[0]){
 		case "quit_ring" :
 		    is_connected=false;
-		    m=new Mess("gbye", me);
+		    m=new Mess("gbye", me, u);
 		    mt2.arret();
 		    mt1.arret();
+		    u.add_list(m.idm);
 		    m.send_mess();
-		   
 		    //serveurs=null
 		    break;
+ 
 		default :
-		    m=new Mess(cmd, me);
+		    m=new Mess(cmd, me, u);
 		    m.send_mess();
 		    break;
 		}

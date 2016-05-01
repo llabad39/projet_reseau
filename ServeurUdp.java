@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.*;
 
 public class ServeurUdp extends Serveur{
-    //Entity e;
+    boolean test=false;
     ArrayList<Long> idmess;
     public ServeurUdp(Entity e){
 	super(e);
@@ -22,24 +22,45 @@ public class ServeurUdp extends Serveur{
 		String st=new String(paquet.getData(),0,paquet.getLength());
 		String[] arr = st.split(" ");
 		Mess m;
+		ClientUdp cl;
 		switch (arr[0]){
 		case "GBYE" : 
-		    System.out.println("GBYE");
-			System.out.println(arr[2]+" "+ent.ip_next);
-
 		    if(arr[2].equals(ent.ip_next)){
-			System.out.println(arr[2]+" "+ent.ip_next);
-			m=new Mess("eybg", ent);
+			m=new Mess("eybg", ent, this);
 			m.send_mess();
+		    }else{
+		        transferer( st);
 		    }
 		    break;
 		case "EYBG" : 
 		    //if(!run){
-			b=false;
-			ent=null;
-			dso.close();
-			System.out.println("vous etes déconnectés");
-			//}
+		    b=false;
+		    ent=null;
+		    dso.close();
+		    System.out.println("vous etes déconnectés");
+		    //}
+		    break;
+		case "WHOS" :
+		    if(!idmess.contains(Long.parseLong(arr[1]))){
+			m=new Mess("memb", ent, this);
+			m.send_mess();
+		        transferer( st);
+		    }	
+		    break;
+		
+		case "MEMB" : 
+		    if(!idmess.contains(Long.parseLong(arr[1]))){
+			transferer( st);
+			System.out.println(arr[2]+" "+arr[3]+" "+arr[4]);
+			transferer(st);
+		    }
+		    break;
+		case "TEST" : 
+		    if(!idmess.contains(Long.parseLong(arr[1]))){
+			transferer(st);
+		    }else{
+			test=false;
+		    }
 		    break;
 		}
 	    }
@@ -51,5 +72,29 @@ public class ServeurUdp extends Serveur{
 
     public void add_list(Long l){
 	idmess.add(l);
+    }
+
+    public void test1(){
+	test=true;
+    }
+    public void test2(){
+	try{
+	    Thread.sleep(2000);
+	}catch(InterruptedException e){
+	    e.printStackTrace();
+	}
+	System.out.println("test");
+	if(!test){
+	    System.out.println("test réussi");
+	}else{
+	    //down
+	}
+    }
+    public void transferer(String s){
+	ClientUdp cl=new ClientUdp(s);
+	cl.send(ent.ip_next, ent.port_udp_next);
+	if(ent.ip_next2!=null){
+	    cl.send(ent.ip_next2, ent.port_udp_next2);	    
+	} 
     }
 }

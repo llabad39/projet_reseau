@@ -1,11 +1,13 @@
 import java.util.*;
 
 public class Mess{
+    ServeurUdp u;
     String cmd;
     Entity ent;
     long idm;
 
-    public Mess(String cmd, Entity ent){
+    public Mess(String cmd, Entity ent, ServeurUdp u){
+	this.u=u;
 	this.cmd=cmd;
 	this.ent=ent;
 	this.idm=give_idm(ent);
@@ -17,7 +19,7 @@ public class Mess{
 	String[] arr2=arr[3].split("\\:");
 	String dat=""+arr2[0]+arr2[1]+arr2[2];
 
-	return Long.parseLong(ent.ip.hashCode()+dat);
+	return Long.parseLong(ent.ip.hashCode()+dat+(int)Math.floor(Math.random()*99));
     }
 
     public void send_mess(){
@@ -25,30 +27,33 @@ public class Mess{
 	ClientUdp cl;
 	switch (arr[0]){
 	case "whos" : 
-	    if(arr.length==1){
-		//envoyer "WHOS "+idm
-		// Mess m=new Mess("memb", ent);
-		//  m.send_mess();
-	    }else{
-		System.out.println("commande mal formée : whos ne prend pas d'argument");
-	    }
+	    envoyer( "WHOS "+idm );
+	    envoyer("MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp );
 	    break;
-	case "memb" : 
-	    //envoyer "MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp;
+	case "memb" :
+	    envoyer("MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp );
 	    break;
 	case "eybg" : 
-	    cl=new ClientUdp( "EYBG "+idm );
-	    cl.send(ent.ip_next, ent.port_udp_next);
+	    envoyer( "EYBG "+idm );
 	    break;
 	case "gbye" :
-	    cl=new ClientUdp( "GBYE "+idm+" "+ent.ip+" "+ent.port_udp+" "+ent.ip_next+" "+ent.port_udp_next);
-	    cl.send(ent.ip_next, ent.port_udp_next);
-	    if(ent.ip_next2!=null){
-		cl.send(ent.ip_next2, ent.port_udp_next2);	    
-	    } 
-	    // envoyer "GBYE "+idm+" "+ent.ip+" "+ent.port_udp+" "+ent.ip_next+" "+ent.port_udp_next;
+	    envoyer( "GBYE "+idm+" "+ent.ip+" "+ent.port_udp+" "+ent.ip_next+" "+ent.port_udp_next);
+	    break;
+	case "test" :
+	    u.test1();
+	    envoyer("TEST "+idm+" "+ent.ip_diff+" "+ent.port_diff);
+	    u.test2();
+	    break;
 	}
-    }
 
+    }
+    public void envoyer(String s){
+	ClientUdp cl=new ClientUdp(s);
+	u.add_list(idm);
+	cl.send(ent.ip_next, ent.port_udp_next);
+	if(ent.ip_next2!=null){
+	    cl.send(ent.ip_next2, ent.port_udp_next2);	    
+	} 
+    }
 }
 
