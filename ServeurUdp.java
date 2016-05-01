@@ -52,7 +52,6 @@ public class ServeurUdp extends Serveur{
 		    if(!idmess.contains(Long.parseLong(arr[1]))){
 			transferer( st);
 			System.out.println(arr[2]+" "+arr[3]+" "+arr[4]);
-			transferer(st);
 		    }
 		    break;
 		case "TEST" : 

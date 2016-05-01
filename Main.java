@@ -135,6 +135,8 @@ public class Main{
 		}
 	    }
 	    System.out.println("vous etes connectés");
+	    System.out.println("port next : "+me.port_udp_next);
+
 	    ServeurTcp s = new ServeurTcp(me);
 	    ServeurUdp u =  new ServeurUdp(me);
 	    Mythread mt1 = new Mythread(s);
@@ -145,6 +147,8 @@ public class Main{
 	    t2.start();
 
 	    while (is_connected){
+		System.out.println("port next : "+me.port_udp_next);
+
 		String cmd = scanner.nextLine();
 		String[] arr = cmd.split(" ");
 		switch (arr[0]){
