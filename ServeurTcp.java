@@ -36,6 +36,7 @@ public class ServeurTcp extends Serveur{
 			ent.port_diff2 = token[4];
 			text = "ACKD "+ent.port_udp+"\n";
 			pw.print(text);
+			pw.flush();
 		    }
 		    socket.close();
 		}
