@@ -10,6 +10,7 @@ public class ServeurTcp extends Serveur{
 	try{
 	    int port_tcp = Integer.parseInt(ent.port_tcp);
 	    ServerSocket server = new ServerSocket(port_tcp);
+	    server.setSoTimeout(10000);
 	    while(run){
 		if(this.ent.ip_next2==null){
 
