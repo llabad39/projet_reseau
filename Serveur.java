@@ -6,5 +6,6 @@ public abstract class Serveur{
     public Serveur(Entity e){
 	this.ent = e;
     }
-    public abstract void runServ(boolean run);
+    public abstract void runServ(int run);
+    
 }

@@ -138,10 +138,9 @@ public class Main{
 	    System.out.println("port next : "+me.port_udp_next);
 
 	    ServeurTcp s = new ServeurTcp(me);
+	    Thread t1 = new Thread(s);
 	    ServeurUdp u =  new ServeurUdp(me);
-	    Mythread mt1 = new Mythread(s);
 	    Mythread mt2 = new Mythread(u);
-	    Thread t1=new Thread(mt1);
 	    Thread t2=new Thread(mt2);
 	    t1.start();
 	    t2.start();
@@ -163,8 +162,8 @@ public class Main{
 		case "quit_ring" :
 		    is_connected=false;
 		    m=new Mess("gbye", me, u);
-		    mt2.arret();
-		    mt1.arret();
+		    //mt2.arret();
+		    s.stop();
 		    u.add_list(m.idm);
 		    m.send_mess();
 		    //serveurs=null

@@ -10,7 +10,7 @@ public class ServeurUdp extends Serveur{
 	this.idmess=new ArrayList<Long>();
 
     }
-    public void runServ(boolean run){
+    public void runServ(int run){
 	try{
 	    int port_udp=Integer.parseInt(ent.port_udp);
 	    DatagramSocket dso=new DatagramSocket(port_udp);
@@ -26,8 +26,11 @@ public class ServeurUdp extends Serveur{
 		switch (arr[0]){
 		case "GBYE" : 
 		    if(arr[2].equals(ent.ip_next)){
+			this.ent.ip_next = arr[4];
+			this.ent.port_udp_next = arr[5];
 			m=new Mess("eybg", ent, this);
 			m.send_mess();
+			
 		    }else{
 		        transferer( st);
 		    }
