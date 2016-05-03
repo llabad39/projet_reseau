@@ -152,6 +152,14 @@ public class Main{
 		String cmd = scanner.nextLine();
 		String[] arr = cmd.split(" ");
 		switch (arr[0]){
+		case "info" : 
+		    System.out.println(me.id);
+		    System.out.println(me.port_udp_next);
+		    System.out.println(me.port_udp_next2);
+		    //System.out.println();
+		    //System.out.println();
+
+		    break;
 		case "quit_ring" :
 		    is_connected=false;
 		    m=new Mess("gbye", me, u);

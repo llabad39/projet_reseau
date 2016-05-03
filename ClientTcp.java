@@ -47,10 +47,11 @@ public class ClientTcp{
 		pw.close();
 		br.close();
 		socket.close();
-		switch (ackd){
+		String[] arr = ackd.split(" ");
+		switch (arr[0]){
 		case "ACKD" : 
-		    this.ent.setIpNext(welc2[1]);
-		    this.ent.setPortUdpNext(welc2[2]);
+		    this.ent.setIpNext(ip);
+		    this.ent.setPortUdpNext(arr[1]);
 		    break;
 		case "NOTC" :
 		    System.out.println("L'entitée est déjà doubleur");	
