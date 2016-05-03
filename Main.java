@@ -8,7 +8,9 @@ import java.io.*;
 public class Main{
 
     public static void main (String[] args){
+
 	Scanner scanner = new Scanner (System.in);
+
 	boolean arg = true;
 	String id="";
 	String ip="";
@@ -55,18 +57,11 @@ public class Main{
 	}
  
 	Entity me=new Entity();
-
-
 	try{
-	    Enumeration<NetworkInterface> listNi=NetworkInterface.getNetworkInterfaces();
-	    NetworkInterface nic=listNi.nextElement();
-	    Enumeration<InetAddress> listIa=nic.getInetAddresses();
-	    InetAddress iac=listIa.nextElement();
-	    iac=listIa.nextElement();
-	    String[] arr = iac.toString().split("/");
-	    ip=me.fill_ip(arr[1]);
-	} catch(Exception e){
-	    e.printStackTrace();
+	    ip=me.fill_ip(me.give_ip());
+	}catch(IpException e){
+	    System.out.println(e);
+	    e.printStackTrace();  
 	}
 
 	ClientTcp cl;

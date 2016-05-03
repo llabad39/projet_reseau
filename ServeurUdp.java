@@ -22,7 +22,8 @@ public class ServeurUdp extends Serveur{
 		String st=new String(paquet.getData(),0,paquet.getLength());
 		String[] arr = st.split(" ");
 		Mess m;
-		ClientUdp cl;
+		Long idm=Long.parseLong(arr[1]);
+		int index=idmess.indexOf(idm);
 		switch (arr[0]){
 		case "GBYE" : 
 		    if(arr[2].equals(ent.ip_next)){
@@ -32,7 +33,7 @@ public class ServeurUdp extends Serveur{
 			m.send_mess();
 			
 		    }else{
-		        transferer( st);
+		        transferer( st, idm);
 		    }
 		    break;
 		case "EYBG" : 
@@ -44,24 +45,30 @@ public class ServeurUdp extends Serveur{
 		    //}
 		    break;
 		case "WHOS" :
-		    if(!idmess.contains(Long.parseLong(arr[1]))){
+		    if(index==-1){
 			m=new Mess("memb", ent, this);
 			m.send_mess();
-		        transferer( st);
-		    }	
+		        transferer(st,idm);
+		    }else{
+			System.out.println(index);
+			idmess.remove(index);
+		    }
 		    break;
 		
 		case "MEMB" : 
-		    if(!idmess.contains(Long.parseLong(arr[1]))){
-			transferer( st);
+		    if(index==-1){
+			transferer( st, idm);
 			System.out.println(arr[2]+" "+arr[3]+" "+arr[4]);
+		    }else{
+			idmess.remove(index);
 		    }
 		    break;
 		case "TEST" : 
-		    if(!idmess.contains(Long.parseLong(arr[1]))){
-			transferer(st);
+		    if(index==-1){
+			transferer(st, idm);
 		    }else{
 			test=false;
+			idmess.remove(index);
 		    }
 		    break;
 		}
@@ -92,11 +99,13 @@ public class ServeurUdp extends Serveur{
 	    //down
 	}
     }
-    public void transferer(String s){
+    public void transferer(String s, Long idm){
 	ClientUdp cl=new ClientUdp(s);
 	cl.send(ent.ip_next, ent.port_udp_next);
 	if(ent.ip_next2!=null){
-	    cl.send(ent.ip_next2, ent.port_udp_next2);	    
+	    idmess.add(idm);
+	    //System.out.println(idm);
+	    cl.send(ent.ip_next2, ent.port_udp_next2);	
 	} 
     }
 }

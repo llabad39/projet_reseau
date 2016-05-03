@@ -1,4 +1,9 @@
 import java.util.*;
+import java.net.InetAddress; 
+import java.net.UnknownHostException;
+import java.lang.*;
+import java.net.*;
+import java.io.*;
     
 public class Entity{
     String ip;
@@ -113,4 +118,25 @@ public class Entity{
 	}
 	return ip2;
     }    
+    public String give_ip(){
+    	try{
+	    Enumeration<NetworkInterface>
+		listNi=NetworkInterface.getNetworkInterfaces();
+	    while(listNi.hasMoreElements()){
+		NetworkInterface nic=listNi.nextElement();
+		Enumeration<InetAddress> listIa=nic.getInetAddresses();
+		while(listIa.hasMoreElements()){
+		    InetAddress iac=listIa.nextElement();
+		    if(iac instanceof Inet4Address){
+			String[] ar=iac.toString().split("/");
+			System.out.println(ar[1]);
+			return ar[1];
+		    }
+		}
+	    }
+	} catch(Exception e){
+	    e.printStackTrace();
+	}
+	return "";
+    }
 }
