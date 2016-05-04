@@ -28,10 +28,12 @@ public class Mess{
 	switch (arr[0]){
 	case "whos" : 
 	    envoyer( "WHOS "+idm );
-	    envoyer("MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp );
+	    Mess m=new Mess("memb", ent, u);
+	    m.send_mess();
 	    break;
 	case "memb" :
 	    envoyer("MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp );
+	    System.out.println(ent.id+" "+ent.ip+" "+ent.port_udp+" "+idm);
 	    break;
 	case "eybg" : 
 	    envoyer( "EYBG "+idm );
@@ -50,9 +52,9 @@ public class Mess{
     public void envoyer(String s){
 	ClientUdp cl=new ClientUdp(s);
 	u.add_list(idm);
-	System.out.println(idm);
 	cl.send(ent.ip_next, ent.port_udp_next);
 	if(ent.ip_next2!=null){
+	    u.add_list(idm);
 	    cl.send(ent.ip_next2, ent.port_udp_next2);	    
 	} 
     }

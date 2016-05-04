@@ -50,7 +50,7 @@ public class ServeurUdp extends Serveur{
 			m.send_mess();
 		        transferer(st,idm);
 		    }else{
-			System.out.println(index);
+			//System.out.println(index);
 			idmess.remove(index);
 		    }
 		    break;
@@ -58,8 +58,9 @@ public class ServeurUdp extends Serveur{
 		case "MEMB" : 
 		    if(index==-1){
 			transferer( st, idm);
-			System.out.println(arr[2]+" "+arr[3]+" "+arr[4]);
+			System.out.println(arr[2]+" "+arr[3]+" "+arr[4]+" "+idm);
 		    }else{
+			System.out.println(idm);
 			idmess.remove(index);
 		    }
 		    break;
@@ -92,7 +93,7 @@ public class ServeurUdp extends Serveur{
 	}catch(InterruptedException e){
 	    e.printStackTrace();
 	}
-	System.out.println("test");
+	//System.out.println("test");
 	if(!test){
 	    System.out.println("test réussi");
 	}else{
@@ -101,9 +102,11 @@ public class ServeurUdp extends Serveur{
     }
     public void transferer(String s, Long idm){
 	ClientUdp cl=new ClientUdp(s);
-	cl.send(ent.ip_next, ent.port_udp_next);
-	if(ent.ip_next2!=null){
+	if(ent.ip_next2==null){
+	    cl.send(ent.ip_next, ent.port_udp_next);
+	}else{
 	    idmess.add(idm);
+	    cl.send(ent.ip_next, ent.port_udp_next);
 	    //System.out.println(idm);
 	    cl.send(ent.ip_next2, ent.port_udp_next2);	
 	} 
