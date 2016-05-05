@@ -4,10 +4,10 @@ import java.util.*;
 
 public class ServeurUdp extends Serveur{
     boolean test=false;
-    ArrayList<Long> idmess;
+    ArrayList<String> idmess;
     public ServeurUdp(Entity e){
 	super(e);
-	this.idmess=new ArrayList<Long>();
+	this.idmess=new ArrayList<String>();
 
     }
     public void runServ(int run){
@@ -22,7 +22,7 @@ public class ServeurUdp extends Serveur{
 		String st=new String(paquet.getData(),0,paquet.getLength());
 		String[] arr = st.split(" ");
 		Mess m;
-		Long idm=Long.parseLong(arr[1]);
+		String idm=arr[1];
 		int index=idmess.indexOf(idm);
 		switch (arr[0]){
 		case "GBYE" : 
@@ -50,7 +50,6 @@ public class ServeurUdp extends Serveur{
 			m.send_mess();
 		        transferer(st,idm);
 		    }else{
-			//System.out.println(index);
 			idmess.remove(index);
 		    }
 		    break;
@@ -58,9 +57,8 @@ public class ServeurUdp extends Serveur{
 		case "MEMB" : 
 		    if(index==-1){
 			transferer( st, idm);
-			System.out.println(arr[2]+" "+arr[3]+" "+arr[4]+" "+idm);
+			System.out.println(arr[2]+" "+arr[3]+" "+arr[4]);
 		    }else{
-			System.out.println(idm);
 			idmess.remove(index);
 		    }
 		    break;
@@ -72,6 +70,18 @@ public class ServeurUdp extends Serveur{
 			idmess.remove(index);
 		    }
 		    break;
+		case "APPL" : 
+		    switch(arr[2]){
+		    case "DIFF####" : 
+			if(index==-1){
+			    transferer( st, idm);
+			    System.out.println(st.substring(27));
+			}else{
+			    idmess.remove(index);
+			}
+			break;
+		    }
+		    break;
 		}
 	    }
 	} catch(Exception e){
@@ -80,7 +90,7 @@ public class ServeurUdp extends Serveur{
     }
 
 
-    public void add_list(Long l){
+    public void add_list(String l){
 	idmess.add(l);
     }
 
@@ -100,7 +110,7 @@ public class ServeurUdp extends Serveur{
 	    //down
 	}
     }
-    public void transferer(String s, Long idm){
+    public void transferer(String s, String idm){
 	ClientUdp cl=new ClientUdp(s);
 	if(ent.ip_next2==null){
 	    cl.send(ent.ip_next, ent.port_udp_next);

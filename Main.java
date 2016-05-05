@@ -10,7 +10,6 @@ public class Main{
     public static void main (String[] args){
 
 	Scanner scanner = new Scanner (System.in);
-
 	boolean arg = true;
 	String id="";
 	String ip="";
@@ -63,7 +62,6 @@ public class Main{
 	    System.out.println(e);
 	    e.printStackTrace();  
 	}
-
 	ClientTcp cl;
 	int a;
 	boolean is_connected=false;
@@ -141,8 +139,6 @@ public class Main{
 	    t2.start();
 
 	    while (is_connected){
-		System.out.println("port next : "+me.port_udp_next);
-
 		String cmd = scanner.nextLine();
 		String[] arr = cmd.split(" ");
 		switch (arr[0]){
@@ -150,8 +146,6 @@ public class Main{
 		    System.out.println(me.id);
 		    System.out.println(me.port_udp_next);
 		    System.out.println(me.port_udp_next2);
-		    //System.out.println();
-		    //System.out.println();
 
 		    break;
 		case "quit_ring" :

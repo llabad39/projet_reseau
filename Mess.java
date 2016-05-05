@@ -1,10 +1,11 @@
 import java.util.*;
+import java.lang.*;
 
 public class Mess{
     ServeurUdp u;
     String cmd;
     Entity ent;
-    long idm;
+    String idm;
 
     public Mess(String cmd, Entity ent, ServeurUdp u){
 	this.u=u;
@@ -13,13 +14,15 @@ public class Mess{
 	this.idm=give_idm(ent);
     }
     
-    public long give_idm(Entity ent){
+    public String give_idm(Entity ent){
 	Date maDate=new Date();
 	String[] arr=maDate.toString().split(" ");
 	String[] arr2=arr[3].split("\\:");
 	String dat=""+arr2[0]+arr2[1]+arr2[2];
-
-	return Long.parseLong(ent.ip.hashCode()+dat+(int)Math.floor(Math.random()*99));
+	Long l=Long.parseLong(ent.ip.hashCode()+dat+(int)Math.floor(Math.random()*99));
+	byte[] b=longToBytes(l);
+	String st=new String(b);
+	return st;
     }
 
     public void send_mess(){
@@ -33,7 +36,7 @@ public class Mess{
 	    break;
 	case "memb" :
 	    envoyer("MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp );
-	    System.out.println(ent.id+" "+ent.ip+" "+ent.port_udp+" "+idm);
+	    //System.out.println(ent.id+" "+ent.ip+" "+ent.port_udp+" "+idm);
 	    break;
 	case "eybg" : 
 	    envoyer( "EYBG "+idm );
@@ -46,6 +49,14 @@ public class Mess{
 	    envoyer("TEST "+idm+" "+ent.ip_diff+" "+ent.port_diff);
 	    u.test2();
 	    break;
+	case "diff" : 
+	    int size_mess=cmd.length()-5;
+	    if(size_mess<486){
+		envoyer("APPL "+idm+" DIFF#### "+fill(size_mess)+" "+cmd.substring(5));
+	    }else{
+		System.out.println("message trop gros : maximum 485 charactères");
+	    }
+	    break;
 	}
 
     }
@@ -57,6 +68,20 @@ public class Mess{
 	    u.add_list(idm);
 	    cl.send(ent.ip_next2, ent.port_udp_next2);	    
 	} 
+    }
+    public String fill(int size){
+	if(size<10){ return "00"+size;}
+	else{if(size<100){ return "0"+size;}
+	    else{return ""+size; }
+	}
+    }
+    public static byte[] longToBytes(long l) {
+	byte[] b = new byte[8];
+	for (int i = 7; i >= 0; i--) {
+	    b[i] = (byte)(l & 0xFF);
+	    l >>= 8;
+	}
+	return b;
     }
 }
 

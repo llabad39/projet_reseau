@@ -21,7 +21,7 @@ public class ServeurTcp implements Runnable{
     public void run(){
 	try{
 	    while(run){
-		if(this.ent.ip_next2==null && ss!=null){
+		if(ss!=null){
 
 		    Socket socket=this.ss.accept();
 		    //System.out.println("on est quand même al malgrés");
@@ -30,8 +30,9 @@ public class ServeurTcp implements Runnable{
 			String text = "WELC "+ent.ip_next+" "+ent.port_udp_next+" "+ent.ip_diff+" "+ent.port_diff+"\n";
 			pw.print(text);
 			pw.flush();
-		    
+			System.out.println("1");	
 			text=br.readLine();
+			System.out.println("2");	
 			String[] token =text.split(" ");
 			if(token[0].equals("NEWC")){
 			    ent.ip_next = token[1];
@@ -40,13 +41,23 @@ public class ServeurTcp implements Runnable{
 			    pw.flush();
 			}
 			else if(token[0].equals("DUPL")){
-			    ent.ip_next2 = token[1];
-			    ent.port_udp_next2 = token[2];
-			    ent.ip_diff2  = token[3];
-			    ent.port_diff2 = token[4];
-			    text = "ACKD "+ent.port_udp+"\n";
-			    pw.print(text);
-			    pw.flush();
+				System.out.println("oubleur");	
+
+			    if(ent.ip_next2==null){
+				ent.ip_next2 = token[1];
+				ent.port_udp_next2 = token[2];
+				ent.ip_diff2  = token[3];
+				ent.port_diff2 = token[4];
+				text = "ACKD "+ent.port_udp+"\n";
+				pw.print(text);
+				pw.flush();
+			    }else{
+				System.out.println("L doubleur");	
+
+				text = "NOTC";
+				pw.print(text);
+				pw.flush();
+			    }
 			}
 			socket.close();
 		      
