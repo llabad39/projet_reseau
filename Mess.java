@@ -18,8 +18,8 @@ public class Mess{
 	Date maDate=new Date();
 	String[] arr=maDate.toString().split(" ");
 	String[] arr2=arr[3].split("\\:");
-	String dat=""+arr2[0]+arr2[1]+arr2[2];
-	Long l=Long.parseLong(ent.ip.hashCode()+dat+(int)Math.floor(Math.random()*99));
+	String dat=""+arr2[1]+arr2[2];
+	Long l=Long.parseLong(ent.ip.hashCode()+dat+(int)Math.floor(Math.random()*9999));
 	byte[] b=longToBytes(l);
 	String st=new String(b);
 	return st;
@@ -38,8 +38,13 @@ public class Mess{
 	    envoyer("MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp );
 	    //System.out.println(ent.id+" "+ent.ip+" "+ent.port_udp+" "+idm);
 	    break;
-	case "eybg" : 
-	    envoyer( "EYBG "+idm );
+	case "eybg1" : 
+	    cl=new ClientUdp( "EYBG "+idm );
+	    cl.send(ent.ip_next, ent.port_udp_next);
+	    break;
+	case "eybg2" : 
+	    cl=new ClientUdp( "EYBG "+idm );
+	    cl.send(ent.ip_next2, ent.port_udp_next2);
 	    break;
 	case "gbye" :
 	    envoyer( "GBYE "+idm+" "+ent.ip+" "+ent.port_udp+" "+ent.ip_next+" "+ent.port_udp_next);

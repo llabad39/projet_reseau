@@ -26,23 +26,27 @@ public class ServeurUdp extends Serveur{
 		int index=idmess.indexOf(idm);
 		switch (arr[0]){
 		case "GBYE" : 
-		    if(arr[2].equals(ent.ip_next)){
+		    if(arr[2].equals(ent.ip_next) && arr[3].equals(ent.port_udp_next)){
+			m=new Mess("eybg1", ent, this);
+			m.send_mess();	
 			this.ent.ip_next = arr[4];
-			this.ent.port_udp_next = arr[5];
-			m=new Mess("eybg", ent, this);
-			m.send_mess();
-			
+			this.ent.port_udp_next = arr[5];		
 		    }else{
-		        transferer( st, idm);
+			if(arr[2].equals(ent.ip_next2) && arr[3].equals(ent.port_udp_next2)){
+			    m=new Mess("eybg2", ent, this);
+			    m.send_mess();
+			    this.ent.ip_next2 = arr[4];
+			    this.ent.port_udp_next2 = arr[5];
+			}else{
+			    transferer( st, idm);
+			}
 		    }
 		    break;
 		case "EYBG" : 
-		    //if(!run){
 		    b=false;
 		    ent=null;
 		    dso.close();
 		    System.out.println("vous etes déconnectés");
-		    //}
 		    break;
 		case "WHOS" :
 		    if(index==-1){

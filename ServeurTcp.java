@@ -30,9 +30,7 @@ public class ServeurTcp implements Runnable{
 			String text = "WELC "+ent.ip_next+" "+ent.port_udp_next+" "+ent.ip_diff+" "+ent.port_diff+"\n";
 			pw.print(text);
 			pw.flush();
-			System.out.println("1");	
 			text=br.readLine();
-			System.out.println("2");	
 			String[] token =text.split(" ");
 			if(token[0].equals("NEWC")){
 			    ent.ip_next = token[1];
@@ -41,8 +39,6 @@ public class ServeurTcp implements Runnable{
 			    pw.flush();
 			}
 			else if(token[0].equals("DUPL")){
-				System.out.println("oubleur");	
-
 			    if(ent.ip_next2==null){
 				ent.ip_next2 = token[1];
 				ent.port_udp_next2 = token[2];
@@ -52,8 +48,6 @@ public class ServeurTcp implements Runnable{
 				pw.print(text);
 				pw.flush();
 			    }else{
-				System.out.println("L doubleur");	
-
 				text = "NOTC";
 				pw.print(text);
 				pw.flush();
@@ -70,7 +64,7 @@ public class ServeurTcp implements Runnable{
 	}
 	
 	catch(Exception e){
-	    System.out.println("serveur Tcp arreter");
+	    System.out.println("serveur Tcp arrete");
 	}
 	
     }
