@@ -15,19 +15,25 @@ public class Mess{
     }
     
     public String give_idm(Entity ent){
-	Date maDate=new Date();
+	/*Date maDate=new Date();
 	String[] arr=maDate.toString().split(" ");
 	String[] arr2=arr[3].split("\\:");
 	String dat=""+arr2[1]+arr2[2];
-	Long l=Long.parseLong(ent.ip.hashCode()+dat+(int)Math.floor(Math.random()*9999));
+	Long ll=13L*ent.port_udp.hashCode()+ent.ip.hashCode()+23L*((int)Math.floor(Math.random()*1000000000));
+	Long l=Long.parseLong(ll+dat);
 	byte[] b=longToBytes(l);
-	String st=new String(b);
-	return st;
+	String st=new String(b);*/
+	String id="";
+	int i;
+	for(i=0; i<8; i++){
+	    id+=(int)Math.floor(Math.random()*10);
+	}
+	return id;
     }
 
     public void send_mess(){
-	String[] arr = cmd.split(" ");
 	ClientUdp cl;
+	String[] arr = cmd.split(" ");
 	switch (arr[0]){
 	case "whos" : 
 	    envoyer( "WHOS "+idm );
@@ -62,8 +68,21 @@ public class Mess{
 		System.out.println("message trop gros : maximum 485 charactères");
 	    }
 	    break;
+	case "quizz" : 
+	    envoyer("APPL "+idm+" QUIZZ### ASK "+ent.id);
+	    break;
+	case "que" : 
+	    int size_que=cmd.length()-4;
+	    envoyer("APPL "+idm+" QUIZZ### QUE "+ ent.id+" "+fill(size_que)+" "+cmd.substring(4));
+	    break;
+	case "rep" : 
+	    int size_rep=cmd.length()-4;
+	    envoyer("APPL "+idm+" QUIZZ### REP "+ent.id+" "+ent.ip+" "+ent.port_udp+" "+ fill(size_rep)+" "+cmd.substring(4));
+	    break;
+	case "win" : 
+	    envoyer("APPL "+idm+" QUIZZ### WIN "+arr[1]+" "+arr[2]+" "+arr[3]);
+	    break;
 	}
-
     }
     public void envoyer(String s){
 	ClientUdp cl=new ClientUdp(s);

@@ -140,31 +140,58 @@ public class Main{
 
 	    while (is_connected){
 		String cmd = scanner.nextLine();
-		String[] arr = cmd.split(" ");
-		switch (arr[0]){
-		case "info" : 
-		    System.out.println(me.id);
-		    System.out.println(me.port_udp_next);
-		    System.out.println(me.port_udp_next2);
-
-		    break;
-		case "quit_ring" :
-		    is_connected=false;
-		    m=new Mess("gbye", me, u);
-		    //mt2.arret();
-		    s.stop();
-		    u.add_list(m.idm);
+		if(me.quizzque){
+		    m=new Mess("que "+cmd, me, u);
+		    System.out.println("Reponse : ");
+		    String reponse = scanner.nextLine();
+		    u.quizz(reponse);
 		    m.send_mess();
-		    //serveurs=null
-		    break;
- 
-		default :
-		    m=new Mess(cmd, me, u);
-		    m.send_mess();
-		    break;
+		}else{
+		    if(me.quizzask){
+			if(cmd.equals("o") || cmd.equals("O")){
+			    me.quizzplay=true;
+			    me.quizzask=false;
+			    System.out.println("QUIZZ !");
+			}else{
+			    if(cmd.equals("n") || cmd.equals("N")){
+				me.quizzask=false;
+			    }else{
+				System.out.println("(O/N)");
+			    }
+			}
+		    }else{
+			if(me.quizzplay){
+			    m=new Mess("rep "+cmd, me, u);
+			    m.send_mess();
+			}else{
+			    String[] arr = cmd.split(" ");
+			    switch (arr[0]){
+			    case "info" : 
+				System.out.println(me.id);
+				System.out.println(me.port_udp_next);
+				System.out.println(me.port_udp_next2);
+				
+				break;
+			    case "quit_ring" :
+				is_connected=false;
+				m=new Mess("gbye", me, u);
+				//mt2.arret();
+				s.stop();
+				u.add_list(m.idm);
+				m.send_mess();
+				//serveurs=null
+				break;
+			    default :
+				m=new Mess(cmd, me, u);
+				m.send_mess();
+				break;
+			    }
+			}
+		    }
 		}
 	    }
 	}
     }
 }
+
 
