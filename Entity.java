@@ -19,23 +19,28 @@ public class Entity{
     String port_udp_next2;
     String port_diff2;
     String ip_diff2;
-    //String ip; l'addresse de la machine locale
-    
+
+    boolean quizzask;    
+    boolean quizzplay;
+    boolean quizzque;
     public Entity(){
     }
     
     public Entity(String _ip,String _id,String _port_udp,String _port_tcp){
 	this.ip=_ip;
-	this.id = _id;
+	this.id = fillid(_id);
 	this.port_udp = _port_udp;
 	this.port_tcp = _port_tcp;
 	this.ip_next2 = null;
 	this.port_udp_next2 = null;
+	this.quizzask=false;
+	this.quizzplay=false;
+	this.quizzque=false;
     }
     
     public Entity(String _ip,String _id,String _port_udp,String _port_tcp,String _ip_diff,String _port_diff){
 	this.ip=_ip;
-	this.id = _id;
+	this.id = fillid(_id);
 	this.ip_next = ip;
 	this.port_udp_next = _port_udp;
 	this.port_udp = _port_udp;
@@ -44,6 +49,9 @@ public class Entity{
 	this.port_diff = _port_diff;
 	this.ip_next2 = null;
 	this.port_udp_next2 = null;  
+	this.quizzask=false;
+	this.quizzplay=false;
+	this.quizzque=false;
     }
 
     public String getId(){
@@ -96,6 +104,19 @@ public class Entity{
 
     public void setPortUdpNext2(String _port_udp_next2){
 	this.port_udp_next2 = _port_udp_next2;
+    }
+
+    public String fillid(String id){
+	String space1="";
+	String space2="";
+	int i;
+	for(i=0; i<(8-id.length())/2; i++){
+	    space1+="_";
+	}
+	for(i=(8-id.length())/2; i<8-id.length(); i++){
+	    space2+="_";
+	}
+	return space1+id+space2;
     }
 
     public String fill_ip(String ip) throws IpException{
