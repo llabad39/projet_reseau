@@ -70,9 +70,10 @@ public class Mess{
 	    }
 	    break;
 	case "quizz" : 
+	    ent.quizz=true;
 	    envoyer("APPL "+idm+" QUIZZ### ASK "+ent.id);
-	    m=new Mess("ok!", ent, u);
-	    m.send_mess();
+	    //m=new Mess("ok!", ent, u);
+	    //m.send_mess();
 	    break;
 	case "ok!" :
 	    envoyer("APPL "+idm+" QUIZZ### OK! ");

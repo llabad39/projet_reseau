@@ -6,10 +6,11 @@ public class ServeurUdp extends Serveur{
     boolean test=false;
     ArrayList<String> idmess;
     String reponse;
-    public ServeurUdp(Entity e){
+    Quizz q;
+    public ServeurUdp(Entity e, Quizz q){
 	super(e);
 	this.idmess=new ArrayList<String>();
-
+	this.q=q;
     }
     public void runServ(int run){
 	try{
@@ -88,78 +89,12 @@ public class ServeurUdp extends Serveur{
 			}
 			break;
 		    case "QUIZZ###" : 
-			switch(arr[3]){
-			case "ASK" :
-			if(index==-1){
-			    ent.quizzask=true;
-			    System.out.println(arr[4]+" vous propose un quizz, voulez vous jouer ?   (O/N)");
-			    transferer( st, idm);
-			}else{
-			    ent.quizzque=true;
-			    System.out.println("Question : ");
-			    idmess.remove(index);
-			}
-			    break;
-			case "OK!" : 
-			    if(ent.quizzask){
-				ent.quizzok=true;
-			    }else{
-				m=new Mess("ok!", ent, this);
-				m.send_mess();
-				idmess.remove(idmess.indexOf(idm));	
-			    }
-			    break;
-			case "QUE" : 
-			    if(index==-1){
-				if(ent.quizzplay){
-				    System.out.println("question de "+arr[4]+" : "+st.substring(40));
-				}
-				transferer(st, idm);
-			    }else{
-				idmess.remove(index);
-			    }
-			    break;
-			case "REP" : 
-			     if(index==-1){
-				 if(!ent.quizzque){
-				     if(ent.quizzplay){
-					 System.out.println(arr[4]+" : "+st.substring(61));
-				     }
-				 }else{
-				     if(st.substring(61).equals(reponse)){
-					 ent.quizzque=false;
-					 ent.quizzplay=true;
-					 m=new Mess("win "+arr[4]+" "+arr[5]+" "+arr[6], ent, this);
-					 m.send_mess();
-				     }  
-				 }
-				 transferer(st, idm);
-			     }else{
-				 idmess.remove(index);
-			    }
-			    break;
-			case "WIN" : 
-			    if(index==-1){
-				if(ent.quizzplay){
-				    if(arr[5].equals(ent.ip) && arr[6].equals(ent.port_udp)){
-					System.out.println("vous avez gagné !");
-					ent.quizzque=true;
-					System.out.println("Question : ");
-				    }else{
-					System.out.println(arr[4]+" a gagné");
-				    }
-				}
-				transferer(st, idm);
-			    }else{
-				idmess.remove(index);
-			    }
-			    break;
-			}
-			break;
-		    default : 
-			System.out.println("l'application "+arr[2]+" n'est pas prise en charge.");
-			break;
+			ent.quizz=true;
+			q.recu(st, index);
 		    }
+		    break;
+		default : 
+		    System.out.println("l'application "+arr[2]+" n'est pas prise en charge.");
 		    break;
 		}
 	    }
