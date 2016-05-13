@@ -100,6 +100,15 @@ public class ServeurUdp extends Serveur{
 			    idmess.remove(index);
 			}
 			    break;
+			case "OK!" : 
+			    if(ent.quizzask){
+				ent.quizzok=true;
+			    }else{
+				m=new Mess("ok!", ent, this);
+				m.send_mess();
+				idmess.remove(idmess.indexOf(idm));	
+			    }
+			    break;
 			case "QUE" : 
 			    if(index==-1){
 				if(ent.quizzplay){
@@ -146,6 +155,9 @@ public class ServeurUdp extends Serveur{
 			    }
 			    break;
 			}
+			break;
+		    default : 
+			System.out.println("l'application "+arr[2]+" n'est pas prise en charge.");
 			break;
 		    }
 		    break;

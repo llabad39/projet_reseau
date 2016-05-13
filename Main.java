@@ -152,9 +152,17 @@ public class Main{
 			    me.quizzplay=true;
 			    me.quizzask=false;
 			    System.out.println("QUIZZ !");
+			    if(me.quizzok){
+				 m=new Mess("ok!", me, u);
+				 m.send_mess();
+			    }
 			}else{
 			    if(cmd.equals("n") || cmd.equals("N")){
-				me.quizzask=false;
+				me.quizzask=false; 
+				if(me.quizzok){
+				    m=new Mess("ok!", me, u);
+				    m.send_mess();
+				}
 			    }else{
 				System.out.println("(O/N)");
 			    }

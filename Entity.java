@@ -23,6 +23,8 @@ public class Entity{
     boolean quizzask;    
     boolean quizzplay;
     boolean quizzque;
+    boolean quizzok;
+
     public Entity(){
     }
     
@@ -36,6 +38,7 @@ public class Entity{
 	this.quizzask=false;
 	this.quizzplay=false;
 	this.quizzque=false;
+	this.quizzok=false;
     }
     
     public Entity(String _ip,String _id,String _port_udp,String _port_tcp,String _ip_diff,String _port_diff){
@@ -52,6 +55,7 @@ public class Entity{
 	this.quizzask=false;
 	this.quizzplay=false;
 	this.quizzque=false;
+	this.quizzok=false;
     }
 
     public String getId(){
