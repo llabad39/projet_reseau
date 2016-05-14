@@ -18,10 +18,11 @@ public class Mess{
     public void send_mess(){
 	ClientUdp cl;
 	String[] arr = cmd.split(" ");
+	Mess m;
 	switch (arr[0]){
 	case "whos" : 
 	    envoyer( "WHOS "+idm );
-	    Mess m=new Mess("memb", ent, u);
+	    m=new Mess("memb", ent, u);
 	    m.send_mess();
 	    break;
 	case "memb" :
@@ -53,7 +54,17 @@ public class Mess{
 	    }
 	    break;
 	case "quizz" : 
+	    ent.quizz=true;
 	    envoyer("APPL "+idm+" QUIZZ### ASK "+ent.id);
+	    m=new Mess("ok!", ent, u);
+	    m.send_mess();
+	    break;
+	case "rej" : 
+	    envoyer("APPL "+idm+" QUIZZ### REJ ");
+	    break;
+	case "ok!" :
+	    envoyer("APPL "+idm+" QUIZZ### OK! ");
+	    //   u.idmess.remove(u.idmess.indexOf(idm));
 	    break;
 	case "que" : 
 	    int size_que=cmd.length()-4;
@@ -70,6 +81,9 @@ public class Mess{
 	    String size_nom = Fonction.fill(2,arr[1].length());
 	    System.out.println("sa se lance");
 	    envoyer("APPL "+idm+" TRANS###"+"REQ "+" "+size_nom+" "+arr[1]);
+	    break;
+	case "gg!" : 
+	    envoyer("APPL "+idm+" QUIZZ### GG! "+arr[1]);
 	    break;
 	}
     }

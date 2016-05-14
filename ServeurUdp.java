@@ -9,14 +9,15 @@ public class ServeurUdp extends Serveur{
     long compteurTrans;
     long maxMess;
     String name;
-    public ServeurUdp(Entity e){
+    Quizz q;
+    public ServeurUdp(Entity e,Quizz q){
 	super(e);
 	this.idmess=new ArrayList<String>();
 	this.compteurTrans=0;
 	this.maxMess=0;
 	this.name= " ";
-
-    }
+	this.q=q;
+ }
     public void runServ(int run){
 	try{
 	    int port_udp=Integer.parseInt(ent.port_udp);
@@ -43,8 +44,15 @@ public class ServeurUdp extends Serveur{
 			if(arr[2].equals(ent.ip_next2) && arr[3].equals(ent.port_udp_next2)){
 			    m=new Mess("eybg2", ent, this);
 			    m.send_mess();
-			    this.ent.ip_next2 = arr[4];
-			    this.ent.port_udp_next2 = arr[5];
+			    if(arr[4]==ent.ip && arr[5]==ent.port_udp){
+				ent.ip_next=ent.ip_next2;
+				ent.port_udp_next=ent.port_udp_next2;
+				ent.ip_next2 =null;
+				ent.port_udp_next2 =null;
+			    }else{
+				ent.ip_next2 = arr[4];
+				ent.port_udp_next2 = arr[5];
+			    }
 			}else{
 			    transferer( st, idm);
 			}
@@ -94,66 +102,13 @@ public class ServeurUdp extends Serveur{
 			}
 			break;
 		    case "QUIZZ###" : 
-			switch(arr[3]){
-			case "ASK" :
-			if(index==-1){
-			    ent.quizzask=true;
-			    System.out.println(arr[4]+" vous propose un quizz, voulez vous jouer ?   (O/N)");
-			    transferer( st, idm);
-			}else{
-			    ent.quizzque=true;
-			    System.out.println("Question : ");
-			    idmess.remove(index);
-			}
-			    break;
-			case "QUE" : 
+			ent.quizz=true;
+			q.recu(st, index);
+			break;
+			
+		    case "TRANS" :
+			if(arr[3].equals("REQ")){
 			    if(index==-1){
-				if(ent.quizzplay){
-				    System.out.println("question de "+arr[4]+" : "+st.substring(40));
-				}
-				transferer(st, idm);
-			    }else{
-				idmess.remove(index);
-			    }
-			    break;
-			case "REP" : 
-			     if(index==-1){
-				 if(!ent.quizzque){
-				     if(ent.quizzplay){
-					 System.out.println(arr[4]+" : "+st.substring(61));
-				     }
-				 }else{
-				     if(st.substring(61).equals(reponse)){
-					 ent.quizzque=false;
-					 ent.quizzplay=true;
-					 m=new Mess("win "+arr[4]+" "+arr[5]+" "+arr[6], ent, this);
-					 m.send_mess();
-				     }  
-				 }
-				 transferer(st, idm);
-			     }else{
-				 idmess.remove(index);
-			    }
-			    break;
-			case "WIN" : 
-			    if(index==-1){
-				if(ent.quizzplay){
-				    if(arr[5].equals(ent.ip) && arr[6].equals(ent.port_udp)){
-					System.out.println("vous avez gagné !");
-					ent.quizzque=true;
-					System.out.println("Question : ");
-				    }else{
-					System.out.println(arr[4]+" a gagné");
-				    }
-				}
-				transferer(st, idm);
-			    }else{
-				idmess.remove(index);
-			    }
-			    break;
-			case "TRANS" :
-			    if(arr[3].equals("REQ")){
-				if(index==-1){
 				    System.out.println("on est la ");
 				    File f = new File(arr[5]);
 				    if(f.exists()){
@@ -222,7 +177,10 @@ public class ServeurUdp extends Serveur{
 			    }
 			}
 			break;
-		    }
+
+			
+		default : 
+                    transferer( st, idm);	
 		    break;
 		}
 	    }

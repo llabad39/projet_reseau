@@ -20,9 +20,8 @@ public class Entity{
     String port_diff2;
     String ip_diff2;
 
-    boolean quizzask;    
-    boolean quizzplay;
-    boolean quizzque;
+    boolean quizz;
+
     public Entity(){
     }
     
@@ -33,9 +32,7 @@ public class Entity{
 	this.port_tcp = _port_tcp;
 	this.ip_next2 = null;
 	this.port_udp_next2 = null;
-	this.quizzask=false;
-	this.quizzplay=false;
-	this.quizzque=false;
+	this.quizz=false;
     }
     
     public Entity(String _ip,String _id,String _port_udp,String _port_tcp,String _ip_diff,String _port_diff){
@@ -49,9 +46,8 @@ public class Entity{
 	this.port_diff = _port_diff;
 	this.ip_next2 = null;
 	this.port_udp_next2 = null;  
-	this.quizzask=false;
-	this.quizzplay=false;
-	this.quizzque=false;
+	this.quizz=false;
+
     }
 
     public String getId(){
