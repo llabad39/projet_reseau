@@ -1,14 +1,20 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
+import java.io.FileWriter;
 public class ServeurUdp extends Serveur{
     boolean test=false;
     ArrayList<String> idmess;
     String reponse;
+    long compteurTrans;
+    long maxMess;
+    String name;
     public ServeurUdp(Entity e){
 	super(e);
 	this.idmess=new ArrayList<String>();
+	this.compteurTrans=0;
+	this.maxMess=0;
+	this.name= " ";
 
     }
     public void runServ(int run){
@@ -145,6 +151,75 @@ public class ServeurUdp extends Serveur{
 				idmess.remove(index);
 			    }
 			    break;
+			case "TRANS" :
+			    if(arr[3].equals("REQ")){
+				if(index==-1){
+				    System.out.println("on est la ");
+				    File f = new File(arr[5]);
+				    if(f.exists()){
+					String id_trans = Fonction.giveUniqueId();
+					long nm = (f.length()-1)/463+1;
+					String nummess = Fonction.long_to_little(nm);
+					st="APPL "+idm+"TRANS### "+"ROK "+id_trans+arr[4]+arr[5]+nummess;
+					transferer(st,idm);
+					try{
+					    FileInputStream fi = new FileInputStream(f);
+					    byte [] cont = new byte[463];
+					    for(long i =0;i<nm;i++){
+						fi.read(cont,0,463);
+						String contenu = new String(cont);
+						String no_mess = Fonction.long_to_little(i);
+						String size_cont = Fonction.fill(3,contenu.length());
+						st ="APPL "+idm+"TRANS### "+"SEN "+id_trans+" "+no_mess+" "+size_cont+" "+contenu;
+						transferer(st,idm);
+					    }
+					}
+					catch(Exception e){
+					    System.out.println("can't read file");
+					}
+				    }
+				    else{
+					transferer(st ,idm);
+				
+				    }
+				}
+				else{
+				    System.out.println("le fichier n'est pas sur l'anneau");
+				    idmess.remove(index);
+				}
+			    }
+			    else if(arr[3].equals("ROK")){
+				if(index!=-1){
+				    this.maxMess = Fonction.little_to_long(arr[7]);
+				    this.name=arr[6];
+				}
+				else{
+				    transferer(st,idm);
+				}
+				
+			    }
+			    else if(arr[3].equals("SEN")){
+				if(index!=-1){
+				    try{
+					
+					FileWriter fw = new FileWriter(this.name,true);
+					fw.write(arr[7]);
+					fw.close();
+					this.compteurTrans++;
+					if(this.compteurTrans==this.maxMess){
+					    this.maxMess=0;
+					    this.compteurTrans=0;
+					    idmess.remove(index);
+					}
+				    }
+				    catch(Exception e){
+					System.out.println("can't write file");
+				    }
+				}
+				else{
+				    transferer(st,idm);
+				}
+			    }
 			}
 			break;
 		    }
@@ -175,7 +250,8 @@ public class ServeurUdp extends Serveur{
 	if(!test){
 	    System.out.println("test réussi");
 	}else{
-	    //down
+	    SendMulticast sm = new SendMulticast(this.ent);
+	    sm.send("l'anneau est cassé");
 	}
     }
     public void transferer(String s, String idm){
@@ -188,4 +264,5 @@ public class ServeurUdp extends Serveur{
 	    cl.send(ent.ip_next2, ent.port_udp_next2);	
 	} 
     }
+   
 }

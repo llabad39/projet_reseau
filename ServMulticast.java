@@ -9,7 +9,7 @@ public class ServMulticast extends Serveur{
 	
 	    int p = Integer.parseInt(ent.port_diff);
 	    try{
-		MulticastSocket mso=new MulticastSocket(9999);
+		MulticastSocket mso=new MulticastSocket(p);
 		mso.joinGroup(InetAddress.getByName(ent.ip_diff));
 		byte[] buff = new byte[10];
 		DatagramPacket paquet=new DatagramPacket(buff,buff.length);

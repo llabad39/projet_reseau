@@ -22,6 +22,7 @@ public class SendMulticast{
 	    
 	    DatagramPacket paquet=new DatagramPacket(buf,buf.length,ia);
 	    dso.send(paquet);
+	    dso.close();
 	}
 	catch(Exception e){
 	    e.printStackTrace();

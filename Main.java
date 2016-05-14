@@ -135,8 +135,12 @@ public class Main{
 	    ServeurUdp u =  new ServeurUdp(me);
 	    Mythread mt2 = new Mythread(u);
 	    Thread t2=new Thread(mt2);
+	    ServMulticast sm = new ServMulticast(me);
+	    Mythread mt3 = new Mythread(sm);
+	    Thread t3 = new Thread(mt3);
 	    t1.start();
 	    t2.start();
+	    t3.start();
 
 	    while (is_connected){
 		String cmd = scanner.nextLine();
