@@ -8,8 +8,12 @@ class Quizz{
     boolean quizzask;    
     boolean quizzplay;
     boolean quizzque;
-    boolean quizzok;
+    boolean quizzgo;
+    boolean quizzdoubleur;
     String reponse;
+    int points;
+    String ok;
+
 
     public Quizz( Entity ent){
 	this.ent=ent;
@@ -17,17 +21,28 @@ class Quizz{
 	this.quizzask=false;
 	this.quizzplay=false;
 	this.quizzque=false;
-	this.quizzok=false;
+	this.quizzgo=false;
+	this.quizzdoubleur=false;
+	this.points=0;
     }
 
     public void play(String c){
-	System.out.println("kuyg");
 	Scanner scanner = new Scanner (System.in);
 	Mess m;
 	boolean quit=false;
 	String cmd=c;
 	while (!quit){
-	    if(quizzque){
+	    if(cmd.equals("quit")){
+		quit=true;
+		ent.quizz=false;
+		this.quizzask=false;
+		this.quizzplay=false;
+		this.quizzque=false;
+		this.quizzgo=false;
+		this.quizzdoubleur=false;
+		break;
+	    }
+	    if(quizzque && reponse==null){
 		m=new Mess("que "+cmd, ent, u);
 		System.out.println("Reponse : ");
 		reponse = scanner.nextLine();
@@ -35,19 +50,33 @@ class Quizz{
 	    }else{
 		if(quizzask){
 		    if(cmd.equals("o") || cmd.equals("O")){
-			quizzplay=true;
-			quizzask=false;
 			System.out.println("QUIZZ !");
-			if(quizzok){
-			    m=new Mess("ok!", ent, u);
-			    m.send_mess();
+			if(ok!=null){
+			    String[] arr = ok.split(" ");
+			    u.transferer(ok, arr[1]);
+			    ok=null;
+			    quizzask=false;
+			    quizzplay=true;
+			}else{
+			    if(quizzgo){
+				quizzask=false;
+				quizzplay=true;
+			    }
+			    quizzgo=true;
 			}
 		    }else{
 			if(cmd.equals("n") || cmd.equals("N")){
 			    ent.quizz=false; 
-			    if(quizzok){
-				m=new Mess("ok!", ent, u);
-				m.send_mess();
+			    if(ok!=null){
+				String[] arr = ok.split(" ");
+				u.transferer(ok, arr[1]);
+				ok=null;
+				quizzask=false;
+			    }else{
+				if(quizzgo){
+				    quizzask=false;
+				}
+				quizzgo=true;
 			    }
 			}else{
 			    System.out.println("(O/N)");
@@ -72,21 +101,56 @@ class Quizz{
 	switch(arr[3]){
 	case "ASK" :
 	    if(index==-1){
-		ent.quizz=true;
-		quizzask=true;
-		System.out.println(arr[4]+" vous propose un quizz, voulez vous jouer ?   (O/N)");
-		transferer( st, idm);
+		if(!(quizzplay || quizzque)){
+		    ent.quizz=true;
+		    quizzask=true;
+		    System.out.println(arr[4]+" vous propose un quizz, voulez vous jouer ?   (O/N)");
+		}		    
+		u.transferer( st, idm);
 	    }else{
-		quizzque=true;
-		System.out.println("Question : ");
 		u.idmess.remove(index);
 	    }
 	    break;
-	case "OK!" : 
-	    if(quizzask){
-		quizzok=true;
+	case "OK!" :
+	    System.out.println(st);
+ 	    if(index==-1){
+		if(!(quizzplay || quizzque)){
+		    if(quizzgo){
+			u.transferer( st, idm);
+			quizzgo=false;
+			quizzplay=true;
+		    }else{
+			ok=st;
+		    }
+		}else{
+		    m=new Mess("rej "+ent.id, ent, u);
+		    m.send_mess();
+		}
 	    }else{
-		transferer( st, idm);
+		if(ent.ip_next2!=null){
+		    if(quizzdoubleur){
+			quizzque=true;
+			System.out.println("Question : ");
+			quizzdoubleur=false;
+		    }else{
+			quizzdoubleur=true;
+		    }
+		}else{
+		    quizzque=true;
+		    System.out.println("Question : ");
+		}
+	    }
+	    break;
+	case "REJ" : 
+	    if(index==-1){
+		if(!(quizzplay || quizzask || quizzque)){
+		    System.out.println("Un quizz est en cour, voulez vous le rejoindre ? (O/N)");
+		    ent.quizz=true;
+		    quizzask=true;
+		    quizzgo=true;
+		}
+	    }else{
+		u.idmess.remove(index);
 	    }
 	    break;
 	case "QUE" : 
@@ -94,7 +158,7 @@ class Quizz{
 		if(quizzplay){
 		    System.out.println("question de "+arr[4]+" : "+st.substring(40));
 		}
-		transferer(st, idm);
+		u.transferer(st, idm);
 	    }else{
 		u.idmess.remove(index);
 	    }
@@ -106,14 +170,16 @@ class Quizz{
 			System.out.println(arr[4]+" : "+st.substring(61));
 		    }
 		}else{
+		    System.out.println(arr[4]+" : "+st.substring(61));
 		    if(st.substring(61).equals(reponse)){
 			quizzque=false;
 			quizzplay=true;
 			m=new Mess("win "+arr[4]+" "+arr[5]+" "+arr[6], ent, u);
 			m.send_mess();
+			reponse=null;
 		    }  
 		}
-		transferer(st, idm);
+		u.transferer(st, idm);
 	    }else{
 		u.idmess.remove(index);
 	    }
@@ -122,28 +188,37 @@ class Quizz{
 	    if(index==-1){
 		if(quizzplay){
 		    if(arr[5].equals(ent.ip) && arr[6].equals(ent.port_udp)){
-			System.out.println("vous avez gagné !");
+			points+=1;
+			if(points==5){
+			    m=new Mess("gg! "+ent.id, ent, u);
+			    m.send_mess();
+			    points=0;
+			    System.out.println("vous avez gagné le quizz!");
+			}else{
+			    System.out.println("gagné !");
+			}
 			quizzque=true;
 			System.out.println("Question : ");
 		    }else{
 			System.out.println(arr[4]+" a gagné");
 		    }
 		}
-		transferer(st, idm);
+		u.transferer(st, idm);
+	    }else{
+		u.idmess.remove(index);
+	    }
+	    break;
+	case "GG!" : 
+	    if(index==-1){
+		if(quizzplay){
+		    System.out.println(arr[4]+" a gagné le quizz !!");
+		    points=0;
+		}
+		u.transferer(st, idm);
 	    }else{
 		u.idmess.remove(index);
 	    }
 	    break;
 	}
-    }
-    public void transferer(String s, String idm ){
-	ClientUdp cl=new ClientUdp(s);
-	if(ent.ip_next2==null){
-	    cl.send(ent.ip_next, ent.port_udp_next);
-	}else{
-	    u.idmess.add(idm);
-	    cl.send(ent.ip_next, ent.port_udp_next);
-	    cl.send(ent.ip_next2, ent.port_udp_next2);	
-	} 
     }
 }

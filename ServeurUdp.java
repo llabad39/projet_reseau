@@ -38,8 +38,15 @@ public class ServeurUdp extends Serveur{
 			if(arr[2].equals(ent.ip_next2) && arr[3].equals(ent.port_udp_next2)){
 			    m=new Mess("eybg2", ent, this);
 			    m.send_mess();
-			    this.ent.ip_next2 = arr[4];
-			    this.ent.port_udp_next2 = arr[5];
+			    if(arr[4]==ent.ip && arr[5]==ent.port_udp){
+				ent.ip_next=ent.ip_next2;
+				ent.port_udp_next=ent.port_udp_next2;
+				ent.ip_next2 =null;
+				ent.port_udp_next2 =null;
+			    }else{
+				ent.ip_next2 = arr[4];
+				ent.port_udp_next2 = arr[5];
+			    }
 			}else{
 			    transferer( st, idm);
 			}
@@ -94,7 +101,7 @@ public class ServeurUdp extends Serveur{
 		    }
 		    break;
 		default : 
-		    System.out.println("l'application "+arr[2]+" n'est pas prise en charge.");
+                    transferer( st, idm);	
 		    break;
 		}
 	    }

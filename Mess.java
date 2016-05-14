@@ -72,12 +72,15 @@ public class Mess{
 	case "quizz" : 
 	    ent.quizz=true;
 	    envoyer("APPL "+idm+" QUIZZ### ASK "+ent.id);
-	    //m=new Mess("ok!", ent, u);
-	    //m.send_mess();
+	    m=new Mess("ok!", ent, u);
+	    m.send_mess();
+	    break;
+	case "rej" : 
+	    envoyer("APPL "+idm+" QUIZZ### REJ ");
 	    break;
 	case "ok!" :
 	    envoyer("APPL "+idm+" QUIZZ### OK! ");
-	    u.idmess.remove(u.idmess.indexOf(idm));
+	    //   u.idmess.remove(u.idmess.indexOf(idm));
 	    break;
 	case "que" : 
 	    int size_que=cmd.length()-4;
@@ -89,6 +92,9 @@ public class Mess{
 	    break;
 	case "win" : 
 	    envoyer("APPL "+idm+" QUIZZ### WIN "+arr[1]+" "+arr[2]+" "+arr[3]);
+	    break;
+	case "gg!" : 
+	    envoyer("APPL "+idm+" QUIZZ### GG! "+arr[1]);
 	    break;
 	}
     }
