@@ -2,6 +2,8 @@
 
 #include "utils.h"
 
+//demande a l'utilisateur d'entrer ces infos de base
+//a savoir son id, port tcp et port udp
 void askInfo(entity * ent){
   char buff[M_SIZE_MAX];
 
@@ -37,6 +39,8 @@ void askInfo(entity * ent){
   memset(buff,0,sizeof(buff));
 }
 
+//demande a l'utilisateur d'entrer ces infos de diffusion 
+//a savoir l'ip et le port de diffusion 
 void askInfoDiff(entity * ent){
   char buff[M_SIZE_MAX];
 
@@ -61,7 +65,9 @@ void askInfoDiff(entity * ent){
   memset(buff,0,sizeof(buff));
 }
 
-char * askIpDest(){
+//demande a l'utilisateur d'entrer l'ip de la machine sur laquelle il veut
+//se connecter
+void askIpDest(char * ip){
   char buff[M_SIZE_MAX];
 
   //ip destination
@@ -71,14 +77,15 @@ char * askIpDest(){
     printf("addresse IP trop long : max 15 char, reessayer\n");
     scanf("%s",buff);
   }
-  char * ip = malloc(sizeof(char)*16);
-  strcat(ip,buff);
+  strcpy(ip,buff);
   memset(buff,0,sizeof(buff));
 
-  return ip;
+  return;
 }
 
-char * askPortDest(){
+//demande a l'utilisateur d'entrer le port TCP de la machine sur laquelle 
+//il veut se connecter
+void askPortDest(char * port_tcp_dest){
   char buff[M_SIZE_MAX];
 
   //port TCP destination
@@ -88,19 +95,20 @@ char * askPortDest(){
     printf("port tcp trop long : max 4 char, reessayer\n");
     scanf("%s",buff);
   } 
-  char * port_tcp_dest = malloc(sizeof(char)*5);
-  strcat(port_tcp_dest,buff);
-  memset(buff,0,sizeof(buff));
+  strcpy(port_tcp_dest,buff);
+  // memset(buff,0,sizeof(buff));
   
-  return port_tcp_dest;
+  return ;
 }
 
+//transforme un int en char *
 char * itos(int i){
   char * result = malloc(sizeof(char)*15);
   sprintf(result,"%d",i);
   return result;
 }
 
+//renvoi l'addresse ip de la machine courante
 char * getIp(){
   struct ifaddrs *myaddrs, *ifa;
   struct sockaddr_in *s4;
@@ -127,6 +135,7 @@ char * getIp(){
   return ip;
 }
 
+//affiche les info de l'entité ent
 void getInfo(entity ent){
   printf("\n%-14s : %s\n","id",ent.id);
   printf("%-14s : %s\n","port_udp",ent.port_udp);
@@ -141,6 +150,7 @@ void getInfo(entity ent){
   printf("%-14s : %s\n\n","port_diff2",ent.port_diff2);
 }
 
+//demande a l'utilisateur si il veut voir les info de ent
 void askGetInfo(entity ent){
   char buff[M_SIZE_MAX];
 
@@ -158,3 +168,34 @@ void askGetInfo(entity ent){
     }
   }
 }
+
+//renvoi un identifiant unique pour les messages
+char * getIdm(){
+  
+  char * idm = malloc(sizeof(char)*9);
+  time_t rawtime;
+  struct tm * timeinfo;
+  memset(idm,0,1);
+  
+  time ( &rawtime );
+  timeinfo = localtime ( &rawtime );
+  int a = rand() %(timeinfo->tm_sec*10);
+  int b = rand() %(timeinfo->tm_min*10);
+  int c = rand() %(timeinfo->tm_mday*10);
+  int d = rand() %timeinfo->tm_year;
+  strncat(idm,itos(a),1);
+  strncat(idm,itos(b),1);
+  strncat(idm,itos(c),1);
+  strncat(idm,itos(d),1);
+  a = rand() %(timeinfo->tm_sec);
+  b = rand() %(timeinfo->tm_min*10);
+  c = rand() %(timeinfo->tm_mday*10);
+  d = rand() %timeinfo->tm_year;
+  strncat(idm,itos(a),1);
+  strncat(idm,itos(b),1);
+  strncat(idm,itos(c),1);
+  strncat(idm,itos(d),1);
+  
+  return idm;
+}
+

@@ -32,7 +32,7 @@ int serverTCP(entity ent){
       strcat(mess," ");
       strcat(mess,ent.port_diff);
       strcat(mess," ");
-      strcat(mess,"\n");
+      strcat(mess," \n");
       write(*sock2,mess,strlen(mess));
       char buff[M_SIZE_MAX];
       int recv = read(*sock2,buff,(M_SIZE_MAX-1)*sizeof(char));
@@ -121,7 +121,7 @@ int connectTCP(char *ip_dest, int port_dest, entity * ent){
     strcat(mess,getIp());
     strcat(mess," ");
     strcat(mess,ent->port_udp);
-    strcat(mess,"\n");
+    strcat(mess," \n");
     write(sock,mess,strlen(mess));
 
     char buff2 [M_SIZE_MAX];
@@ -186,7 +186,7 @@ int connectTCPDupl(char *ip_dest, int port_dest, entity * ent){
     strcat(mess,ent->ip_diff);
     strcat(mess," ");
     strcat(mess,ent->port_diff);
-    strcat(mess,"\n");
+    strcat(mess," \n");
     write(sock,mess,strlen(mess));
 
     char buff2 [M_SIZE_MAX];

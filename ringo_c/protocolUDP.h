@@ -10,9 +10,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/types.h>
+#include <netdb.h>
 
 #include "utils.h"
 
 
 int serverUDP(entity ent);
 
+int envoiUDP(entity ent, char * mess);

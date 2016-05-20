@@ -22,3 +22,26 @@ int serverUDP(entity ent){
   }
   return 0;
 }
+
+int envoiUDP(entity ent, char * mess){ 
+  int sock;
+  if((sock  = socket(PF_INET, SOCK_DGRAM,0)) == -1){
+    fprintf(stderr,"Erreur lors de la creation de la socket\n");
+    return -1;      
+  }
+  struct addrinfo * first_info;
+  
+  if(getaddrinfo(ent.ip_next,ent.port_udp_next,NULL,&first_info) == 0){
+    if(first_info!=NULL){
+      struct sockaddr *saddr=first_info->ai_addr;
+      sendto(sock,mess,strlen(mess),0,saddr,sizeof(struct sockaddr_in));
+    }
+  }else{
+    fprintf(stderr,"Erreur lors de getaddrinfo\n");
+    close(sock);
+    return -1;
+  }
+  close(sock);
+  
+  return 0;
+}

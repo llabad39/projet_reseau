@@ -49,10 +49,10 @@ int r_connect(entity *ent){
 
   askInfo(ent);
   char * ip = malloc(sizeof(char)*16);
-  ip = askIpDest();
+  askIpDest(ip);
 
   char * port_tcp_dest = malloc(sizeof(char)*5);
-  port_tcp_dest = askPortDest();
+  askPortDest(port_tcp_dest);
 
   connectTCP(ip,atoi(port_tcp_dest),ent);
   
@@ -71,6 +71,8 @@ int r_connect(entity *ent){
 
   printf("\t--------FIN CONNECT--------\n\n");
 
+  free(ip);
+  free(port_tcp_dest);
   return 0;
 }
 
@@ -79,10 +81,10 @@ int r_duplicate(entity *ent){
 
   askInfo(ent);
   char * ip = malloc(sizeof(char)*16);
-  ip = askIpDest();
+  askIpDest(ip);
 
   char * port_tcp_dest = malloc(sizeof(char)*5);
-  port_tcp_dest = askPortDest();
+  askPortDest(port_tcp_dest);
 
   askInfoDiff(ent);
 
@@ -103,10 +105,16 @@ int r_duplicate(entity *ent){
 
   printf("\t--------FIN DUPLICATE--------\n\n");
   
+  free(ip);
+  free(port_tcp_dest);
+
   return 0;
 }
 
 int r_quit_ring(entity *ent){
+  strcpy(ent->ip_next,"127.0.0.1");
+  strcpy(ent->port_udp_next,"4242");
+  envoiUDP(*ent,"yoyoy bla bla\n");
   return 0;
 }
 
