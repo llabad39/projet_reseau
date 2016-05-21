@@ -5,14 +5,14 @@
 
 void * tcp(void * _ent){
   printf("thread tcp lancer\n");
-  entity ent = *(entity *)_ent;
+  entity * ent = (entity *)_ent;
   serverTCP(ent);
   return(NULL);
 }
 
 void * udp(void * _ent){
   printf("thread udp lancer\n");
-  entity ent = *(entity *)_ent;
+  entity * ent = (entity *)_ent;
   serverUDP(ent);
   return(NULL);
 }
@@ -114,7 +114,7 @@ int r_duplicate(entity *ent){
 int r_quit_ring(entity *ent){
   strcpy(ent->ip_next,"127.0.0.1");
   strcpy(ent->port_udp_next,"4242");
-  envoiUDP(*ent,"yoyoy bla bla\n");
+  envoiUDP(ent,"yoyoy bla bla\n");
   return 0;
 }
 

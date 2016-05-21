@@ -154,7 +154,7 @@ void getInfo(entity ent){
 void askGetInfo(entity ent){
   char buff[M_SIZE_MAX];
 
-  printf("\nEntité créer ! Voulez vous voir ces informations ? (y/n)\n\n");
+  printf("\nVoulez vous voir vos informations ? (y/n)\n\n");
   scanf("%s",buff);
   while(1){
     if(!strcmp(buff,"y") || !strcmp(buff,"yes")){

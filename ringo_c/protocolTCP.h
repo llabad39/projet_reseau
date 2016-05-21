@@ -13,7 +13,7 @@
 
 #include "utils.h"
 
-int serverTCP(entity ent);
+int serverTCP(entity * ent);
 
 int connectTCP(char *ip_dest, int port_dest,entity * ent);
 

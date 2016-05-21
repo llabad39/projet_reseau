@@ -13,8 +13,9 @@
 #include <netdb.h>
 
 #include "utils.h"
+#include "message.h"
 
 
-int serverUDP(entity ent);
+int serverUDP(entity * ent);
 
-int envoiUDP(entity ent, char * mess);
+int envoiUDP(entity * ent, char * mess);

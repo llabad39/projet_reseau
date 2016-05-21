@@ -14,7 +14,9 @@ int main() {
     }else if(!strcmp(buff,"duplicate")){
       r_duplicate(ent);
     }else if(!strcmp(buff,"quit_ring")){
-      printf("idm : --%s--\n",getIdm());
+      char * idm = getIdm();
+      int l = strlen(idm);
+      printf("idm : --%s--%d--\n",idm,l);
       printf("idm2: __%s__\n",getIdm());
       printf("idm3: __%s__\n",getIdm());
     }else if(!strcmp(buff,"quit") || !strcmp(buff,"q")){

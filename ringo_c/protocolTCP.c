@@ -1,10 +1,10 @@
 #include "protocolTCP.h"
 
-int serverTCP(entity ent){
+int serverTCP(entity * ent){
   int sock = socket(PF_INET,SOCK_STREAM,0);
   struct sockaddr_in adress_sock;
   adress_sock.sin_family = AF_INET;
-  adress_sock.sin_port = htons(atoi(ent.port_tcp));
+  adress_sock.sin_port = htons(atoi(ent->port_tcp));
   adress_sock.sin_addr.s_addr = htonl(INADDR_ANY);
   if(bind(sock,(struct sockaddr *)&adress_sock,
 	  sizeof(struct sockaddr_in)) != 0){
@@ -24,13 +24,13 @@ int serverTCP(entity ent){
     *sock2 = accept(sock,(struct sockaddr *)&caller,&si);
     if(*sock2 >= 0){
       char mess[M_SIZE_MAX] = "WELC ";
-      strcat(mess,ent.ip_next);
+      strcat(mess,ent->ip_next);
       strcat(mess," ");
-      strcat(mess,ent.port_udp_next);
+      strcat(mess,ent->port_udp_next);
       strcat(mess," ");
-      strcat(mess,ent.ip_diff);
+      strcat(mess,ent->ip_diff);
       strcat(mess," ");
-      strcat(mess,ent.port_diff);
+      strcat(mess,ent->port_diff);
       strcat(mess," ");
       strcat(mess," \n");
       write(*sock2,mess,strlen(mess));
@@ -51,8 +51,8 @@ int serverTCP(entity ent){
       //cas de demande d'insertion dans l'anneau
       if(strcmp(b1,"NEWC") == 0){
 	if((b1 = strtok(NULL," ")) != NULL && (b2 = strtok(NULL," ")) != NULL){
-	  strncpy(ent.ip_next,b1,15); 
-	  strncpy(ent.port_udp_next,b2,4);
+	  strncpy(ent->ip_next,b1,15); 
+	  strncpy(ent->port_udp_next,b2,4);
 	  char mess2[M_SIZE_MAX] = "ACKC\n";
 	  write(*sock2,mess2,strlen(mess2));
 	}else{
@@ -60,7 +60,7 @@ int serverTCP(entity ent){
 	} 
 	//cas de demande de duplication de l'anneau
       }else if(strcmp(b1,"DUPL") == 0){
-	if(strcmp(ent.ip_next2,"") != 0){
+	if(strcmp(ent->ip_next2,"") != 0){
 	  char mess [M_SIZE_MAX] = "NOTC\n";
 	  write(*sock2,mess,strlen(mess));
 	  fprintf(stderr,"Duplication impossible, l'entite est deja doubleur\n");
@@ -71,12 +71,12 @@ int serverTCP(entity ent){
 	     && (b2 = strtok(NULL," ")) != NULL
 	     && (b3 = strtok(NULL," ")) != NULL 
 	     && (b4 = strtok(NULL," ")) != NULL){
-	    strncpy(ent.ip_next2,b1,15); 
-	    strncpy(ent.port_udp_next2,b2,4); 
-	    strncpy(ent.ip_diff2,b3,15); 
-	    strncpy(ent.port_diff2,b4,4);
+	    strncpy(ent->ip_next2,b1,15); 
+	    strncpy(ent->port_udp_next2,b2,4); 
+	    strncpy(ent->ip_diff2,b3,15); 
+	    strncpy(ent->port_diff2,b4,4);
 	    char mess2 [M_SIZE_MAX] = "ACKD ";
-	    strcat(mess2,ent.port_udp);
+	    strcat(mess2,ent->port_udp);
 	    strcat(mess2,"\n");
 	    write(*sock2,mess2,strlen(mess2));
 	  }else{
@@ -85,7 +85,7 @@ int serverTCP(entity ent){
 	}
       }
       close(*sock2);
-      getInfo(ent);
+      getInfo(*ent);
     }
   }
   close(sock);
