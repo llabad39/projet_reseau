@@ -19,7 +19,20 @@
 
 #endif
 
+/**
+ * Linked list to id message (idm)
+ */
+typedef struct lidm lidm;
+struct lidm {
+  char * idm;
+  struct lidm *next;
+};
+
+
 char * whos(char * idm);
 char * memb(char * idm, char * id, char * ip, char * port);
 char * gbye(char * idm, char * ip, char * port, char * ip_succ,char * port_succ);
 char * eybg(char * idm);
+void add (lidm * head, char * idm);
+int contains (lidm * l , char * idm);
+void show (lidm * l);

@@ -179,17 +179,17 @@ char * getIdm(){
   
   time ( &rawtime );
   timeinfo = localtime ( &rawtime );
-  int a = rand() %(timeinfo->tm_sec*10);
-  int b = rand() %(timeinfo->tm_min*10);
-  int c = rand() %(timeinfo->tm_mday*10);
+  int a = rand() %(timeinfo->tm_sec*10+1);
+  int b = rand() %(timeinfo->tm_min*10)+1;
+  int c = rand() %(timeinfo->tm_mday*10+1);
   int d = rand() %timeinfo->tm_year;
   strncat(idm,itos(a),1);
   strncat(idm,itos(b),1);
   strncat(idm,itos(c),1);
   strncat(idm,itos(d),1);
-  a = rand() %(timeinfo->tm_sec);
-  b = rand() %(timeinfo->tm_min*10);
-  c = rand() %(timeinfo->tm_mday*10);
+  a = rand() %(timeinfo->tm_sec*10+1);
+  b = rand() %(timeinfo->tm_min*10+1);
+  c = rand() %(timeinfo->tm_mday*10+1);
   d = rand() %timeinfo->tm_year;
   strncat(idm,itos(a),1);
   strncat(idm,itos(b),1);

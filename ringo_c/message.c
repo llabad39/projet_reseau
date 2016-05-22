@@ -17,8 +17,11 @@ char * memb(char * idm, char * id, char * ip, char * port){
   memset(mess,0,1);
   strncat(mess,"MEMB ",5);
   strcat(mess,idm);
+  strcat(mess," ");
   strcat(mess,id);
+  strcat(mess," ");
   strcat(mess,ip);
+  strcat(mess," ");
   strcat(mess,port);
   strcat(mess," \n");
   
@@ -31,9 +34,13 @@ char * gbye(char * idm, char * ip, char * port, char * ip_succ,char * port_succ)
   memset(mess,0,1);
   strncat(mess,"MEMB ",5);
   strcat(mess,idm);
+  strcat(mess," ");
   strcat(mess,ip);
+  strcat(mess," ");
   strcat(mess,port);
+  strcat(mess," ");
   strcat(mess,ip_succ);
+  strcat(mess," ");
   strcat(mess,port_succ);
   strcat(mess," \n");
   
@@ -49,4 +56,46 @@ char * eybg(char * idm){
   strcat(mess," \n");
   
   return mess;
+}
+
+//ajoute idm a la liste
+void add (lidm * head, char * idm){
+  lidm * current = head;
+  while(current->next != NULL){
+    current = current->next;
+  }
+  lidm * next = malloc(sizeof(struct lidm));
+  next->idm = idm;
+  next->next = NULL;
+  current->next = next;
+  printf("ADDDDD %s\n",current->next->idm);
+}
+
+//renvoi 1 si idm est dans la liste l, 0 sinon
+int contains (lidm * head , char * idm){
+  lidm * l = head;
+  printf("contains show :");
+  show(l);
+  while(l->next != NULL){
+    printf("contains : idm %s\n",idm);
+    printf("contains : l idm %s\n",l->idm);
+    if(strcmp(l->idm,idm) == 0)
+      return 1;
+    l = l->next;
+  }
+  if(strcmp(l->idm,idm) == 0){
+    printf("contains dernier %s\n",l->idm);
+    return 1;
+  }
+  return 0;
+} 
+
+//affiche tout les idm de la liste l
+void show (lidm * head){
+  lidm * l = head;
+  while(l->next != NULL){
+    printf("%s\n",l->idm);
+    l = l->next;
+  }
+  printf("%s\n",l->idm);
 }

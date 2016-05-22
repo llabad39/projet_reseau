@@ -4,14 +4,12 @@
 
 
 void * tcp(void * _ent){
-  printf("thread tcp lancer\n");
   entity * ent = (entity *)_ent;
   serverTCP(ent);
   return(NULL);
 }
 
 void * udp(void * _ent){
-  printf("thread udp lancer\n");
   entity * ent = (entity *)_ent;
   serverUDP(ent);
   return(NULL);

@@ -16,36 +16,48 @@ int serverUDP(entity * ent){
   if(r == 0){
     char mess[M_SIZE_MAX];
     char * type;
+    //creation de la liste de idm
+    struct lidm * l = NULL;
+    l = malloc(sizeof(struct lidm));
+    l->idm = "00000000\0";
+    l->next = NULL;
     while(1){
       int rec = recv(sock,mess,M_SIZE_MAX,0);
       mess[rec] = '\0';
-      printf("SERVER UDP - Message recu : %s\n",mess);
       char mess_c[M_SIZE_MAX];
       strcpy(mess_c,mess);
       type = strtok(mess," ");
-      if(strcmp(type,"WHOS") == 0){
-	char * idm = malloc(sizeof(char)*8);
-	strncpy(idm,strtok(NULL," "),8);
-	envoiUDP(ent,whos(idm));
-	free(idm);
-      }else if(strcmp(type,"MEMB") == 0){
-	//TODO
-      }else if(strcmp(type,"GBYE") == 0){
-	char * idm = malloc(sizeof(char)*8);
-	strncpy(idm,strtok(NULL," "),8);
-	char * ip = malloc(sizeof(char)*15);
-	strncpy(ip,strtok(NULL," "),15);
-	char * port = malloc(sizeof(char)*4);
-	strncpy(port,strtok(NULL," "),8);
-	char * ip_succ = malloc(sizeof(char)*15);
-	strncpy(ip_succ,strtok(NULL," "),15);
-	char * port_succ = malloc(sizeof(char)*4);
-	strncpy(port_succ,strtok(NULL," "),8);
-	if(strcmp(ent->port_udp,port_succ) == 0 && strcmp(getIp(),ip_succ) == 0){
-	  envoiUDP(ent,eybg(getIdm()));
-	}else{
-	  printf("mess -%s-\n",mess_c);
+      strncpy(idm,strtok(NULL," "),8);
+      //si on a pas deja vu le message
+      if(contains(&l,idm) == 0){
+	printf("SERVER UDP - Message recu : %s\n",mess_c);
+	add(&l,idm);
+	printf("SHOW");
+	show(&l);
+	printf("TYPE -%s- \n",type);
+	if(strcmp(type,"WHOS") == 0){
+	  //on transmet le message
 	  envoiUDP(ent,mess_c);
+	  //on envoi le message MEMB
+	  envoiUDP(ent,memb(getIdm(),ent->id,getIp(),ent->port_udp));
+	  memset(idm,0,(size_t)sizeof(idm));
+	}else if(strcmp(type,"MEMB") == 0){
+	  //TODO
+	}else if(strcmp(type,"GBYE") == 0){
+	  char * ip = malloc(sizeof(char)*15);
+	  strncpy(ip,strtok(NULL," "),15);
+	  char * port = malloc(sizeof(char)*4);
+	  strncpy(port,strtok(NULL," "),8);
+	  char * ip_succ = malloc(sizeof(char)*15);
+	  strncpy(ip_succ,strtok(NULL," "),15);
+	  char * port_succ = malloc(sizeof(char)*4);
+	  strncpy(port_succ,strtok(NULL," "),8);
+	  if(strcmp(ent->port_udp,port_succ) == 0 && strcmp(getIp(),ip_succ) == 0){
+	    envoiUDP(ent,eybg(getIdm()));
+	  }else{
+	    printf("mess -%s-\n",mess_c);
+	    envoiUDP(ent,mess_c);
+	  }
 	}
       }
     }
