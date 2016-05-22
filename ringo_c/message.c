@@ -64,27 +64,22 @@ void add (lidm * head, char * idm){
   while(current->next != NULL){
     current = current->next;
   }
-  lidm * next = malloc(sizeof(struct lidm));
-  next->idm = idm;
-  next->next = NULL;
-  current->next = next;
-  printf("ADDDDD %s\n",current->next->idm);
+  current->next = malloc(sizeof(struct lidm));
+  current->next->idm = malloc(sizeof(char)*9);
+  strncpy(current->next->idm,idm,9);
+  memset(&current->next->idm[8],0,1);
+  current->next->next = NULL;
 }
 
 //renvoi 1 si idm est dans la liste l, 0 sinon
 int contains (lidm * head , char * idm){
   lidm * l = head;
-  printf("contains show :");
-  show(l);
   while(l->next != NULL){
-    printf("contains : idm %s\n",idm);
-    printf("contains : l idm %s\n",l->idm);
     if(strcmp(l->idm,idm) == 0)
       return 1;
     l = l->next;
   }
   if(strcmp(l->idm,idm) == 0){
-    printf("contains dernier %s\n",l->idm);
     return 1;
   }
   return 0;

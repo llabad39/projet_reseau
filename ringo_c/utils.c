@@ -179,6 +179,7 @@ char * getIdm(){
   
   time ( &rawtime );
   timeinfo = localtime ( &rawtime );
+  srand(time(NULL));
   int a = rand() %(timeinfo->tm_sec*10+1);
   int b = rand() %(timeinfo->tm_min*10)+1;
   int c = rand() %(timeinfo->tm_mday*10+1);

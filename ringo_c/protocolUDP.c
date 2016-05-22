@@ -22,27 +22,24 @@ int serverUDP(entity * ent){
     l->idm = "00000000\0";
     l->next = NULL;
     while(1){
+      char * idm = malloc(sizeof(char)*9);
+      memset(idm,0,(size_t)sizeof(idm));
       int rec = recv(sock,mess,M_SIZE_MAX,0);
       mess[rec] = '\0';
       char mess_c[M_SIZE_MAX];
       strcpy(mess_c,mess);
       type = strtok(mess," ");
-      strncpy(idm,strtok(NULL," "),8);
+      strncpy(idm,strtok(NULL," "),9);
+      memset(&idm[8],0,1);
       //si on a pas deja vu le message
-      if(contains(&l,idm) == 0){
+      if(contains(l,idm) == 0){
 	printf("SERVER UDP - Message recu : %s\n",mess_c);
-	add(&l,idm);
-	printf("SHOW");
-	show(&l);
-	printf("TYPE -%s- \n",type);
+	add(l,idm);
 	if(strcmp(type,"WHOS") == 0){
 	  //on transmet le message
 	  envoiUDP(ent,mess_c);
 	  //on envoi le message MEMB
 	  envoiUDP(ent,memb(getIdm(),ent->id,getIp(),ent->port_udp));
-	  memset(idm,0,(size_t)sizeof(idm));
-	}else if(strcmp(type,"MEMB") == 0){
-	  //TODO
 	}else if(strcmp(type,"GBYE") == 0){
 	  char * ip = malloc(sizeof(char)*15);
 	  strncpy(ip,strtok(NULL," "),15);
@@ -58,6 +55,9 @@ int serverUDP(entity * ent){
 	    printf("mess -%s-\n",mess_c);
 	    envoiUDP(ent,mess_c);
 	  }
+	}else{
+	  printf("transmis\n");
+	  envoiUDP(ent,mess_c);
 	}
       }
     }
