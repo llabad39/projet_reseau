@@ -1,10 +1,10 @@
 #include "protocolRINGO.h"
 
 int main() {
+  entity *ent = (entity *)malloc(sizeof(entity));
   while(1){
     char buff[M_SIZE_MAX];
     scanf("%s",buff);
-    entity *ent = (entity *)malloc(sizeof(entity));
     if(!strcmp(buff,"help") || !strcmp(buff,"--help")){
       r_help();
     }else if(!strcmp(buff,"create")){
@@ -14,11 +14,7 @@ int main() {
     }else if(!strcmp(buff,"duplicate")){
       r_duplicate(ent);
     }else if(!strcmp(buff,"quit_ring")){
-      char * idm = getIdm();
-      int l = strlen(idm);
-      printf("idm : --%s--%d--\n",idm,l);
-      printf("idm2: __%s__\n",getIdm());
-      printf("idm3: __%s__\n",getIdm());
+      r_quit_ring(ent);
     }else if(!strcmp(buff,"quit") || !strcmp(buff,"q")){
       return 0;
     }else{

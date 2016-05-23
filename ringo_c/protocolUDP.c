@@ -31,7 +31,7 @@ int serverUDP(entity * ent){
       type = strtok(mess," ");
       strncpy(idm,strtok(NULL," "),9);
       memset(&idm[8],0,1);
-      //si on a pas deja vu le message
+      //on verifie si on a pas deja vu le message
       if(contains(l,idm) == 0){
 	printf("SERVER UDP - Message recu : %s\n",mess_c);
 	add(l,idm);
@@ -49,14 +49,24 @@ int serverUDP(entity * ent){
 	  strncpy(ip_succ,strtok(NULL," "),15);
 	  char * port_succ = malloc(sizeof(char)*4);
 	  strncpy(port_succ,strtok(NULL," "),8);
-	  if(strcmp(ent->port_udp,port_succ) == 0 && strcmp(getIp(),ip_succ) == 0){
+	  if(strcmp(ent->port_udp_next,port) == 0 && strcmp(getIp(),ip) == 0){
+	    printf("avant : ip -%s- port -%s- \n",ent->ip_next,ent->port_udp_next);
 	    envoiUDP(ent,eybg(getIdm()));
+	    printf("apres : ip -%s- port -%s- \n",ent->ip_next,ent->port_udp_next);
+	    strncpy(ent->ip_next,ip_succ,15);
+	    strncpy(ent->port_udp_next,port_succ,4);
+	    getInfo(*ent);
+
 	  }else{
 	    printf("mess -%s-\n",mess_c);
 	    envoiUDP(ent,mess_c);
 	  }
+	}else if (strcmp(type,"EYBG") == 0){
+	  printf("Vous avez quitter l'anneau ! \n");
+	  freeEntity(ent);
+	  getInfo(*ent);
+	  return 0;
 	}else{
-	  printf("transmis\n");
 	  envoiUDP(ent,mess_c);
 	}
       }
@@ -80,6 +90,7 @@ int envoiUDP(entity * ent, char * mess){
       sendto(sock,mess,strlen(mess),0,saddr,sizeof(struct sockaddr_in));
     }
   }else{
+    printf("envoi : ip -%s- port -%s- \n",ent->ip_next,ent->port_udp_next);
     fprintf(stderr,"Erreur lors de getaddrinfo\n");
     close(sock);
     return -1;

@@ -96,7 +96,6 @@ void askPortDest(char * port_tcp_dest){
     scanf("%s",buff);
   } 
   strcpy(port_tcp_dest,buff);
-  // memset(buff,0,sizeof(buff));
   
   return ;
 }
@@ -116,7 +115,7 @@ char * getIp(){
   char *ip=(char *)malloc(64*sizeof(char));
   status = getifaddrs(&myaddrs);
   if (status != 0){
-    perror("Probleme de recuperation d'adresse IP");
+    fprintf(stderr,"Probleme de recuperation d'adresse IP");
     exit(1);
   }
   for (ifa = myaddrs; ifa != NULL; ifa = ifa->ifa_next){
@@ -175,15 +174,16 @@ char * getIdm(){
   char * idm = malloc(sizeof(char)*9);
   time_t rawtime;
   struct tm * timeinfo;
-  memset(idm,0,1);
+  memset(idm,0,1); //permet d'enlever '\0' qui est dans idm
   
-  time ( &rawtime );
+  //time ( &rawtime );
   timeinfo = localtime ( &rawtime );
-  srand(time(NULL));
-  int a = rand() %(timeinfo->tm_sec*10+1);
-  int b = rand() %(timeinfo->tm_min*10)+1;
+  srand(clock());
+  int a = rand() %(timeinfo->tm_sec*10+1);//*10 pour augmenter le nombre
+  int b = rand() %(timeinfo->tm_min*10)+1;//et +1 pour eviter les divisions par 0
   int c = rand() %(timeinfo->tm_mday*10+1);
   int d = rand() %timeinfo->tm_year;
+  //on prend juste le premier byte de chaques nombre aléatoire
   strncat(idm,itos(a),1);
   strncat(idm,itos(b),1);
   strncat(idm,itos(c),1);

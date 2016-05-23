@@ -32,7 +32,7 @@ char * memb(char * idm, char * id, char * ip, char * port){
 char * gbye(char * idm, char * ip, char * port, char * ip_succ,char * port_succ){
   char * mess = malloc(sizeof(char)*M_SIZE_MAX);
   memset(mess,0,1);
-  strncat(mess,"MEMB ",5);
+  strncat(mess,"GBYE  ",5);
   strcat(mess,idm);
   strcat(mess," ");
   strcat(mess,ip);

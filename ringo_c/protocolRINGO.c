@@ -109,10 +109,11 @@ int r_duplicate(entity *ent){
   return 0;
 }
 
-int r_quit_ring(entity *ent){
-  strcpy(ent->ip_next,"127.0.0.1");
-  strcpy(ent->port_udp_next,"4242");
-  envoiUDP(ent,"yoyoy bla bla\n");
+int r_quit_ring(entity *ent){  
+  printf("gbye -%s-\n",gbye(getIdm(),getIp(),
+			    ent->port_udp,ent->ip_next,ent->port_udp_next));
+  envoiUDP(ent,gbye(getIdm(),getIp(),
+		    ent->port_udp,ent->ip_next,ent->port_udp_next));
   return 0;
 }
 
