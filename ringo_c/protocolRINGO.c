@@ -110,8 +110,6 @@ int r_duplicate(entity *ent){
 }
 
 int r_quit_ring(entity *ent){  
-  printf("gbye -%s-\n",gbye(getIdm(),getIp(),
-			    ent->port_udp,ent->ip_next,ent->port_udp_next));
   envoiUDP(ent,gbye(getIdm(),getIp(),
 		    ent->port_udp,ent->ip_next,ent->port_udp_next));
   return 0;

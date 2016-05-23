@@ -50,13 +50,9 @@ int serverUDP(entity * ent){
 	  char * port_succ = malloc(sizeof(char)*4);
 	  strncpy(port_succ,strtok(NULL," "),8);
 	  if(strcmp(ent->port_udp_next,port) == 0 && strcmp(getIp(),ip) == 0){
-	    printf("avant : ip -%s- port -%s- \n",ent->ip_next,ent->port_udp_next);
 	    envoiUDP(ent,eybg(getIdm()));
-	    printf("apres : ip -%s- port -%s- \n",ent->ip_next,ent->port_udp_next);
 	    strncpy(ent->ip_next,ip_succ,15);
 	    strncpy(ent->port_udp_next,port_succ,4);
-	    getInfo(*ent);
-
 	  }else{
 	    printf("mess -%s-\n",mess_c);
 	    envoiUDP(ent,mess_c);

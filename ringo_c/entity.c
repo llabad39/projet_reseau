@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+/*
 entity * createEntity(char * _ip_diff, char * _port_diff,char * _port_tcp,char * _port_udp){
 
   entity *ent = (entity *)malloc(sizeof(entity));
@@ -15,13 +15,14 @@ entity * createEntity(char * _ip_diff, char * _port_diff,char * _port_tcp,char *
 
   return ent;
 }
+*/
 
 void freeEntity(entity * ent){
-  free(ent->port_tcp);
-  free(ent->port_udp);
-  free(ent->port_udp_next);
-  free(ent->ip_diff);
-  free(ent->port_diff);
-  free(ent->ip_next);
-  free(ent);
+  memset(ent->id,0,1);
+  memset(ent->port_tcp,0,1);
+  memset(ent->port_udp,0,1);
+  memset(ent->port_udp_next,0,1);
+  memset(ent->ip_diff,0,1);
+  memset(ent->port_diff,0,1);
+  memset(ent->ip_next,0,1);
 }

@@ -17,5 +17,5 @@ struct entity {
   char port_diff2[5];
 };
 
-entity * createEntity(char * _ip_diff, char * _port_diff, char * _port_tcp,char* _port_udp);
+//entity * createEntity(char * _ip_diff, char * _port_diff, char * _port_tcp,char* _port_udp);
 void freeEntity(entity * ent);
