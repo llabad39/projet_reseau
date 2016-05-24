@@ -1,6 +1,6 @@
 #include "protocolRINGO.h"
 
-int main() {
+int main(){
   entity *ent = (entity *)malloc(sizeof(entity));
   while(1){
     char buff[M_SIZE_MAX];
@@ -13,13 +13,12 @@ int main() {
       r_connect(ent);
     }else if(!strcmp(buff,"duplicate")){
       r_duplicate(ent);
-    }else if(!strcmp(buff,"quit_ring")){
-      r_quit_ring(ent);
     }else if(!strcmp(buff,"quit") || !strcmp(buff,"q")){
       return 0;
     }else{
-      fprintf(stderr,"\n\tErreur d'utilisation de la commande ringo\n");
+      fprintf(stderr,"\n\tErreur d'utilisation de la commande\n");
       r_help();
     }
   }
+  return 0;
 }

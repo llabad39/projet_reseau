@@ -8,12 +8,12 @@ int serverTCP(entity * ent){
   adress_sock.sin_addr.s_addr = htonl(INADDR_ANY);
   if(bind(sock,(struct sockaddr *)&adress_sock,
 	  sizeof(struct sockaddr_in)) != 0){
-    fprintf(stderr,"Probleme lors du bind\n");
+    fprintf(stderr,"ServeurTCP-Erreur: bind\n");
     close(sock);
     return -1;
   }
   if(listen(sock,0) != 0){
-    fprintf(stderr,"Probleme lors du listen\n");
+    fprintf(stderr,"ServeurTCP-Erreur: listen\n");
     close(sock);
     return -1;
   }
@@ -36,13 +36,13 @@ int serverTCP(entity * ent){
       write(*sock2,mess,strlen(mess));
       char buff[M_SIZE_MAX];
       int recv = read(*sock2,buff,(M_SIZE_MAX-1)*sizeof(char));
-      if( recv < 0){
-	fprintf(stderr,"Probleme lors du read\n");
+      if(recv < 0){
+	fprintf(stderr,"ServeurTCP-Erreur: read\n");
 	close(sock);
 	return -1;
       }
       buff[recv]='\0';
-      printf("SERVEUR TCP - Message recu : %s\n",buff);
+      printf("ServeurTCP-MessageRecu: %s\n",buff);
 
       char * b1;
       char * b2;
@@ -56,7 +56,7 @@ int serverTCP(entity * ent){
 	  char mess2[M_SIZE_MAX] = "ACKC\n";
 	  write(*sock2,mess2,strlen(mess2));
 	}else{
-	  fprintf(stderr,"Message erroné, insertion annulée\n\n");
+	  fprintf(stderr,"ServeurTCP-Erreur: NEWC Message erroné, insertion annulée\n\n");
 	} 
 	//cas de demande de duplication de l'anneau
       }else if(strcmp(b1,"DUPL") == 0){
@@ -80,12 +80,11 @@ int serverTCP(entity * ent){
 	    strcat(mess2,"\n");
 	    write(*sock2,mess2,strlen(mess2));
 	  }else{
-	    fprintf(stderr,"Message erroné, duplication annulée\n\n");
+	    fprintf(stderr,"ServeurTCP-Erreur: NEWC Message erroné, insertion annulée\n\n");
 	  } 
 	}
       }
       close(*sock2);
-      getInfo(*ent);
     }
   }
   close(sock);
@@ -102,7 +101,7 @@ int connectTCP(char *ip_dest, int port_dest, entity * ent){
   adress_sock.sin_family = AF_INET;
   adress_sock.sin_port = htons(port_dest);
   if(inet_aton(ip_dest,&adress_sock.sin_addr) == 0){
-    fprintf(stderr,"Veillez entrer une adresse correcte\n");
+    fprintf(stderr,"Connect-Erreur: adresse incorrecte\n");
     return -1;
   }
   int sock = socket(PF_INET,SOCK_STREAM,0);
@@ -111,12 +110,12 @@ int connectTCP(char *ip_dest, int port_dest, entity * ent){
     char buff [M_SIZE_MAX];
     int size_rec = recv(sock,buff,(M_SIZE_MAX-1)*sizeof(char),0);
     if(size_rec < 1){
-      fprintf(stderr,"Probleme lors du recv\n");
+      fprintf(stderr,"Connect-Erreur: recv\n");
       close(sock);
       return -1;
     }
     buff[size_rec] = '\0';
-    printf("CLIENT TCP - Message recu : %s\n",buff);
+    printf("ClientTCP-MessageRecu: %s\n",buff);
     char mess[M_SIZE_MAX] = "NEWC ";
     strcat(mess,getIp());
     strcat(mess," ");
@@ -127,14 +126,14 @@ int connectTCP(char *ip_dest, int port_dest, entity * ent){
     char buff2 [M_SIZE_MAX];
     size_rec = recv(sock,buff2,(M_SIZE_MAX-1)*sizeof(char),0);
     if(size_rec < 1){
-      fprintf(stderr,"Probleme lors du recv\n");
+      fprintf(stderr,"Connect-Erreur: recv\n");
       close(sock);
       return -1;
     }
     buff2[size_rec] = '\0';
-    printf("CLIENT TCP - Message recu : %s\n",buff2);
+    printf("ClientTCP-MessageRecu: %s\n",buff2);
     if(strcmp(buff2,"ACKC\n") > 0){
-      fprintf(stderr,"Probleme d'acceptation dans l'anneau\n");
+      fprintf(stderr,"Connect-Erreur: Pas accepter dans l'anneau\n");
       close(sock);
       return -1;      
     }
@@ -146,7 +145,7 @@ int connectTCP(char *ip_dest, int port_dest, entity * ent){
     strncpy(ent->port_diff,strtok(NULL," "),4);
     
   }else{
-    fprintf(stderr,"Probleme lors du connect\nVerifier le port tcp indiqué\n");
+    fprintf(stderr,"Connect-Erreur: connect\n-->Verifier le port tcp indiqué\n");
     close(sock);
     return -1;
   }
@@ -163,7 +162,7 @@ int connectTCPDupl(char *ip_dest, int port_dest, entity * ent){
   adress_sock.sin_family = AF_INET;
   adress_sock.sin_port = htons(port_dest);
   if(inet_aton(ip_dest,&adress_sock.sin_addr) == 0){
-    fprintf(stderr,"Veillez entrer une adresse correcte\n");
+    fprintf(stderr,"Duplication-Erreur: adresse incorrecte\n\n");
     return -1;
   }
   int sock = socket(PF_INET,SOCK_STREAM,0);
@@ -172,12 +171,12 @@ int connectTCPDupl(char *ip_dest, int port_dest, entity * ent){
     char buff [M_SIZE_MAX];
     int size_rec = recv(sock,buff,(M_SIZE_MAX-1)*sizeof(char),0);
     if(size_rec < 1){
-      fprintf(stderr,"Probleme lors du recv\n");
+      fprintf(stderr,"Duplicate-Erreur: recv\n");
       close(sock);
       return -1;
     }
     buff[size_rec] = '\0';
-    printf("CLIENT TCP - Message recu : %s\n",buff);
+    printf("CLIENT TCP - MessageRecu : %s\n",buff);
     char mess[M_SIZE_MAX] = "DUPL ";
     strcat(mess,getIp());
     strcat(mess," ");
@@ -192,14 +191,14 @@ int connectTCPDupl(char *ip_dest, int port_dest, entity * ent){
     char buff2 [M_SIZE_MAX];
     size_rec = recv(sock,buff2,(M_SIZE_MAX-1)*sizeof(char),0);
     if(size_rec < 1){
-      fprintf(stderr,"Probleme lors du recv\n");
+      fprintf(stderr,"Duplicate-Erreur: recv\n");
       close(sock);
       return -1;
     }
     buff2[size_rec] = '\0';
-    printf("CLIENT TCP - Message recu : %s\n",buff2);
+    printf("Duplicate-MessageRecu: %s\n",buff2);
     if(strcmp(buff2,"NOTC\n") == 0){
-      fprintf(stderr,"Impossible de dupliquer l'anneau, l'entite est deja doubleur\n");
+      fprintf(stderr,"Duplicate-Erreur: Impossible de dupliquer l'anneau, l'entite est deja doubleur\n");
       close(sock);
       return -1;      
     }
@@ -216,7 +215,7 @@ int connectTCPDupl(char *ip_dest, int port_dest, entity * ent){
     strncpy(ent->port_udp_next,strtok(NULL," "),4);
     
   }else{
-    fprintf(stderr,"Probleme lors du connect\nVerifier le port tcp indiqué\n");
+    fprintf(stderr,"Duplicate-Erreur: connect\n-->Verifier le port tcp indiqué\n");
     close(sock);
     return -1;
   }

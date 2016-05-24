@@ -153,7 +153,7 @@ void getInfo(entity ent){
 void askGetInfo(entity ent){
   char buff[M_SIZE_MAX];
 
-  printf("\nVoulez vous voir vos informations ? (y/n)\n\n");
+  printf("\nVoulez vous voir vos informations ? (y/n) ");
   scanf("%s",buff);
   while(1){
     if(!strcmp(buff,"y") || !strcmp(buff,"yes")){
@@ -176,7 +176,7 @@ char * getIdm(){
   struct tm * timeinfo;
   memset(idm,0,1); //permet d'enlever '\0' qui est dans idm
   
-  //time ( &rawtime );
+  time ( &rawtime );
   timeinfo = localtime ( &rawtime );
   srand(clock());
   int a = rand() %(timeinfo->tm_sec*10+1);//*10 pour augmenter le nombre
