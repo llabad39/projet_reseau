@@ -128,6 +128,7 @@ public class Transfert {
                     this.maxMess = 0;
                     this.compteurTrans = 0;
                     serv.idmess.remove(index);
+		    System.out.println("telechargement termine");
                     fw.close();//ferme le fichier copier
                 }
             } catch (Exception e) {

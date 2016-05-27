@@ -78,7 +78,7 @@ public class Mess{
 	    break;
 	case "transfert":
 	    String size_nom = Fonction.fill(2,arr[1].length());
-	    System.out.println("sa se lance");
+	    System.out.println("debut telechargement");
 	    envoyer("APPL "+idm+" TRANS### REQ "+size_nom+" "+arr[1]);
 	    break;
 	case "gg!" : 
