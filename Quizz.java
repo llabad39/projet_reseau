@@ -62,7 +62,7 @@ class Quizz{
 		}
 		if(temps==0){ 
 		    System.out.println("temps écoulé.");
-		    m=new Mess("tim ", ent, u);
+		    m=new Mess("tim "+reponse, ent, u);
 		    m.send_mess();
 		    System.out.println("Voulez vous poser une autre question ? (O/N)");
 		    while(true){
@@ -201,7 +201,7 @@ class Quizz{
 	case "TIM" : //le temps de reponse a la dernière question est écoulé.
 	    if(index==-1){
 		if(quizzplay){
-		    System.out.println("temps écoulé.");
+		    System.out.println("temps écoulé, la réponse étais : "+arr[4]);
 		}
 		u.transferer(st, idm);
 	    }else{

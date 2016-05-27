@@ -26,7 +26,6 @@ public class Main{
 		break;
 	    }
 	}
-	System.out.println("Utilisation: create, dupl ou connect");
  
 	Entity me=new Entity();
 	try{
@@ -35,6 +34,9 @@ public class Main{
 	    System.out.println(e);
 	    e.printStackTrace();  
 	}
+	System.out.println("votre ip est : "+ip);
+	System.out.println("Utilisation: create, dupl ou connect");
+
 	ClientTcp cl;
 	int a;
 	boolean is_connected=false;
@@ -105,6 +107,9 @@ public class Main{
 		    }	
 		    System.out.println("\n\t----------FIN DUPLICATION----------\n");
 		    break;
+		case "quit" : 
+		    System.exit(0);
+		    break;
 		default : 
 		    System.out.println("Utilisation: connect, create ou dupl");
 		    break;
@@ -143,15 +148,12 @@ public class Main{
 			    System.out.println("quizz ? "+me.quizz);
 			   
 			    break;
-			case "quit" : 
-			    quit=true;
-			    m=new Mess("gbye", me, u);
-			    s.stop();
-			    u.add_list(m.idm);
-			    m.send_mess();
-			    break;
 			case "quit_ring" :
 			    is_connected=false;
+			    me.ip_next2=null;
+			    me.port_udp_next2=null;
+			    me.ip_diff2=null;
+			    me.port_diff2=null;
 			    m=new Mess("gbye", me, u);
 			    s.stop();
 			    u.add_list(m.idm);
