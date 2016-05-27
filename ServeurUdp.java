@@ -30,6 +30,7 @@ public class ServeurUdp extends Serveur{
 	    while(b){
 		dso.receive(paquet);
 		String st=new String(paquet.getData(),0,paquet.getLength());
+		System.out.println(st);
 		String[] arr = st.split(" ");
 		Mess m;
 		String idm=arr[1];
@@ -107,28 +108,38 @@ public class ServeurUdp extends Serveur{
 			q.recu(st, index);
 			break;
 			
-		    case "TRANS" :
+		    case "TRANS###" :
 			if(arr[3].equals("REQ")){
 			    if(index==-1){
-				    System.out.println("on est la ");
 				    File f = new File(arr[5]);
 				    if(f.exists()){
 					String id_trans = Fonction.giveUniqueId();
 					long nm = (f.length()-1)/463+1;
 					String nummess = Fonction.long_to_little(nm);
-					st="APPL "+idm+"TRANS### "+"ROK "+id_trans+arr[4]+arr[5]+nummess;
-					transferer(st,idm);
+					st="APPL "+idm+" TRANS### "+"ROK "+id_trans+" "+arr[4]+" "+arr[5]+" "+nummess;
+					transferer(st,idm);	 
 					try{
 					    FileInputStream fi = new FileInputStream(f);
 					    byte [] cont = new byte[463];
+					    int lect;
+					    String contenu;
+					    long size_rest = f.length();
 					    for(long i =0;i<nm;i++){
-						fi.read(cont,0,463);
-						String contenu = new String(cont);
+						fi.read(cont);
+						if(size_rest>=463){
+						    contenu = new String(cont);
+						    size_rest=size_rest-463;
+						}
+						else{
+						    contenu = new String(cont,0,(int)size_rest);
+						}
 						String no_mess = Fonction.long_to_little(i);
+			       
 						String size_cont = Fonction.fill(3,contenu.length());
-						st ="APPL "+idm+"TRANS### "+"SEN "+id_trans+" "+no_mess+" "+size_cont+" "+contenu;
+						st ="APPL "+idm+" TRANS### "+"SEN "+id_trans+" "+no_mess+" "+size_cont+" "+contenu;
 						transferer(st,idm);
 					    }
+					    fi.close();
 					}
 					catch(Exception e){
 					    System.out.println("can't read file");
@@ -136,7 +147,6 @@ public class ServeurUdp extends Serveur{
 				    }
 				    else{
 					transferer(st ,idm);
-				
 				    }
 				}
 				else{
@@ -159,6 +169,8 @@ public class ServeurUdp extends Serveur{
 				    try{
 					
 					FileWriter fw = new FileWriter(this.name,true);
+					System.out.println("sa écrit");
+					System.out.println(arr[7]);
 					fw.write(arr[7]);
 					fw.close();
 					this.compteurTrans++;
@@ -180,7 +192,8 @@ public class ServeurUdp extends Serveur{
 			break;
 
 			
-		default : 
+		default :
+		    System.out.println("défaut");
                     transferer( st, idm);	
 		    break;
 		}

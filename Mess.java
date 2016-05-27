@@ -77,7 +77,7 @@ public class Mess{
 	case "transfert":
 	    String size_nom = Fonction.fill(2,arr[1].length());
 	    System.out.println("sa se lance");
-	    envoyer("APPL "+idm+" TRANS###"+"REQ "+" "+size_nom+" "+arr[1]);
+	    envoyer("APPL "+idm+" TRANS### REQ "+size_nom+" "+arr[1]);
 	    break;
 	case "gg!" : 
 	    envoyer("APPL "+idm+" QUIZZ### GG! "+arr[1]);
@@ -85,6 +85,8 @@ public class Mess{
 	case "qit" :
 	    envoyer("APPL "+idm+" QUIZZ### QIT "+ent.id);
 	    break;
+	default :
+	    System.out.println("requete non reconnu");
 	}
     }
     public void envoyer(String s){

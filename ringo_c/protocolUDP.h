@@ -10,11 +10,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/types.h>
+#include <netdb.h>
 
 #include "utils.h"
+#include "message.h"
 
-int serverTCP(entity * ent);
 
-int connectTCP(char *ip_dest, int port_dest,entity * ent);
+int serverUDP(entity * ent);
 
-int connectTCPDupl(char *ip_dest, int port_dest,entity * ent);
+int envoiUDP(entity * ent, char * mess);

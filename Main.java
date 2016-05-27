@@ -24,36 +24,6 @@ public class Main{
 		break;
 	    }
 	}
-
-	while(arg){
-	    System.out.println("port UDP ?");
-	    port_udp = scanner.nextLine();
-	    try{
-		DatagramSocket dso=new DatagramSocket(Integer.parseInt(port_udp));
-		dso.close();
-	    	break;
-	    }	
-	    catch(Exception e){
-		System.out.println("Mauvais port udp");
-	    }
-	}
-
-	while(arg){
-	    System.out.println("port TCP ?");
-	    port_tcp = scanner.nextLine();
-	    if(!port_tcp.equals(port_udp)){
-		try{
-		    ServerSocket server=new ServerSocket(Integer.parseInt(port_tcp));
-		    server.close();
-		    break;
-		}
-		catch(Exception e){
-		    System.out.println("Mauvais port tcp");
-		}
-	    }else{
-		System.out.println("Mauvais port tcp");
-	    }
-	}
  
 	Entity me=new Entity();
 	try{
@@ -71,6 +41,8 @@ public class Main{
 	while(b && !quit){
 	    Mess m;
 	    while(!is_connected && !quit){
+		String tcp;
+		String udp;
 		String cmd = scanner.nextLine();
 		String[] arr = cmd.split(" ");
 		switch (arr[0]){
@@ -78,30 +50,36 @@ public class Main{
 		    quit=true;
 		    break;
 		case "connect":
-			if(arr.length==3){			    
-			    me = new Entity(ip, id, port_udp, port_tcp);
-			    cl=new ClientTcp(me,arr[1], arr[2]);
-			    a=cl.clientTCP("connect");
-			    if(a==0){
+		    if(arr.length==3){
+			port_udp=askUdp();
+		        port_tcp=askTcp(port_udp);
+			me = new Entity(ip, id, port_udp, port_tcp);
+			cl=new ClientTcp(me,arr[1], arr[2]);
+			a=cl.clientTCP("connect");
+			if(a==0){
 				is_connected=true;
-			    }else{
-				System.out.println("wrong arguments");
-			    }
 			}else{
 			    System.out.println("wrong arguments");
-			}
+			    }
+		    }else{
+			System.out.println("wrong arguments");
+		    }
 		    break;
 		case "create":
-			System.out.println("multi diff adress ?");
-			String multi_diff = scanner.nextLine();
-			System.out.println("multi diff port ?");
+		    port_udp=askUdp();
+		    port_tcp=askTcp(port_udp);
+		    System.out.println("multi diff adress ?");
+		    String multi_diff = scanner.nextLine();
+		    System.out.println("multi diff port ?");
 			String port_diff = scanner.nextLine();
 			me = new Entity(ip, id, port_udp, port_tcp, multi_diff, port_diff);
 			is_connected=true;
-		    break;
+			break;
 		case "dupl":
-			if(arr.length==3){
-			    System.out.println("multi diff adress ?");
+		    if(arr.length==3){
+			port_udp=askUdp();
+		        port_tcp=askTcp(port_udp);
+			System.out.println("multi diff adress ?");
 			    String multi_diff2 = scanner.nextLine();
 			    System.out.println("multi diff port ?");
 			    String port_diff2 = scanner.nextLine();
@@ -124,6 +102,9 @@ public class Main{
 			}else{
 			    System.out.println("wrong arguments");
 			}	
+		    break;
+		case "quit":
+		    System.exit(0);
 		    break;
 		default : 
 		    System.out.println("use connect, create or dupl");
@@ -189,6 +170,46 @@ public class Main{
 	    }
 	}
     }
+    public static String askTcp(String port_udp){
+	String port_tcp;
+	while(true){
+	    Scanner scanner = new Scanner (System.in);
+	    System.out.println("port TCP ?");
+	     port_tcp = scanner.nextLine();
+	    if(!port_tcp.equals(port_udp)){
+		try{
+		    ServerSocket server=new ServerSocket(Integer.parseInt(port_tcp));
+		    server.close();
+		    break;
+		}
+		catch(Exception e){
+		    System.out.println("Mauvais port tcp");
+		}
+	    }else{
+		System.out.println("Mauvais port tcp");
+	    }
+	}
+	return port_tcp;
+    }
+    public static String askUdp(){
+	String port_udp;
+	Scanner scanner = new Scanner (System.in);
+	while(true){
+	    System.out.println("port UDP ?");
+	    port_udp = scanner.nextLine();
+	    try{
+		DatagramSocket dso=new DatagramSocket(Integer.parseInt(port_udp));
+		dso.close();
+	    	break;
+	    }	
+	    catch(Exception e){
+		System.out.println("Mauvais port udp");
+	    }
+	}
+	return port_udp;
+    }
+    
+    
 }
 
 

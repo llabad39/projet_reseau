@@ -10,11 +10,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/types.h>
+#include <netdb.h>
 
 #include "utils.h"
 
-int serverTCP(entity * ent);
 
-int connectTCP(char *ip_dest, int port_dest,entity * ent);
+int serverMulticast(char * ip, char * port);
 
-int connectTCPDupl(char *ip_dest, int port_dest,entity * ent);
+int envoiMulticast(char * ip, char * port, char * mess);
