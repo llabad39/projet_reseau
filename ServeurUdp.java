@@ -1,23 +1,16 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.io.FileWriter;
 public class ServeurUdp extends Serveur{
     boolean test=false;
     ArrayList<String> idmess;
     String reponse;
-    long compteurTrans;
-    long maxMess;
-    String name;
     Transfert trf;
     Quizz q;
     boolean b;
     public ServeurUdp(Entity e,Quizz q){
 	super(e);
 	this.idmess=new ArrayList<String>();
-	this.compteurTrans=0;
-	this.maxMess=0;
-	this.name= " ";
 	trf= new Transfert(this);
 	this.q=q;
 	this.b=true;
@@ -32,7 +25,6 @@ public class ServeurUdp extends Serveur{
 	    while(b){
 		dso.receive(paquet);
 		String st=new String(paquet.getData(),0,paquet.getLength());
-		//System.out.println(st);
 		String[] arr = st.split(" ");
 		Mess m;
 		String idm=arr[1];
@@ -163,7 +155,6 @@ public class ServeurUdp extends Serveur{
 	} 
     }
     public void transfererB(byte[]data,String idm){
-	System.out.println("on transfert un bail de cette taille "+data.length);
 	ClientUdp cl = new ClientUdp(data);
         if(ent.ip_next2==null){
 	    cl.send(ent.ip_next, ent.port_udp_next);

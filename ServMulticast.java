@@ -7,7 +7,7 @@ public class ServMulticast extends Serveur{
 	super(e);
 	this.diff1=b;
     }
-    public void runServ(int run){
+    public void runServ(int run){//lance un serveur de multidiffusion
 	int p;
 	String ip;
 	if(diff1){
@@ -25,7 +25,7 @@ public class ServMulticast extends Serveur{
 		while(run!=-1){
 		    mso.receive(paquet);
 		    String s=new String(paquet.getData(),0,paquet.getLength());
-		    if(s.equals("DOWN")){
+		    if(s.equals("DOWN")){//une entité sur l'anneau à envoyé sur le serveur que celui ci était disfonctionnel
 			if(ent.ip_next2==null){
 			    System.out.println("anneau cassé, déconnection.");
 			    System.exit(0);
