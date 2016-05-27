@@ -2,16 +2,18 @@ import java.io.*;
 import java.net.*;
 
 public class ClientUdp {
-    String mess;
+    byte[] data;
 
-    public ClientUdp(String mess){
-	this.mess=mess;
+    public ClientUdp(byte[] mess){
+	this.data=mess;
     }
+    public ClientUdp(String s){
+        this.data=s.getBytes();
+    }
+    
     public void send(String ip, String port){
 	try{
 	    DatagramSocket dso=new DatagramSocket();
-	    byte[]data;
-	    data=mess.getBytes();
 	    DatagramPacket paquet=new DatagramPacket(data,data.length,InetAddress.getByName(ip),Integer.parseInt(port));
 	    dso.send(paquet);
 	} catch(Exception e){

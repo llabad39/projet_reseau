@@ -90,7 +90,8 @@ public class Mess{
 	}
     }
     public void envoyer(String s){
-	ClientUdp cl=new ClientUdp(s);
+	byte data[] = s.getBytes();
+	ClientUdp cl=new ClientUdp(data);
 	u.add_list(idm);
 	cl.send(ent.ip_next, ent.port_udp_next);
 	if(ent.ip_next2!=null){

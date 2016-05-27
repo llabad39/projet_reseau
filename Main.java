@@ -78,7 +78,7 @@ public class Main{
 		        port_tcp=askTcp(port_udp);
 			System.out.println("multi diff adress ?");
 			    String multi_diff2 = scanner.nextLine();
-			    System.out.println("multi diff port ?");
+ 			    System.out.println("multi diff port ?");
 			    String port_diff2 = scanner.nextLine();
 			    try{
 				String ipf=me.fill_ip(arr[1]);
