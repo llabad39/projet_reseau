@@ -66,14 +66,17 @@ public class Main{
 	int a;
 	boolean is_connected=false;
 	boolean b=true;
-	
-	while(b){
-	    Mess m;
+	boolean quit=false;
 
-	    while(!is_connected){
+	while(b && !quit){
+	    Mess m;
+	    while(!is_connected && !quit){
 		String cmd = scanner.nextLine();
 		String[] arr = cmd.split(" ");
 		switch (arr[0]){
+		case "quit" : 
+		    quit=true;
+		    break;
 		case "connect":
 			if(arr.length==3){			    
 			    me = new Entity(ip, id, port_udp, port_tcp);
@@ -127,49 +130,61 @@ public class Main{
 		    break;
 		}
 	    }
-	    System.out.println("vous etes connectés");
-	    System.out.println("port next : "+me.port_udp_next);
+	    if(!quit){
+		System.out.println("vous etes connectés");
+		System.out.println("port next : "+me.port_udp_next);
+		
+		Quizz q=new Quizz(me);
+		ServeurTcp s = new ServeurTcp(me);
+		Thread t1 = new Thread(s);
+		ServeurUdp u =  new ServeurUdp(me,q);
+		q.u=u;
+		Mythread mt2 = new Mythread(u);
+		Thread t2=new Thread(mt2);
+		ServMulticast sm = new ServMulticast(me, u);
+		Mythread mt3 = new Mythread(sm);
+		Thread t3 = new Thread(mt3);
+		t1.start();
+		t2.start();
+		t3.start();
 
-	    Quizz q=new Quizz(me);
-	    ServeurTcp s = new ServeurTcp(me);
-	    Thread t1 = new Thread(s);
-	    ServeurUdp u =  new ServeurUdp(me,q);
-	    q.u=u;
-	    Mythread mt2 = new Mythread(u);
-	    Thread t2=new Thread(mt2);
-	    ServMulticast sm = new ServMulticast(me);
-	    Mythread mt3 = new Mythread(sm);
-	    Thread t3 = new Thread(mt3);
-	    t1.start();
-	    t2.start();
-	    t3.start();
+		while (is_connected && !quit){
+		    String cmd = scanner.nextLine();
+		    if(me.quizz){
+			q.play(cmd);
+		    }else{
+			String[] arr = cmd.split(" ");
+			switch (arr[0]){
+			case "info" : 
+			    System.out.println(me.id);
+			    System.out.println(me.port_udp_next);
+			    System.out.println(me.port_udp_next2);
+			    System.out.println(me.quizz);
+			    System.out.println(q.quizzque);
+			    System.out.println(q.quizzask);
+			    System.out.println(q.quizzplay);
 
-	    while (is_connected){
-		String cmd = scanner.nextLine();
-		if(me.quizz){
-		    q.play(cmd);
-		}
-		String[] arr = cmd.split(" ");
-		switch (arr[0]){
-		case "info" : 
-		    System.out.println(me.id);
-		    System.out.println(me.port_udp_next);
-		    System.out.println(me.port_udp_next2);
-		    
-		    break;
-		case "quit_ring" :
-		    is_connected=false;
-		    m=new Mess("gbye", me, u);
-		    //mt2.arret();
-		    s.stop();
-		    u.add_list(m.idm);
-		    m.send_mess();
-		    //serveurs=null
-		    break;
-		default :
-		    m=new Mess(cmd, me, u);
-		    m.send_mess();
-		    break;
+			    break;
+			case "quit" : 
+			    quit=true;
+			    m=new Mess("gbye", me, u);
+			    s.stop();
+			    u.add_list(m.idm);
+			    m.send_mess();
+			    break;
+			case "quit_ring" :
+			    is_connected=false;
+			    m=new Mess("gbye", me, u);
+			    s.stop();
+			    u.add_list(m.idm);
+			    m.send_mess();
+			    break;
+			default :
+			    m=new Mess(cmd, me, u);
+			    m.send_mess();
+			    break;
+			}
+		    }
 		}
 	    }
 	}

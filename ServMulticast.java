@@ -2,8 +2,10 @@ import java.io.*;
 import java.net.*;
 
 public class ServMulticast extends Serveur{
-    public ServMulticast(Entity e){
+    ServeurUdp u;
+    public ServMulticast(Entity e, ServeurUdp u){
 	super(e);
+	this.u=u;
     }
     public void runServ(int run){
 	
@@ -16,7 +18,9 @@ public class ServMulticast extends Serveur{
 		while(run!=-1){
 		    mso.receive(paquet);
 		    String s=new String(paquet.getData(),0,paquet.getLength());
-		    System.out.println("Le message de multidiffusion est :"+s);
+		    if(s.equals("DOWN")){
+			u.quit();
+		    }
 		}
 	    }
 	catch(IOException e){

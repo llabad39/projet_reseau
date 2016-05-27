@@ -27,7 +27,6 @@ public class Mess{
 	    break;
 	case "memb" :
 	    envoyer("MEMB "+idm+" "+ent.id+" "+ent.ip+" "+ent.port_udp );
-	    //System.out.println(ent.id+" "+ent.ip+" "+ent.port_udp+" "+idm);
 	    break;
 	case "eybg1" : 
 	    cl=new ClientUdp( "EYBG "+idm );
@@ -56,24 +55,22 @@ public class Mess{
 	case "quizz" : 
 	    ent.quizz=true;
 	    envoyer("APPL "+idm+" QUIZZ### ASK "+ent.id);
-	    m=new Mess("ok!", ent, u);
-	    m.send_mess();
 	    break;
 	case "rej" : 
 	    envoyer("APPL "+idm+" QUIZZ### REJ ");
 	    break;
-	case "ok!" :
-	    envoyer("APPL "+idm+" QUIZZ### OK! ");
-	    //   u.idmess.remove(u.idmess.indexOf(idm));
-	    break;
 	case "que" : 
-	    int size_que=cmd.length()-4;
-	    envoyer("APPL "+idm+" QUIZZ### QUE "+ ent.id+" "+Fonction.fill(3,size_que)+" "+cmd.substring(4));
+	    int size_time=arr[1].length();
+	    int size_que=cmd.length()-5-size_time;
+	    envoyer("APPL "+idm+" QUIZZ### QUE "+ ent.id+" "+arr[1]+" "+Fonction.fill(3,size_que)+" "+cmd.substring(5+size_time));
 	    break;
 	case "rep" : 
 	    int size_rep=cmd.length()-4;
 	    envoyer("APPL "+idm+" QUIZZ### REP "+ent.id+" "+ent.ip+" "+ent.port_udp+" "+ Fonction.fill(3,size_rep)+" "+cmd.substring(4));
 	    break;
+	case "tim" :
+	    envoyer("APPL "+idm+" QUIZZ### TIM ");
+	    break; 
 	case "win" : 
 	    envoyer("APPL "+idm+" QUIZZ### WIN "+arr[1]+" "+arr[2]+" "+arr[3]);
 	    break;
@@ -84,6 +81,9 @@ public class Mess{
 	    break;
 	case "gg!" : 
 	    envoyer("APPL "+idm+" QUIZZ### GG! "+arr[1]);
+	    break;
+	case "qit" :
+	    envoyer("APPL "+idm+" QUIZZ### QIT "+ent.id);
 	    break;
 	}
     }
