@@ -10,6 +10,7 @@ public class ServeurUdp extends Serveur{
     long maxMess;
     String name;
     Quizz q;
+    boolean b;
     public ServeurUdp(Entity e,Quizz q){
 	super(e);
 	this.idmess=new ArrayList<String>();
@@ -17,15 +18,15 @@ public class ServeurUdp extends Serveur{
 	this.maxMess=0;
 	this.name= " ";
 	this.q=q;
+	this.b=true;
  }
     public void runServ(int run){
 	try{
 	    int port_udp=Integer.parseInt(ent.port_udp);
 	    DatagramSocket dso=new DatagramSocket(port_udp);
-	    byte[]data=new byte[4096];
+	    byte[]data=new byte[512];
 	    DatagramPacket paquet=new DatagramPacket(data,data.length);
 	    boolean quizz=false;
-	    boolean b=true;
 	    while(b){
 		dso.receive(paquet);
 		String st=new String(paquet.getData(),0,paquet.getLength());
@@ -60,13 +61,11 @@ public class ServeurUdp extends Serveur{
 		    }
 		    break;
 		case "EYBG" : 
-		    b=false;
-		    ent=null;
 		    dso.close();
+		    quit();
 		    System.out.println("vous etes déconnectés");
 		    break;
 		case "WHOS" :
-		    System.out.println("whooo");
 		    if(index==-1){
 			m=new Mess("memb", ent, this);
 			m.send_mess();
@@ -86,7 +85,10 @@ public class ServeurUdp extends Serveur{
 		    break;
 		case "TEST" : 
 		    if(index==-1){
-			transferer(st, idm);
+			System.out.println(arr[2]+" "+ent.ip_diff+" "+arr[3]+" "+ent.port_diff);
+			if(arr[2].equals(ent.ip_diff) && arr[3].equals(ent.port_diff)){
+			    transferer(st, idm);
+			}
 		    }else{
 			test=false;
 			idmess.remove(index);
@@ -103,7 +105,6 @@ public class ServeurUdp extends Serveur{
 			}
 			break;
 		    case "QUIZZ###" : 
-			ent.quizz=true;
 			q.recu(st, index);
 			break;
 			
@@ -235,5 +236,8 @@ public class ServeurUdp extends Serveur{
 	    cl.send(ent.ip_next2, ent.port_udp_next2);	
 	} 
     }
-   
+    public void quit(){
+	b=false;
+	ent=null;
+    }
 }
