@@ -49,9 +49,7 @@ public class Main{
 		String cmd = scanner.nextLine();
 		String[] arr = cmd.split(" ");
 		switch (arr[0]){
-		case "quit" : 
-		    quit=true;
-		    break;
+		
 		case "connect":
 		    System.out.println("\n\t----------CONNECT----------\n");
 		    if(arr.length==3){
