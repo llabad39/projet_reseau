@@ -20,7 +20,7 @@ public class Entity{
     String port_diff2;
     String ip_diff2;
 
-    boolean quizz;
+    boolean quizz;  //permet de savoir si on joue au quizz ou pas.
 
     public Entity(){
     }
@@ -48,58 +48,6 @@ public class Entity{
 	this.port_udp_next2 = null;  
 	this.quizz=false;
 
-    }
-
-    public String getId(){
-	return this.id;
-    }
-
-    public void setPortUdpNext(String _port_udp_next){
-	this.port_udp_next = _port_udp_next;
-    }
-
-    public String getPortUdpNext(){
-	return this.port_udp_next;
-    }
-
-    public String getIpNext(){
-	return this.ip_next;
-    }
-
-    public void setIpNext(String _ip_next){
-	this.ip_next = _ip_next;
-    }
-
-    public String getIpDiff(){
-	return this.ip_diff;
-    }
-
-    public void setIpDiff(String _ip_diff){
-	this.ip_diff = _ip_diff;
-    }
-
-    public String getPortDiff(){
-	return this.port_diff;
-    }
-
-    public void setPortDiff(String _port_diff){
-	this.port_diff = _port_diff;
-    }
-
-    public String getIpNext2(){
-	return this.ip_next2;
-    }
-
-    public void setIpNext2(String _ip_next2){
-	this.ip_next2 = _ip_next2;
-    }
-
-    public String getPortUdpNext2(){
-	return this.port_udp_next2;
-    }
-
-    public void setPortUdpNext2(String _port_udp_next2){
-	this.port_udp_next2 = _port_udp_next2;
     }
 
     public String fillid(String id){
@@ -146,7 +94,6 @@ public class Entity{
 		    InetAddress iac=listIa.nextElement();
 		    if(iac instanceof Inet4Address){
 			String[] ar=iac.toString().split("/");
-			System.out.println(ar[1]);
 			return ar[1];
 		    }
 		}

@@ -23,7 +23,7 @@ class Quizz{
 	this.points=0;
     }
 
-    public void play(String c){
+    public void play(String c){ // lit l'entrée standard lorsque l'utilisateur joue au quizz ; et fait les actions demandés.
 	Scanner scanner = new Scanner (System.in);
 	Mess m;
 	boolean quit=false;
@@ -35,7 +35,7 @@ class Quizz{
 		break;
 	    }
 	
-	    if(quizzque){
+	    if(quizzque){ //si c'est a nous de poser une question
 		int temps=0;
 		System.out.println("Reponse : ");
 		reponse = scanner.nextLine();
@@ -52,9 +52,9 @@ class Quizz{
 		}
 		m=new Mess("que "+temps+" "+cmd, ent, u);
 		m.send_mess();
-		while(temps!=0 && quizzque){
+		while(temps!=0 && quizzque){ //on attend que les autres répondent.
 		    try{
-			Thread.sleep(1000);
+			Thread.sleep(1000); 
 		    }catch(InterruptedException e){
 			e.printStackTrace();
 		    }
@@ -82,7 +82,7 @@ class Quizz{
 		    }
 		}		
 	    }else{
-		if(quizzask){
+		if(quizzask){ //si on vient de nous proposer un quizz, on va décider si on veut jouer ou pas.
 		    if(cmd.equals("o") || cmd.equals("O")){
 			System.out.println("QUIZZ !");
 			quizzask=false;
@@ -98,7 +98,7 @@ class Quizz{
 			}
 		    }
 		}else{
-		    if(quizzplay){
+		    if(quizzplay){ // si on veut répondre a une question.
 			m=new Mess("rep "+cmd, ent, u);
 			m.send_mess();
 		    }
@@ -121,12 +121,12 @@ class Quizz{
 	System.out.println("vous avez quité le quizz.");
     }
 
-    public void recu(String st,  int index){
+    public void recu(String st,  int index){ //traite les messages reçus dans le serveur udp qui sont des messages le l'application quizz
 	String[] arr = st.split(" ");
 	Mess m;
 	String idm=arr[1];
 	switch(arr[3]){
-	case "ASK" :
+	case "ASK" : //quelqu'un nous propose un quizz
 	    if(index==-1){
 		if(!(quizzplay || quizzque)){
 		    ent.quizz=true;
@@ -153,7 +153,7 @@ class Quizz{
 		u.idmess.remove(index);
 	    }
 	    break;
-	case "REJ" : 
+	case "REJ" : // vous voulez faire un quizz et il y en a deja un en cour. Une entitée qui joue vous enverra alors ce message.
 	    if(index==-1){
 		    System.out.println("Un qui");
 		if(ent.quizz && !(quizzplay || quizzask || quizzque)){
@@ -165,7 +165,7 @@ class Quizz{
 		u.idmess.remove(index);
 	    }
 	    break;
-	case "QUE" : 
+	case "QUE" : //une entitée pose une question.
 	    if(index==-1){
 		if(quizzplay){
 		    System.out.println("question de "+arr[4]+" : "+st.substring(41+arr[5].length())+" ; vous avez "+arr[5]+" secondes");
@@ -175,7 +175,7 @@ class Quizz{
 		u.idmess.remove(index);
 	    }
 	    break;
-	case "REP" : 
+	case "REP" :  //une entitée repond a une question.
 	    if(index==-1){
 		if(!quizzque){
 		    if(quizzplay){
@@ -198,7 +198,7 @@ class Quizz{
 		u.idmess.remove(index);
 	    }
 	    break;
-	case "TIM" : 
+	case "TIM" : //le temps de reponse a la dernière question est écoulé.
 	    if(index==-1){
 		if(quizzplay){
 		    System.out.println("temps écoulé.");
@@ -208,7 +208,7 @@ class Quizz{
 		u.idmess.remove(index);
 	    }
 	    break;
-	case "WIN" : 
+	case "WIN" : //quelqu'un a répondu juste a la dernière question.
 	    if(index==-1){
 		if(quizzplay){
 		    if(arr[5].equals(ent.ip) && arr[6].equals(ent.port_udp)){
@@ -233,7 +233,7 @@ class Quizz{
 		u.idmess.remove(index);
 	    }
 	    break;
-	case "GG!" : 
+	case "GG!" : //quelqu'un a gagné le quizz (il a eu 5 bonnes réponses).
 	    if(index==-1){
 		if(quizzplay || quizzque){
 		    System.out.println(arr[4]+" a gagné le quizz !!");
@@ -244,7 +244,7 @@ class Quizz{
 		u.idmess.remove(index);
 	    }
 	    break;
-	case "QIT" : 
+	case "QIT" : //quelqu'un a quité le quizz.
 	    if(index==-1){
 		if(quizzplay  || quizzque){
 		    System.out.println(arr[4]+" a quité le quizz");

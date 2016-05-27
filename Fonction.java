@@ -1,5 +1,8 @@
 public class Fonction{
+
     public static String fill(int nb_octet,int nb){//renvoie un String du nombre avec le nombre d'octet souhaité
+
+
 	String s= ""+nb;
 	for(int i=s.length();i<nb_octet;i++){
 	    s="0"+s;//complète les octets manquant avec des zéros avant le chiffre passé en argument
@@ -48,7 +51,9 @@ public class Fonction{
 	}
 	return f;
     }
+<
     
 }
        
+
 
