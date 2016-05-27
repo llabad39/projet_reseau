@@ -7,7 +7,6 @@ public class Fonction{
 	for(int i=s.length();i<nb_octet;i++){
 	    s="0"+s;//complète les octets manquant avec des zéros avant le chiffre passé en argument
 	}
-	System.out.println(s+"on a fill");
 	return s;
     }
     public static int taille(String a){//renvoie la valeur d'un eniter d'une chaine de caractère
