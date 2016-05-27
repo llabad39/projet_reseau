@@ -1,7 +1,0 @@
-import java.io.*;
-
-public class Test throws IOException{
-    FileInputStream fs = new FileInputStream(new File("livre.txt"));
-    byte [] cont = new byte[463];
-    fs.read(cont
-} 
