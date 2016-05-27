@@ -1,5 +1,6 @@
 #define M_SIZE_MAX 512        /***< maximum size for a message (octets) */
 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,13 +10,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/types.h>
-#include <pthread.h>
+#include <netdb.h>
 
 #include "utils.h"
-#include "protocolMulticast.h"
 
-int serverTCP(entity * ent);
+int serverMulticast(entity * ent, int i);
 
-int connectTCP(char *ip_dest, int port_dest,entity * ent);
-
-int connectTCPDupl(char *ip_dest, int port_dest,entity * ent);
+int envoiMulticast(entity * ent, int i, char * mess);

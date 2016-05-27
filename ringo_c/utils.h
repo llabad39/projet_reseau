@@ -21,6 +21,7 @@
 
 void askInfo(entity * ent);
 void askInfoDiff(entity * ent);
+void askInfoDiff2(entity * ent);
 void askIpDest(char * ip);
 void  askPortDest(char * port_tcp_dest);
 char * itos(int i);

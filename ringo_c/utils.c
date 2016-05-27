@@ -65,6 +65,32 @@ void askInfoDiff(entity * ent){
   memset(buff,0,sizeof(buff));
 }
 
+//demande a l'utilisateur d'entrer ces infos de diffusion 
+//a savoir l'ip et le port de diffusion numero 2 (cas duplicate)
+void askInfoDiff2(entity * ent){
+  char buff[M_SIZE_MAX];
+
+  //ip_diff
+  printf("Veillez entrer une addresse de multidiffusion (15 char max)\n");
+  scanf("%s",buff);
+  while(strlen(buff) > 15){
+    printf("addresse de multidiffusion trop long : max 15 char, reessayer\n");
+    scanf("%s",buff);
+  } 
+  strcpy(ent->ip_diff2,buff);
+  memset(buff,0,sizeof(buff));
+
+  //port_diff
+  printf("Veillez entrer un port de diffusion libre (4 char max)\n");
+  scanf("%s",buff);
+  while(strlen(buff) > 4){
+    printf("port de diffusion trop long : max 4 char, reessayer\n");
+    scanf("%s",buff);
+  } 
+  strcpy(ent->port_diff2,buff);
+  memset(buff,0,sizeof(buff));
+}
+
 //demande a l'utilisateur d'entrer l'ip de la machine sur laquelle il veut
 //se connecter
 void askIpDest(char * ip){
@@ -115,7 +141,7 @@ char * getIp(){
   char *ip=(char *)malloc(64*sizeof(char));
   status = getifaddrs(&myaddrs);
   if (status != 0){
-    fprintf(stderr,"Probleme de recuperation d'adresse IP");
+    fprintf(stderr,"Probleme de recuperation d'adresse IP\nVerfiez que vous etes connecter a internet\n");
     exit(1);
   }
   for (ifa = myaddrs; ifa != NULL; ifa = ifa->ifa_next){
@@ -153,7 +179,7 @@ void getInfo(entity ent){
 void askGetInfo(entity ent){
   char buff[M_SIZE_MAX];
 
-  printf("\nVoulez vous voir vos informations ? (y/n)\n\n");
+  printf("\nVoulez vous voir vos informations ? (y/n) ");
   scanf("%s",buff);
   while(1){
     if(!strcmp(buff,"y") || !strcmp(buff,"yes")){
@@ -176,7 +202,7 @@ char * getIdm(){
   struct tm * timeinfo;
   memset(idm,0,1); //permet d'enlever '\0' qui est dans idm
   
-  //time ( &rawtime );
+  time ( &rawtime );
   timeinfo = localtime ( &rawtime );
   srand(clock());
   int a = rand() %(timeinfo->tm_sec*10+1);//*10 pour augmenter le nombre

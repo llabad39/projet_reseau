@@ -2,38 +2,44 @@
 
 //ecoute sur le port UDP de l'entité
 int serverUDP(entity * ent){
-  int sock;
-  if((sock  = socket(PF_INET, SOCK_DGRAM,0)) == -1){
-    fprintf(stderr,"Erreur lors de la creation de la socket\n");
+  int sock = socket(PF_INET, SOCK_DGRAM,0);
+  if(sock == -1){
+    perror("ServeurUDP-Erreur (socket)");
+    //fprintf(stderr,"ServerUDP-Erreur: socket\n");
     return -1;      
   }
   struct sockaddr_in address_sock;
   address_sock.sin_family = AF_INET;
   address_sock.sin_port = htons(atoi(ent->port_udp));
   address_sock.sin_addr.s_addr = htonl(INADDR_ANY);
-  int r = bind(sock,(struct sockaddr *)&address_sock,
-	       sizeof(struct sockaddr_in));
-  if(r == 0){
-    char mess[M_SIZE_MAX];
-    char * type;
-    //creation de la liste de idm
-    struct lidm * l = NULL;
-    l = malloc(sizeof(struct lidm));
-    l->idm = "00000000\0";
-    l->next = NULL;
-    while(1){
-      char * idm = malloc(sizeof(char)*9);
-      memset(idm,0,(size_t)sizeof(idm));
-      int rec = recv(sock,mess,M_SIZE_MAX,0);
-      mess[rec] = '\0';
-      char mess_c[M_SIZE_MAX];
-      strcpy(mess_c,mess);
-      type = strtok(mess," ");
-      strncpy(idm,strtok(NULL," "),9);
+  if(bind(sock,(struct sockaddr *)&address_sock,
+	  sizeof(struct sockaddr_in)) == -1){
+    perror("ServeurUDP-Erreur (bind)");
+    return -1;
+  }
+  char mess[M_SIZE_MAX];
+  char * type;
+  //creation de la liste de idm
+  struct lidm * l = NULL;
+  l = malloc(sizeof(struct lidm));
+  l->idm = "00000000\0"; //initialisation
+  l->next = NULL;
+  while(1){
+    char * idm = malloc(sizeof(char)*9);
+    memset(idm,0,(size_t)sizeof(idm));
+    int rec = recv(sock,mess,M_SIZE_MAX,0);
+    mess[rec] = '\0';
+    char mess_c[M_SIZE_MAX];
+    strcpy(mess_c,mess);
+    type = strtok(mess," ");
+    char * tmp = strtok(NULL," ");
+    if(tmp != NULL){
+      printf("if\n");
+      strncpy(idm,tmp,9);
       memset(&idm[8],0,1);
       //on verifie si on a pas deja vu le message
       if(contains(l,idm) == 0){
-	printf("SERVER UDP - Message recu : %s\n",mess_c);
+	printf("\nServerUDP-MessageRecu: %s",mess_c);
 	add(l,idm);
 	if(strcmp(type,"WHOS") == 0){
 	  //on transmet le message
@@ -54,18 +60,26 @@ int serverUDP(entity * ent){
 	    strncpy(ent->ip_next,ip_succ,15);
 	    strncpy(ent->port_udp_next,port_succ,4);
 	  }else{
-	    printf("mess -%s-\n",mess_c);
+	    //on transmet le message
 	    envoiUDP(ent,mess_c);
 	  }
 	}else if (strcmp(type,"EYBG") == 0){
-	  printf("Vous avez quitter l'anneau ! \n");
+	  printf("\n\t-----Vous avez quitter l'anneau !-----\n\n");
 	  freeEntity(ent);
-	  getInfo(*ent);
+	  free(idm);
 	  return 0;
 	}else{
+	  //on transmet le message
 	  envoiUDP(ent,mess_c);
 	}
       }
+    }else if(strcmp(mess_c,"DOWN\n") == 0){
+      freeEntity(ent);
+      printf("\nServerUDP-MessageRecu: %s",mess_c);
+      printf("\n\t-----L'anneau est casser-----\n\n");
+      exit(0);
+    }else{
+      printf("else\n");
     }
   }
   return 0;
@@ -75,19 +89,17 @@ int serverUDP(entity * ent){
 int envoiUDP(entity * ent, char * mess){ 
   int sock;
   if((sock  = socket(PF_INET, SOCK_DGRAM,0)) == -1){
-    fprintf(stderr,"Erreur lors de la creation de la socket\n");
+    perror("EnvoiUDP-Erreur (socket)");
     return -1;      
   }
   struct addrinfo * first_info;
-  
   if(getaddrinfo(ent->ip_next,ent->port_udp_next,NULL,&first_info) == 0){
     if(first_info!=NULL){
       struct sockaddr *saddr=first_info->ai_addr;
       sendto(sock,mess,strlen(mess),0,saddr,sizeof(struct sockaddr_in));
     }
   }else{
-    printf("envoi : ip -%s- port -%s- \n",ent->ip_next,ent->port_udp_next);
-    fprintf(stderr,"Erreur lors de getaddrinfo\n");
+    fprintf(stderr,"EnvoiUDP-Erreur: getaddrinfo\n");
     close(sock);
     return -1;
   }

@@ -1,1 +1,1 @@
-gcc -Wall ringo.c protocolTCP.c utils.c entity.c protocolRINGO.c protocolUDP.c message.c -o ringo -lpthread
+gcc -Wall ringo.c protocolTCP.c utils.c entity.c protocolRINGO.c protocolUDP.c message.c protocolMulticast.c -o ringo -lpthread
