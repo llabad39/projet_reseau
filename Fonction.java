@@ -33,7 +33,6 @@ public class Fonction{
 	for(int i=0;i<8;i++){
 		long b = x%256;
 		t[i]=new Character((char)b);
-		System.out.println(t[i]);
 		x=x/256;
 	    
 	    
