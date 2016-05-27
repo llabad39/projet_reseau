@@ -4,7 +4,8 @@
 int serverUDP(entity * ent){
   int sock = socket(PF_INET, SOCK_DGRAM,0);
   if(sock == -1){
-    fprintf(stderr,"ServerUDP-Erreur: socket\n");
+    perror("ServeurUDP-Erreur (socket)");
+    //fprintf(stderr,"ServerUDP-Erreur: socket\n");
     return -1;      
   }
   struct sockaddr_in address_sock;
@@ -13,7 +14,7 @@ int serverUDP(entity * ent){
   address_sock.sin_addr.s_addr = htonl(INADDR_ANY);
   if(bind(sock,(struct sockaddr *)&address_sock,
 	  sizeof(struct sockaddr_in)) == -1){
-    fprintf(stderr,"ServeurUDP-Erreur: bind\n");
+    perror("ServeurUDP-Erreur (bind)");
     return -1;
   }
   char mess[M_SIZE_MAX];
@@ -88,7 +89,7 @@ int serverUDP(entity * ent){
 int envoiUDP(entity * ent, char * mess){ 
   int sock;
   if((sock  = socket(PF_INET, SOCK_DGRAM,0)) == -1){
-    fprintf(stderr,"EnvoiUDP-Erreur: socket\n");
+    perror("EnvoiUDP-Erreur (socket)");
     return -1;      
   }
   struct addrinfo * first_info;

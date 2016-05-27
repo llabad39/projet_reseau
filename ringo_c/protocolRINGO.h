@@ -12,6 +12,10 @@
 #include "protocolMulticast.h"
 
 
+void * tcp(void * _ent);
+void * udp(void * _ent);
+void * multicast(void * _ent);
+void * multicast2(void * _ent);
 int r_create(entity *ent);
 int r_connect(entity *ent);
 int r_duplicate(entity *ent);

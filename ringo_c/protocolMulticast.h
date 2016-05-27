@@ -14,7 +14,6 @@
 
 #include "utils.h"
 
+int serverMulticast(entity * ent, int i);
 
-int serverMulticast(char * ip, char * port);
-
-int envoiMulticast(char * ip, char * port, char * mess);
+int envoiMulticast(entity * ent, int i, char * mess);
