@@ -64,7 +64,6 @@ public class ServeurUdp extends Serveur{
 		    dso.close();
 		    quit();
 		    System.out.println("vous etes déconnectés");
-		    System.exit(0);
 		    break;
 		case "WHOS" :
 		    if(index==-1){
