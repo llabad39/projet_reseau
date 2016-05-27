@@ -33,10 +33,10 @@ public class ClientTcp{
 		    System.err.println("Erreur d'acceptation, message repondu: "+ackc);
 		    return -1;
 		}
-		this.ent.setIpNext(welc[1]);
-		this.ent.setPortUdpNext(welc[2]);
-		this.ent.setIpDiff(welc[3]);
-		this.ent.setPortDiff(welc[4]);	
+		this.ent.ip_next=welc[1];
+		this.ent.port_udp_next=welc[2];
+		this.ent.ip_diff=welc[3];
+		this.ent.port_diff=welc[4];	
 		break;
 	    case "dupl" : 
 		String mess2 = br.readLine();
@@ -50,8 +50,8 @@ public class ClientTcp{
 		String[] arr = ackd.split(" ");
 		switch (arr[0]){
 		case "ACKD" : 
-		    this.ent.setIpNext(ip);
-		    this.ent.setPortUdpNext(arr[1]);
+		    this.ent.ip_next=ip;
+		    this.ent.port_udp_next=arr[1];
 		    break;
 		case "NOTC" :
 		    System.out.println("L'entitée est déjà doubleur");	

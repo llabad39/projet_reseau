@@ -91,8 +91,8 @@ public class Mess{
 	    System.out.println("requete non reconnu");
 	}
     }
-    public void envoyer(String s){
-	ClientUdp cl=new ClientUdp(s);
+    public void envoyer(String s){  // créé un client udp pour envoyer le 
+	ClientUdp cl=new ClientUdp(s);//string pris en argument aux suivants.
 	u.add_list(idm);
 	cl.send(ent.ip_next, ent.port_udp_next);
 	if(ent.ip_next2!=null){

@@ -10,22 +10,23 @@ public class Main{
     public static void main (String[] args){
 
 	Scanner scanner = new Scanner (System.in);
-	boolean arg = true;
+	//boolean arg = true;
 	String id="";
 	String ip="";
 	String port_tcp="";
 	String port_udp="";
 	String port_diff="";
 	String multi_diff="";
-	while(arg){
-	    System.out.println("what's your name ?");
+	while(true){
+	    System.out.println("\nVeuillez entrer un id (8 char max)");
 	    id = scanner.nextLine();
 	    if(id.length()>8){
-		System.out.println("id too long, 8 char max");
+		System.out.println("id trop, 8 char max");
 	    }else{
 		break;
 	    }
 	}
+	System.out.println("Utilisation: create, dupl ou connect");
  
 	Entity me=new Entity();
 	try{
@@ -41,7 +42,6 @@ public class Main{
 	boolean quit=false;
 
 	while(b && !quit){
-	    System.out.println("qDfvgwrdgvSRDgv");
 	    Mess m;
 	    while(!is_connected && !quit){
 		String tcp;
@@ -53,6 +53,7 @@ public class Main{
 		    quit=true;
 		    break;
 		case "connect":
+		    System.out.println("\n\t----------CONNECT----------\n");
 		    if(arr.length==3){
 			port_udp=askUdp();
 		        port_tcp=askTcp(port_udp);
@@ -62,21 +63,25 @@ public class Main{
 			if(a==0){
 			    is_connected=true;
 			}else{
-			    System.out.println("wrong arguments");
+			    System.out.println("Erreur, utilisation : create ip port");
 			}
 		    }else{
-			System.out.println("wrong arguments");
+			    System.out.println("Erreur, utilisation : create ip port");
 		    }
+		    System.out.println("\n\t----------FIN CONNECT----------\n");
 		    break;
 		case "create":
+		    System.out.println("\n\t----------CREATE----------\n");
 		    port_udp=askUdp();
 		    port_tcp=askTcp(port_udp);
 		    port_diff=askPortDiff();
 		    multi_diff=askDiff(port_diff);
 		    me = new Entity(ip, id, port_udp, port_tcp, multi_diff, port_diff);
 		    is_connected=true;
+		    System.out.println("\n\t----------FIN CREATE----------\n");
 		    break;
 		case "dupl":
+		    System.out.println("\n\t----------DUPLICATION----------\n");
 		    if(arr.length==3){
 			port_udp=askUdp();
 		        port_tcp=askTcp(port_udp);
@@ -90,8 +95,7 @@ public class Main{
 			    if(a==0){
 				is_connected=true;
 			    }else{
-				System.out.println("wrong arguments");
-				System.out.println();
+				System.out.println("Erreur, utilisation : dupl ip port\n");
 				b=false;
 			    }
 			}catch(IpException e){
@@ -99,18 +103,17 @@ public class Main{
 			    e.printStackTrace();  
 			}
 		    }else{
-			System.out.println("wrong arguments");
+			System.out.println("Erreur, utilisation : dupl ip port");
 		    }	
+		    System.out.println("\n\t----------FIN DUPLICATION----------\n");
 		    break;
 		default : 
-		    System.out.println("use connect, create or dupl");
+		    System.out.println("Utilisation: connect, create ou dupl");
 		    break;
 		}
 	    }
 	    if(!quit){
-		System.out.println("vous etes connectés");
-		System.out.println("port next : "+me.port_udp_next);
-		
+	
 		Quizz q=new Quizz(me);
 		ServeurTcp s = new ServeurTcp(me);
 		Thread t1 = new Thread(s);
@@ -126,8 +129,6 @@ public class Main{
 		t3.start();
 
 		while (is_connected && !quit){
-	    System.out.println("qSRDgv");
-
 		    String cmd = scanner.nextLine();
 		    if(me.quizz){
 			q.play(cmd);
@@ -135,14 +136,14 @@ public class Main{
 			String[] arr = cmd.split(" ");
 			switch (arr[0]){
 			case "info" : 
-			    System.out.println(me.id);
-			    System.out.println(me.port_udp_next);
-			    System.out.println(me.port_udp_next2);
-			    System.out.println(me.quizz);
-			    System.out.println(q.quizzque);
-			    System.out.println(q.quizzask);
-			    System.out.println(q.quizzplay);
-
+			    System.out.println("id : "+me.id);
+			    System.out.println("port udp : "+me.port_udp);
+			    System.out.println("port tcp : "+me.port_tcp);
+			    System.out.println("adresse de multidiff : "+me.ip_diff);
+			    System.out.println("port udp next : "+me.port_udp_next);
+			    System.out.println("port udp next 2 : "+me.port_udp_next2);
+			    System.out.println("quizz ? "+me.quizz);
+			   
 			    break;
 			case "quit" : 
 			    quit=true;
@@ -176,15 +177,15 @@ public class Main{
 	    port_tcp = scanner.nextLine();
 	    if(!port_tcp.equals(port_udp)){
 		try{
-		    ServerSocket server=new ServerSocket(Integer.parseInt(port_tcp));
+		    ServerSocket server = new ServerSocket(Integer.parseInt(port_tcp));
 		    server.close();
 		    break;
 		}
 		catch(Exception e){
-		    System.out.println("Mauvais port tcp");
+		    System.out.println("Mauvais port tcp, réessayer");
 		}
 	    }else{
-		System.out.println("Mauvais port tcp");
+		System.out.println("Mauvais port tcp, réessayer");
 	    }
 	}
 	return port_tcp;
@@ -201,7 +202,7 @@ public class Main{
 	    	break;
 	    }	
 	    catch(Exception e){
-		System.out.println("Mauvais port udp");
+		System.out.println("Mauvais port udp, réessayer");
 	    }
 	}
 	return port_udp;
@@ -219,7 +220,7 @@ public class Main{
 		break;
 	    }
 	    catch(Exception e){
-		System.out.println("Mauvais port de diffusion");
+		System.out.println("Mauvais port de diffusion, réessayer");
 	    }	    
 	}
 	return port_diff;
@@ -238,7 +239,7 @@ public class Main{
 		break;
 	    }
 	    catch(Exception e){
-		System.out.println("Mauvaise adresse de multi_diffusion");
+		System.out.println("Mauvaise adresse de multidiffusion, réessayer");
 	    }	    
 	}
 	return multi_diff;

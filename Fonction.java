@@ -1,4 +1,5 @@
 public class Fonction{
+
     public static String fill(int nb_octet,int nb){
 	String s= ""+nb;
 	for(int i=s.length();i<nb_octet;i++){
@@ -52,23 +53,3 @@ public class Fonction{
 	System.out.println(c);
     }
 }
-	    /*t[0]=x%256;
-	t[1]=(x/256)%256;
-	t[2]=((x/256)/256)%256;
-	t[3]=((((x/256)/256)/256)/256)%256;
-	t[4]=((((x/256)/256)/256)/256)%256;
-	t[5]=(((x/256)/256)/256)%256;
-	t[6]=(((x/256)/256)/256)%256;
-	t[7]=(((x/256)/256)/256)%256;
-	t[8]=(((x/256)/256)/256)%256;
-	    */
-    
-    /*Date maDate=new Date();
-	String[] arr=maDate.toString().split(" ");
-	String[] arr2=arr[3].split("\\:");
-	String dat=""+arr2[1]+arr2[2];
-	Long ll=13L*ent.port_udp.hashCode()+ent.ip.hashCode()+23L*((int)Math.floor(Math.random()*1000000000));
-	Long l=Long.parseLong(ll+dat);
-	byte[] b=longToBytes(l);
-	String st=new String(b);*/
-
