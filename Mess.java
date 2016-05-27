@@ -71,7 +71,7 @@ public class Mess{
 	    envoyer("APPL "+idm+" QUIZZ### REP "+ent.id+" "+ent.ip+" "+ent.port_udp+" "+ Fonction.fill(3,size_rep)+" "+cmd.substring(4));
 	    break;
 	case "tim" :
-	    envoyer("APPL "+idm+" QUIZZ### TIM ");
+	    envoyer("APPL "+idm+" QUIZZ### TIM "+arr[1]);
 	    break; 
 	case "win" : 
 	    envoyer("APPL "+idm+" QUIZZ### WIN "+arr[1]+" "+arr[2]+" "+arr[3]);
