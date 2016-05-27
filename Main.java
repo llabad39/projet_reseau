@@ -15,6 +15,8 @@ public class Main{
 	String ip="";
 	String port_tcp="";
 	String port_udp="";
+	String port_diff="";
+	String multi_diff="";
 	while(arg){
 	    System.out.println("what's your name ?");
 	    id = scanner.nextLine();
@@ -39,6 +41,7 @@ public class Main{
 	boolean quit=false;
 
 	while(b && !quit){
+	    System.out.println("qDfvgwrdgvSRDgv");
 	    Mess m;
 	    while(!is_connected && !quit){
 		String tcp;
@@ -57,10 +60,10 @@ public class Main{
 			cl=new ClientTcp(me,arr[1], arr[2]);
 			a=cl.clientTCP("connect");
 			if(a==0){
-				is_connected=true;
+			    is_connected=true;
 			}else{
 			    System.out.println("wrong arguments");
-			    }
+			}
 		    }else{
 			System.out.println("wrong arguments");
 		    }
@@ -68,43 +71,36 @@ public class Main{
 		case "create":
 		    port_udp=askUdp();
 		    port_tcp=askTcp(port_udp);
-		    System.out.println("multi diff adress ?");
-		    String multi_diff = scanner.nextLine();
-		    System.out.println("multi diff port ?");
-			String port_diff = scanner.nextLine();
-			me = new Entity(ip, id, port_udp, port_tcp, multi_diff, port_diff);
-			is_connected=true;
-			break;
+		    port_diff=askPortDiff();
+		    multi_diff=askDiff(port_diff);
+		    me = new Entity(ip, id, port_udp, port_tcp, multi_diff, port_diff);
+		    is_connected=true;
+		    break;
 		case "dupl":
 		    if(arr.length==3){
 			port_udp=askUdp();
 		        port_tcp=askTcp(port_udp);
-			System.out.println("multi diff adress ?");
-			    String multi_diff2 = scanner.nextLine();
-			    System.out.println("multi diff port ?");
-			    String port_diff2 = scanner.nextLine();
-			    try{
-				String ipf=me.fill_ip(arr[1]);
-				me = new Entity(ip, id, port_udp, port_tcp, multi_diff2, port_diff2);
-				cl=new ClientTcp(me,ipf, arr[2]);
-				a=cl.clientTCP("dupl");
-				if(a==0){
-				    is_connected=true;
-				}else{
-				    System.out.println("wrong arguments");
-				    System.out.println();
-				    b=false;
-				}
-			    }catch(IpException e){
-				System.out.println(e);
-				e.printStackTrace();  
+			port_diff=askPortDiff();
+			multi_diff=askDiff(port_diff);
+			try{
+			    String ipf=me.fill_ip(arr[1]);
+			    me = new Entity(ip, id, port_udp, port_tcp, multi_diff, port_diff);
+			    cl=new ClientTcp(me,ipf, arr[2]);
+			    a=cl.clientTCP("dupl");
+			    if(a==0){
+				is_connected=true;
+			    }else{
+				System.out.println("wrong arguments");
+				System.out.println();
+				b=false;
 			    }
-			}else{
-			    System.out.println("wrong arguments");
-			}	
-		    break;
-		case "quit":
-		    System.exit(0);
+			}catch(IpException e){
+			    System.out.println(e);
+			    e.printStackTrace();  
+			}
+		    }else{
+			System.out.println("wrong arguments");
+		    }	
 		    break;
 		default : 
 		    System.out.println("use connect, create or dupl");
@@ -122,7 +118,7 @@ public class Main{
 		q.u=u;
 		Mythread mt2 = new Mythread(u);
 		Thread t2=new Thread(mt2);
-		ServMulticast sm = new ServMulticast(me, u);
+		ServMulticast sm = new ServMulticast(me,true);
 		Mythread mt3 = new Mythread(sm);
 		Thread t3 = new Thread(mt3);
 		t1.start();
@@ -130,6 +126,8 @@ public class Main{
 		t3.start();
 
 		while (is_connected && !quit){
+	    System.out.println("qSRDgv");
+
 		    String cmd = scanner.nextLine();
 		    if(me.quizz){
 			q.play(cmd);
@@ -175,7 +173,7 @@ public class Main{
 	while(true){
 	    Scanner scanner = new Scanner (System.in);
 	    System.out.println("port TCP ?");
-	     port_tcp = scanner.nextLine();
+	    port_tcp = scanner.nextLine();
 	    if(!port_tcp.equals(port_udp)){
 		try{
 		    ServerSocket server=new ServerSocket(Integer.parseInt(port_tcp));
@@ -209,8 +207,40 @@ public class Main{
 	return port_udp;
     }
     
-    
+    public static String askPortDiff(){
+	String port_diff;
+	Scanner scanner = new Scanner (System.in);
+	while(true){
+	    System.out.println("multi diff port ?");
+	    port_diff = scanner.nextLine();
+	    try{
+		MulticastSocket mso=new MulticastSocket(Integer.parseInt(port_diff));
+		mso.close();
+		break;
+	    }
+	    catch(Exception e){
+		System.out.println("Mauvais port de diffusion");
+	    }	    
+	}
+	return port_diff;
+    }
+
+ public static String askDiff(String port){
+	String multi_diff;
+	Scanner scanner = new Scanner (System.in);
+	while(true){
+	    System.out.println("multi diff adress ?");
+	    multi_diff = scanner.nextLine();
+	    try{
+		MulticastSocket mso=new MulticastSocket(Integer.parseInt(port));
+		mso.joinGroup(InetAddress.getByName(multi_diff));
+		mso.close();
+		break;
+	    }
+	    catch(Exception e){
+		System.out.println("Mauvaise adresse de multi_diffusion");
+	    }	    
+	}
+	return multi_diff;
+    }
 }
-
-
-

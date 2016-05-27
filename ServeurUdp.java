@@ -64,6 +64,7 @@ public class ServeurUdp extends Serveur{
 		    dso.close();
 		    quit();
 		    System.out.println("vous etes déconnectés");
+		    System.exit(0);
 		    break;
 		case "WHOS" :
 		    if(index==-1){
@@ -86,7 +87,7 @@ public class ServeurUdp extends Serveur{
 		case "TEST" : 
 		    if(index==-1){
 			System.out.println(arr[2]+" "+ent.ip_diff+" "+arr[3]+" "+ent.port_diff);
-			if(arr[2].equals(ent.ip_diff) && arr[3].equals(ent.port_diff)){
+			if((arr[2].equals(ent.ip_diff) && arr[3].equals(ent.port_diff)) ||(arr[2].equals(ent.ip_diff2) && arr[3].equals(ent.port_diff2)) ){
 			    transferer(st, idm);
 			}
 		    }else{
@@ -223,7 +224,7 @@ public class ServeurUdp extends Serveur{
 	    System.out.println("test réussi");
 	}else{
 	    SendMulticast sm = new SendMulticast(this.ent);
-	    sm.send("l'anneau est cassé");
+	    sm.send("DOWN");
 	}
     }
     public void transferer(String s, String idm){

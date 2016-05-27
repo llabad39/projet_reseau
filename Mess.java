@@ -21,7 +21,7 @@ public class Mess{
 	Mess m;
 	switch (arr[0]){
 	case "whos" : 
-	    envoyer( "WHOS "+idm );
+	    envoyer( "WHOS "+idm+" ");
 	    m=new Mess("memb", ent, u);
 	    m.send_mess();
 	    break;
@@ -41,7 +41,9 @@ public class Mess{
 	    break;
 	case "test" :
 	    u.test1();
-	    envoyer("TEST "+idm+" "+ent.ip_diff+" "+ent.port_diff);
+	    cl=new ClientUdp("TEST "+idm+" "+ent.ip_diff+" "+ent.port_diff);
+	    u.add_list(idm);
+	    cl.send(ent.ip_next, ent.port_udp_next);
 	    u.test2();
 	    break;
 	case "diff" : 
