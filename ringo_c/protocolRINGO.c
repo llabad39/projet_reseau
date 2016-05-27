@@ -1,6 +1,4 @@
 #include "protocolRINGO.h"
-#include <errno.h>
-#include <pthread.h>
 
 
 void * tcp(void * _ent){
@@ -17,13 +15,13 @@ void * udp(void * _ent){
 
 void * multicast(void * _ent){
   entity * ent = (entity *)_ent;
-  serverMulticast(ent->ip_diff,ent->port_diff);
+  serverMulticast(ent,1);
   return(NULL);
 }
 
 void * multicast2(void * _ent){
   entity * ent = (entity *)_ent;
-  serverMulticast(ent->ip_diff2,ent->port_diff2);
+  serverMulticast(ent,2);
   return(NULL);
 }
 
@@ -74,8 +72,8 @@ int r_connect(entity *ent){
     return -1;
   }
   
-  //lancement des serveurs TCP et UDP sur les port renseignes via des threads
-  pthread_t th_tcp,th_udp;
+  //lancement des serveurs TCP,UDP et Multicast sur les port renseignes via des threads
+  pthread_t th_tcp,th_udp,th_multicast;
   if(pthread_create(&th_tcp, NULL,tcp,ent) != 0){
     fprintf(stderr,"Probleme lors de la creation du thread-serverTCP\n");
     return -1;
@@ -83,6 +81,10 @@ int r_connect(entity *ent){
   if(pthread_create(&th_udp, NULL,udp,ent) != 0){
     fprintf(stderr,"Probleme lors de la creation du thread-serverUDP\n");
     return -1;
+  }
+  if(pthread_create(&th_multicast, NULL,multicast,ent) != 0){
+    fprintf(stderr,"Probleme lors de la creation du thread-Multidiffusion\n");
+    askInfoDiff(ent);
   }
   
   askGetInfo(*ent);
@@ -106,13 +108,13 @@ int r_duplicate(entity *ent){
   char * port_tcp_dest = malloc(sizeof(char)*5);
   askPortDest(port_tcp_dest);
 
-  askInfoDiff(ent);
+  askInfoDiff2(ent);
 
   connectTCPDupl(ip,atoi(port_tcp_dest),ent);
 
   //lancement des serveurs TCP,UDP et Multicast sur les port 
   //renseignes via des threads
-  pthread_t th_tcp,th_udp,th_multidiff;
+  pthread_t th_tcp,th_udp,th_multicast;
   if(pthread_create(&th_tcp, NULL,tcp,ent) != 0){
     fprintf(stderr,"Probleme lors de la creation du thread-serverTCP\n");
     return -1;
@@ -121,7 +123,7 @@ int r_duplicate(entity *ent){
     fprintf(stderr,"Probleme lors de la creation du thread-serverUDP\n");
     return -1;
   }
-  while(pthread_create(&th_multidiff, NULL,multicast2,ent) != 0){
+  if(pthread_create(&th_multicast, NULL,multicast2,ent) != 0){
     fprintf(stderr,"Probleme lors de la creation du thread-Multidiffusion\n");
     askInfoDiff(ent);
   }
