@@ -34,13 +34,13 @@ int serverUDP(entity * ent){
     type = strtok(mess," ");
     char * tmp = strtok(NULL," ");
     if(tmp != NULL){
-      printf("if\n");
       strncpy(idm,tmp,9);
       memset(&idm[8],0,1);
       //on verifie si on a pas deja vu le message
       if(contains(l,idm) == 0){
 	printf("\nServerUDP-MessageRecu: %s",mess_c);
 	add(l,idm);
+	printf("type -%s-\n",type);
 	if(strcmp(type,"WHOS") == 0){
 	  //on transmet le message
 	  envoiUDP(ent,mess_c);
@@ -96,6 +96,7 @@ int envoiUDP(entity * ent, char * mess){
   if(getaddrinfo(ent->ip_next,ent->port_udp_next,NULL,&first_info) == 0){
     if(first_info!=NULL){
       struct sockaddr *saddr=first_info->ai_addr;
+      printf("m -%s- port -%s- addr -%s-\n",mess,ent->port_udp_next,ent->ip_next);
       sendto(sock,mess,strlen(mess),0,saddr,sizeof(struct sockaddr_in));
     }
   }else{
