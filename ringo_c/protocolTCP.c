@@ -1,4 +1,5 @@
 #include "protocolTCP.h"
+#include "protocolUDP.h"
 
 
 void * multic(void * _ent){
@@ -16,12 +17,10 @@ int serverTCP(entity * ent){
   if(bind(sock,(struct sockaddr *)&adress_sock,
 	  sizeof(struct sockaddr_in)) != 0){
     perror("ServeurTCP-Erreur (bind)");
-    //fprintf(stderr,"ServeurTCP-Erreur: bind\n");
     close(sock);
     return -1;
   }
   if(listen(sock,0) != 0){
-    //fprintf(stderr,"ServeurTCP-Erreur: listen\n");
     perror("ServeurTCP-Erreur (listen)");
     close(sock);
     return -1;
@@ -47,12 +46,11 @@ int serverTCP(entity * ent){
       int recv = read(*sock2,buff,(M_SIZE_MAX-1)*sizeof(char));
       if(recv < 0){
 	perror("ServeurTCP-Erreur (read)");
-	//fprintf(stderr,"ServeurTCP-Erreur: read\n");
 	close(sock);
 	return -1;
       }
       buff[recv]='\0';
-      printf("ServeurTCP-MessageRecu: %s\n",buff);
+      //printf("ServeurTCP-MessageRecu: %s\n",buff);
 
       char * b1;
       char * b2;
@@ -127,12 +125,11 @@ int connectTCP(char *ip_dest, int port_dest, entity * ent){
     int size_rec = recv(sock,buff,(M_SIZE_MAX-1)*sizeof(char),0);
     if(size_rec < 1){
       perror("Connect-Erreur (recv)");
-      //fprintf(stderr,"Connect-Erreur: recv\n");
       close(sock);
       return -1;
     }
     buff[size_rec] = '\0';
-    printf("ClientTCP-MessageRecu: %s\n",buff);
+    //printf("ClientTCP-MessageRecu: %s\n",buff);
     char mess[M_SIZE_MAX] = "NEWC ";
     strcat(mess,getIp());
     strcat(mess," ");
@@ -144,12 +141,11 @@ int connectTCP(char *ip_dest, int port_dest, entity * ent){
     size_rec = recv(sock,buff2,(M_SIZE_MAX-1)*sizeof(char),0);
     if(size_rec < 1){
       perror("Connect-Erreur (recv)");
-      //fprintf(stderr,"Connect-Erreur: recv\n");
       close(sock);
       return -1;
     }
     buff2[size_rec] = '\0';
-    printf("ClientTCP-MessageRecu: %s\n",buff2);
+    //printf("ClientTCP-MessageRecu: %s\n",buff2);
     if(strcmp(buff2,"ACKC\n") > 0){
       fprintf(stderr,"Connect-Erreur: Pas accepter dans l'anneau\n");
       close(sock);
@@ -187,7 +183,6 @@ int connectTCPDupl(char *ip_dest, int port_dest, entity * ent){
   if(connect(sock,(struct sockaddr *)&adress_sock,
 	     sizeof(struct sockaddr_in)) == -1){
     perror("Duplication-Erreur (connect)");
-    //fprintf(stderr,"Duplication-Erreur: connect\n\n");
     close(sock);
     return -1;
   }
@@ -195,12 +190,10 @@ int connectTCPDupl(char *ip_dest, int port_dest, entity * ent){
   int size_rec = recv(sock,buff,(M_SIZE_MAX-1)*sizeof(char),0);
   if(size_rec < 1){
     perror("Duplicate-Erreur (recv)");
-    //fprintf(stderr,"Duplicate-Erreur: recv\n");
     close(sock);
     return -1;
   }
   buff[size_rec] = '\0';
-  printf("CLIENT TCP - MessageRecu : %s\n",buff);
   char mess[M_SIZE_MAX] = "DUPL ";
   strcat(mess,getIp());
   strcat(mess," ");
@@ -216,12 +209,11 @@ int connectTCPDupl(char *ip_dest, int port_dest, entity * ent){
   size_rec = recv(sock,buff2,(M_SIZE_MAX-1)*sizeof(char),0);
   if(size_rec < 1){
     perror("Duplicate-Erreur (recv)");
-    //fprintf(stderr,"Duplicate-Erreur: recv\n");
     close(sock);
     return -1;
   }
   buff2[size_rec] = '\0';
-  printf("Duplicate-MessageRecu: %s\n",buff2);
+  //printf("Duplicate-MessageRecu: %s\n",buff2);
   if(strcmp(buff2,"NOTC\n") == 0){
     fprintf(stderr,"Duplicate-Erreur: Impossible de dupliquer l'anneau, l'entite est deja doubleur\n");
     close(sock);

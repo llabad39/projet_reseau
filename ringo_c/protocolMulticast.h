@@ -12,6 +12,8 @@
 #include <sys/types.h>
 #include <netdb.h>
 
+#include <time.h>
+
 #include "utils.h"
 
 int serverMulticast(entity * ent, int i);

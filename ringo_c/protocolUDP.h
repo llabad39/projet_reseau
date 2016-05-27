@@ -18,4 +18,4 @@
 
 int serverUDP(entity * ent);
 
-int envoiUDP(entity * ent, char * mess);
+int envoiUDP(entity * ent, char * mess,int i);
