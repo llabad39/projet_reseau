@@ -202,8 +202,8 @@ char * getIdm(){
   struct tm * timeinfo;
   memset(idm,0,1); //permet d'enlever '\0' qui est dans idm
   
-  time ( &rawtime );
-  timeinfo = localtime ( &rawtime );
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
   srand(clock());
   int a = rand() %(timeinfo->tm_sec*10+1);//*10 pour augmenter le nombre
   int b = rand() %(timeinfo->tm_min*10)+1;//et +1 pour eviter les divisions par 0

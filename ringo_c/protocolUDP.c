@@ -1,11 +1,11 @@
 #include "protocolUDP.h"
+#include "protocolMulticast.h"
 
 //ecoute sur le port UDP de l'entité
 int serverUDP(entity * ent){
   int sock = socket(PF_INET, SOCK_DGRAM,0);
   if(sock == -1){
     perror("ServeurUDP-Erreur (socket)");
-    //fprintf(stderr,"ServerUDP-Erreur: socket\n");
     return -1;      
   }
   struct sockaddr_in address_sock;
@@ -38,14 +38,16 @@ int serverUDP(entity * ent){
       memset(&idm[8],0,1);
       //on verifie si on a pas deja vu le message
       if(contains(l,idm) == 0){
-	printf("\nServerUDP-MessageRecu: %s",mess_c);
 	add(l,idm);
-	printf("type -%s-\n",type);
 	if(strcmp(type,"WHOS") == 0){
 	  //on transmet le message
-	  envoiUDP(ent,mess_c);
+	  envoiUDP(ent,mess_c,1);
 	  //on envoi le message MEMB
-	  envoiUDP(ent,memb(getIdm(),ent->id,getIp(),ent->port_udp));
+	  envoiUDP(ent,memb(getIdm(),ent->id,getIp(),ent->port_udp),1);
+	  
+	  if(strcmp(ent->port_udp_next2,"") != 0){
+	    envoiUDP(ent,mess_c,2);
+	  }
 	}else if(strcmp(type,"GBYE") == 0){
 	  char * ip = malloc(sizeof(char)*15);
 	  strncpy(ip,strtok(NULL," "),15);
@@ -56,21 +58,52 @@ int serverUDP(entity * ent){
 	  char * port_succ = malloc(sizeof(char)*4);
 	  strncpy(port_succ,strtok(NULL," "),8);
 	  if(strcmp(ent->port_udp_next,port) == 0 && strcmp(getIp(),ip) == 0){
-	    envoiUDP(ent,eybg(getIdm()));
+	    envoiUDP(ent,eybg(getIdm()),1);
+	    strncpy(ent->ip_next,ip_succ,15);
+	    strncpy(ent->port_udp_next,port_succ,4);
+	  }else if(strcmp(ent->port_udp_next2,port) == 0 && strcmp(getIp(),ip) == 0){
+	    envoiUDP(ent,eybg(getIdm()),2);
 	    strncpy(ent->ip_next,ip_succ,15);
 	    strncpy(ent->port_udp_next,port_succ,4);
 	  }else{
 	    //on transmet le message
-	    envoiUDP(ent,mess_c);
+	    envoiUDP(ent,mess_c,1);
+	    if(strcmp(ent->port_udp_next2,"") != 0){
+	      envoiUDP(ent,mess_c,2);
+	    }
 	  }
 	}else if (strcmp(type,"EYBG") == 0){
 	  printf("\n\t-----Vous avez quitter l'anneau !-----\n\n");
 	  freeEntity(ent);
 	  free(idm);
 	  return 0;
-	}else{
+	}else if (strcmp(type,"MEMB") == 0){
+	  printf("\nServerUDP-MessageRecu: %s",mess_c);
+	  envoiUDP(ent,mess_c,1);
+	  if(strcmp(ent->port_udp_next2,"") != 0){
+	    envoiUDP(ent,mess_c,2);
+	  }
+	  return 0;
+	}
+	/*	else if (strcmp(type,"TEST") == 0){
+	  char * ip_diff = malloc(sizeof(char)*15);
+	  strncpy(ip_diff,strtok(NULL," "),15);
+	  char * port_diff = malloc(sizeof(char)*4);
+	  strncpy(port_diff,strtok(NULL," "),8);
+	  if(strcmp(ent->ip_diff,ip_diff) && strcmp(ent->port_diff,port_diff)){
+	    envoiUDP(ent,mess_c,1);
+	  }else if(strcmp(ent->ip_diff2,ip_diff) && strcmp(ent->port_diff2,port_diff)){
+	    envoiUDP(ent,mess_c,2);
+	  }
+	  return 0;
+}
+*/
+	else{
 	  //on transmet le message
-	  envoiUDP(ent,mess_c);
+	  envoiUDP(ent,mess_c,1);
+	  if(strcmp(ent->port_udp_next2,"") != 0){
+	    envoiUDP(ent,mess_c,2);
+	  }
 	}
       }
     }else if(strcmp(mess_c,"DOWN\n") == 0){
@@ -78,25 +111,28 @@ int serverUDP(entity * ent){
       printf("\nServerUDP-MessageRecu: %s",mess_c);
       printf("\n\t-----L'anneau est casser-----\n\n");
       exit(0);
-    }else{
-      printf("else\n");
     }
   }
   return 0;
 }
 
 //envoi un message en UDP
-int envoiUDP(entity * ent, char * mess){ 
+int envoiUDP(entity * ent, char * mess,int i){ 
   int sock;
   if((sock  = socket(PF_INET, SOCK_DGRAM,0)) == -1){
     perror("EnvoiUDP-Erreur (socket)");
     return -1;      
   }
   struct addrinfo * first_info;
-  if(getaddrinfo(ent->ip_next,ent->port_udp_next,NULL,&first_info) == 0){
+  int r;
+  if(i == 1){
+    r = getaddrinfo(ent->ip_next,ent->port_udp_next,NULL,&first_info);
+  }else if(i == 2){
+    r = getaddrinfo(ent->ip_next2,ent->port_udp_next2,NULL,&first_info);
+  }
+  if(r == 0){
     if(first_info!=NULL){
       struct sockaddr *saddr=first_info->ai_addr;
-      printf("m -%s- port -%s- addr -%s-\n",mess,ent->port_udp_next,ent->ip_next);
       sendto(sock,mess,strlen(mess),0,saddr,sizeof(struct sockaddr_in));
     }
   }else{

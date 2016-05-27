@@ -45,9 +45,9 @@ int r_create(entity *ent){
     fprintf(stderr,"Probleme lors de la creation du thread-serverUDP\n");
     return -1;
   }
-  while(pthread_create(&th_multidiff, NULL,multicast,ent) != 0){
+  if(pthread_create(&th_multidiff, NULL,multicast,ent) != 0){
     fprintf(stderr,"Probleme lors de la creation du thread-Multidiffusion\n");
-    askInfoDiff(ent);
+    return -1;
   }
 
   askGetInfo(*ent);
@@ -141,7 +141,10 @@ int r_duplicate(entity *ent){
 //permet de quitter un anneau
 int r_quit_ring(entity *ent){ 
   envoiUDP(ent,gbye(getIdm(),getIp(),
-		    ent->port_udp,ent->ip_next,ent->port_udp_next));
+		    ent->port_udp,ent->ip_next,ent->port_udp_next),1);
+  if(strcmp(ent->port_udp_next2,"") != 0)
+    envoiUDP(ent,gbye(getIdm(),getIp(),
+		      ent->port_udp,ent->ip_next2,ent->port_udp_next2),2);
   sleep(1);
   return 0;
 }
@@ -158,6 +161,7 @@ int r_help(){
 //affiche l'aide des commandes lorsqu'on est connecter
 int r_c_help(){
   printf("\n%-10s : permet de savoir qui est sur l'anneau\n","whos/WHOS");
+  printf("%-10s : pour connaitre des infos sur l'entité courante\n","info");
   printf("%-10s : permet de quitter l'anneau dans laquelle on se trouve\n","quit_ring/q");
   return 0;
 }
@@ -170,10 +174,18 @@ int r_command(entity * ent){
     if(!strcmp(buff,"help") || !strcmp(buff,"--help")){
       r_c_help();
     }else if(!strcmp(buff,"whos") || !strcmp(buff,"WHOS")){
-      envoiUDP(ent,whos(getIdm()));
+      char * idm = getIdm();
+      envoiUDP(ent,whos(idm),1);
+      if(strcmp(ent->port_udp_next2,"") != 0)
+	envoiUDP(ent,whos(idm),2);
     }else if(!strcmp(buff,"quit") || !strcmp(buff,"q") 
       || !strcmp(buff,"quit_ring")){
       return r_quit_ring(ent);
+      //le TEST ne fonctionne pas ..
+      //}else if(!strcmp(buff,"test")){
+      //envoiUDP(ent,test(getIdm(),ent->ip_diff,ent->port_diff),1);
+    }else if(!strcmp(buff,"info")){
+      getInfo(*ent);
     }else{
       fprintf(stderr,"\n\tErreur d'utilisation de la commande ringo\n");
       r_c_help();

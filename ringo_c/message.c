@@ -58,6 +58,21 @@ char * eybg(char * idm){
   return mess;
 }
 
+//
+char * test(char * idm, char * ip_diff, char * port_diff){
+  char * mess = malloc(sizeof(char)*M_SIZE_MAX);
+  memset(mess,0,1);
+  strncat(mess,"TEST ",5);
+  strcat(mess,idm);
+  strcat(mess," ");
+  strcat(mess,ip_diff);
+  strcat(mess," ");
+  strcat(mess,port_diff);
+  strcat(mess," \n");
+  
+  return mess;
+}
+
 //ajoute idm a la liste
 void add (lidm * head, char * idm){
   lidm * current = head;

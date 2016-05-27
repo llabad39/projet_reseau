@@ -21,5 +21,5 @@ int r_connect(entity *ent);
 int r_duplicate(entity *ent);
 int r_quit_ring(entity *ent);
 int r_help();
-int r_c_help();
 int r_command(entity * ent);
+int r_c_help();
