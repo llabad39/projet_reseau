@@ -15,7 +15,6 @@ class Quizz{
 
     public Quizz( Entity ent){
 	this.ent=ent;
-	this.u=u;
 	this.quizzask=false;
 	this.quizzplay=false;
 	this.quizzque=false;

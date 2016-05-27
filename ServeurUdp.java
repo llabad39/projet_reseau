@@ -38,7 +38,7 @@ public class ServeurUdp extends Serveur{
 		String idm=arr[1];
 		int index=idmess.indexOf(idm);
 		switch (arr[0]){
-		case "GBYE" : 
+		case "GBYE" :  
 		    if(arr[2].equals(ent.ip_next) && arr[3].equals(ent.port_udp_next)){
 			m=new Mess("eybg1", ent, this);
 			m.send_mess();	
@@ -80,14 +80,13 @@ public class ServeurUdp extends Serveur{
 		case "MEMB" : 
 		    if(index==-1){
 			transferer( st, idm);
-			System.out.println(arr[2]+" "+arr[3]+" "+arr[4]+" "+idm);
+			System.out.println(arr[2]+" "+arr[3]+" "+arr[4]);
 		    }else{
 			idmess.remove(index);
 		    }
 		    break;
 		case "TEST" : 
 		    if(index==-1){
-			System.out.println(arr[2]+" "+ent.ip_diff+" "+arr[3]+" "+ent.port_diff);
 			if((arr[2].equals(ent.ip_diff) && arr[3].equals(ent.port_diff)) ||(arr[2].equals(ent.ip_diff2) && arr[3].equals(ent.port_diff2)) ){
 			    transferer(st, idm);
 			}
