@@ -12,13 +12,13 @@ public class SendMulticast{
 	    DatagramSocket dso=new DatagramSocket();
 	    byte[] buf = text.getBytes();
 	    InetSocketAddress ia=new InetSocketAddress(this.ent.ip_diff,Integer.parseInt(this.ent.port_diff));
-	    if(this.ent.ip_next2 != null){
+	    /*if(this.ent.ip_next2 != null){
 		int p2 = Integer.parseInt(this.ent.port_diff2);
 		//DatagramSocket dso2=new DatagramSocket();
 		InetSocketAddress ia2=new InetSocketAddress(this.ent.ip_diff2,p2);
-	    DatagramPacket paquet2=new DatagramPacket(buf,buf.length,ia2);
-	    dso.send(paquet2);
-	    }
+		DatagramPacket paquet2=new DatagramPacket(buf,buf.length,ia2);
+		dso.send(paquet2);
+		}*/
 	    
 	    DatagramPacket paquet=new DatagramPacket(buf,buf.length,ia);
 	    dso.send(paquet);
