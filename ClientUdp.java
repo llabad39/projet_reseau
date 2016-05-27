@@ -16,6 +16,7 @@ public class ClientUdp {
 	    DatagramSocket dso=new DatagramSocket();
 	    DatagramPacket paquet=new DatagramPacket(data,data.length,InetAddress.getByName(ip),Integer.parseInt(port));
 	    dso.send(paquet);
+	    System.out.println(paquet.getLength()+" mon paquet");
 	} catch(Exception e){
 	    e.printStackTrace();
 	}

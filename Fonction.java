@@ -4,10 +4,12 @@ public class Fonction{
 	for(int i=s.length();i<nb_octet;i++){
 	    s="0"+s;
 	}
+	System.out.println(s+"on a fill");
 	return s;
     }
     public static int taille(String a){
 	System.out.println(a);
+	
 	for(int i=0;i<a.length();i++){
 	    if(a.charAt(i)!='0'){
 
@@ -15,6 +17,7 @@ public class Fonction{
 		return Integer.parseInt(a.substring(i));
 	    }
 	}
+	
 	return 0;
     }
 	

@@ -164,7 +164,8 @@ public class ServeurUdp extends Serveur{
 	} 
     }
     public void transfererB(byte[]data,String idm){
-        ClientUdp cl = new ClientUdp(data);
+	System.out.println("on transfert un bail de cette taille "+data.length);
+	ClientUdp cl = new ClientUdp(data);
         if(ent.ip_next2==null){
 	    cl.send(ent.ip_next, ent.port_udp_next);
 	}else{

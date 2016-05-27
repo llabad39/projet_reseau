@@ -46,9 +46,7 @@ public class Main{
 		String cmd = scanner.nextLine();
 		String[] arr = cmd.split(" ");
 		switch (arr[0]){
-		case "quit" : 
-		    quit=true;
-		    break;
+		
 		case "connect":
 		    if(arr.length==3){
 			port_udp=askUdp();

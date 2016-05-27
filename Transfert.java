@@ -40,7 +40,6 @@ public class Transfert {
 
     public void req(String size_name, String n, int index, String idm) {
         String st;
-        System.out.println("call req");
         if (index == -1) {
             File f = new File(n);
             if (f.exists()) {
@@ -55,26 +54,33 @@ public class Transfert {
                     long size_rest = f.length();
 		    String size_cont;
 		    int size;
+		    System.out.println("il y a "+nm+" message");
                     for (long i = 0; i < nm; i++) {
-			if(size_rest>463){
-			    size = 463;
-			    size_rest=size_rest-463;
+			System.out.println("la taille "+size_rest);
+			if(size_rest>=463){
+			    size = 462;
+			    size_rest=size_rest-462;
 			}
 			else
 			    size =(int)size_rest;
+			
 			System.out.println(size);
 			size_cont=Fonction.fill(3,size);
+			System.out.println(size_cont+"mon size_cont");
 			String no_mess = Fonction.long_to_little(i);
 			st = "APPL " + idm + " TRANS### " + "SEN " + id_trans + " " + no_mess + " " + size_cont + " ";
 			byte  [] prot =st.getBytes();
+			System.out.println(prot.length+" la taille du port");
 			byte [] cont= new byte[size];
-			fi.read(cont);
+			fi.read(cont,0,size);
 			byte [] fin = new byte[prot.length+cont.length];
+			System.out.println(fin.length+"ceci est ma fin");
 			System.arraycopy(prot, 0, fin, 0, prot.length);
 			System.arraycopy(cont, 0, fin, prot.length, cont.length);
-			System.out.println("ceci est mon string"+new String(fin));
+			System.out.println("ceci est mon string"+new String(fin)+" "+fin.length+" "+i);
 			serv.transfererB(fin, idm);
                     }
+		    
                     fi.close();
                 } catch (Exception e) {
 		    e.printStackTrace();
@@ -104,7 +110,10 @@ public class Transfert {
                 String[] names = n.split("\\.");
                 names[0] = names[0] + i;
                 for (int j = 0; j < names.length; j++) {
-                    new_name = new_name+names[j]+".";
+		    if(j!=names.length-1)
+			new_name = new_name+names[j]+".";
+		    else
+		    new_name = new_name+names[j];
                 }
                 f = new File(new_name);
                 i++;
@@ -125,10 +134,14 @@ else {
 
     public void sen(byte[] contenu,String taille, int index, String idm) {
         System.out.println(index);
-	//int t = Fonction.taille(taille);
+	System.out.println(contenu.length+"mon contenu est un peu gros");
+	System.out.println(taille);
+	
+	int t = Fonction.taille(taille);
+	System.out.println(t);
         if (index != -1) {
             try {
-                fw.write(contenu,49,contenu.length-49);
+                fw.write(contenu,49,t);
                 this.compteurTrans++;
                 if (this.compteurTrans == this.maxMess) {
                     this.maxMess = 0;
